@@ -8,7 +8,8 @@ package com.gnr.sgp.modelo.dominio;
  *
  * @author Guilherme
  */
-public class Fornecedor {
+
+public class Fornecedores {
     
     private long id;
     private String nome;
@@ -16,10 +17,10 @@ public class Fornecedor {
     private String email;
     private String endereco;
 
-    public Fornecedor() {
+    public Fornecedores() {
     }
 
-    public Fornecedor(long id, String nome, String telefone, String email, String endereco) {
+    public Fornecedores(long id, String nome, String telefone, String email, String endereco) {
         this.id = id;
         this.nome = nome;
         this.telefone = telefone;

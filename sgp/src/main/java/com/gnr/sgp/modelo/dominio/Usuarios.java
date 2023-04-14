@@ -10,22 +10,22 @@ import java.util.Objects;
  *
  * @author Guilherme
  */
-public class Usuario {
+public class Usuarios {
     
     
     private Long id;
-    private String nome;
+    private String login;
     private String senha;
     private Boolean tipo;
 
-    public Usuario() {
+    public Usuarios() {
         this.tipo = false; 
     }
     
    
-    public Usuario(Long id, String nome, String senha, Boolean tipo) {
+    public Usuarios(Long id, String login, String senha, Boolean tipo) {
         this.id = id;
-        this.nome = nome;
+        this.login = login;
         this.senha = senha;
         this.tipo = false;
     }
@@ -38,12 +38,12 @@ public class Usuario {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getLogin() {
+        return login;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getSenha() {
@@ -80,7 +80,7 @@ public class Usuario {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Usuario other = (Usuario) obj;
+        final Usuarios other = (Usuarios) obj;
         return Objects.equals(this.id, other.id);
     }
     

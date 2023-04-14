@@ -4,6 +4,8 @@
 
 package com.gnr.sgp;
 
+import java.util.Date;
+
 /**
  *
  * @author Guilherme
@@ -11,6 +13,6 @@ package com.gnr.sgp;
 public class main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        System.out.println();
     }
 }

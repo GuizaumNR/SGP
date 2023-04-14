@@ -14,18 +14,18 @@ public class Animais {
     private String raca;
     private String idade;
     private String sexo;
-    private Fornecedor Fornecedor;
+    private Fornecedores id_fornecedores;
 
     public Animais() {
     }
 
-    public Animais(long id, String descricao, String raca, String idade, String sexo, Fornecedor Fornecedor) {
+    public Animais(long id, String descricao, String raca, String idade, String sexo, Fornecedores id_fornecedores) {
         this.id = id;
         this.descricao = descricao;
         this.raca = raca;
         this.idade = idade;
         this.sexo = sexo;
-        this.Fornecedor = Fornecedor;
+        this.id_fornecedores = id_fornecedores;
     }
 
     public long getId() {
@@ -68,12 +68,12 @@ public class Animais {
         this.sexo = sexo;
     }
 
-    public Fornecedor getFornecedor() {
-        return Fornecedor;
+    public Fornecedores getId_fornecedores() {
+        return id_fornecedores;
     }
 
-    public void setFornecedor(Fornecedor Fornecedor) {
-        this.Fornecedor = Fornecedor;
+    public void setId_fornecedores(Fornecedores id_fornecedores) {
+        this.id_fornecedores = id_fornecedores;
     }
     
 }
