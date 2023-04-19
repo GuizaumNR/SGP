@@ -1,30 +1,41 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.gnr.sgp.modelo.conexao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- *
- * @author Guilherme
- */
-public class ConexaoMysql implements Conexao{
-    
-    private final String USUARIO = "root";
-    private final String SENHA = "guilherme2015";
-    private final String URL = "jdbc:mysql://localhost/dbinfox";
-    private Connection conectar;        
+public class ConexaoMysql implements Conexao {
+
+    private static Connection connection;
+    private static final String URL = "jdbc:mysql://localhost:3306/dbinfox";
+    private static final String USER = "root";
+    private static final String PASSWORD = "guilherme2015";
+
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (ClassNotFoundException e) {
+            System.out.println("Não foi possível encontrar o driver de conexão com o MySQL.");
+        } catch (SQLException e) {
+            System.out.println("Não foi possível conectar ao banco de dados MySQL.");
+        }
+    }
 
     @Override
     public Connection obterConexao() throws SQLException {
-       
-        if(conectar == null){
-            conectar = DriverManager.getConnection(URL, USUARIO, SENHA);
+        if (connection.isClosed()) {
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
         }
-        return conectar;
+        return connection;
     }
+
+    
+    public void fecharConexao() throws SQLException {
+        if (!connection.isClosed()) {
+            connection.close();
+        }
+    }
+
 }
