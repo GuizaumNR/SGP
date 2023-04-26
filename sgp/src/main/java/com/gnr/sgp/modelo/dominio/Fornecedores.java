@@ -13,15 +13,14 @@ public class Fornecedores {
     
     private long id;
     private String nome;
-    private String telefone;
+    private int telefone;
     private String email;
     private String endereco;
 
     public Fornecedores() {
     }
 
-    public Fornecedores(long id, String nome, String telefone, String email, String endereco) {
-        this.id = id;
+    public Fornecedores( String nome, int telefone, String email, String endereco) {
         this.nome = nome;
         this.telefone = telefone;
         this.email = email;
@@ -44,11 +43,11 @@ public class Fornecedores {
         this.nome = nome;
     }
 
-    public String getTelefone() {
+    public int getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(String telefone) {
+    public void setTelefone(int telefone) {
         this.telefone = telefone;
     }
 
