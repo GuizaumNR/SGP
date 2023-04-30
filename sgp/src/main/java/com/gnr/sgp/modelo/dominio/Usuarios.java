@@ -16,18 +16,18 @@ public class Usuarios {
     private Long id;
     private String login;
     private String senha;
-    private Boolean tipo;
+    private String tipo;
 
     public Usuarios() {
-        this.tipo = false; 
+        this.tipo = "consulta"; 
     }
     
    
-    public Usuarios(Long id, String login, String senha, Boolean tipo) {
+    public Usuarios(Long id, String login, String senha, String tipo) {
         this.id = id;
         this.login = login;
         this.senha = senha;
-        this.tipo = false;
+        this.tipo = tipo;
     }
 
     public Long getId() {
@@ -54,11 +54,11 @@ public class Usuarios {
         this.senha = senha;
     }
 
-    public Boolean getTipo() {
+    public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(Boolean tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 

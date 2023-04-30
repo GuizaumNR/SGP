@@ -9,7 +9,10 @@ import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dominio.Usuarios;
 import com.mysql.cj.xdevapi.PreparableStatement;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -19,10 +22,10 @@ public class UsuariosDao {
     
     private final Conexao conexao;
 
-    public UsuariosDao(Conexao conexao) {
+    public UsuariosDao() {
         this.conexao = new ConexaoMysql();
     }
-    
+
     public String salvar(Usuarios usuario){
       if(usuario.getId() == 0){
           return adicionar(usuario);
@@ -32,7 +35,15 @@ public class UsuariosDao {
     };
 
     private String adicionar(Usuarios usuario) {
-      String sql = "INSERT INTO usuarios(login, senha) VALUES(?, ?)";
+      String sql = "INSERT INTO usuarios(login, senha, tipo) VALUES(?, ?, ?)";
+      
+      
+      Usuarios usuarioTemp = buscarUsuariosLogin(usuario.getLogin());
+      
+      if(usuarioTemp != null){
+          return String.format("Erro: esse login %s já existe no banco de dados.",usuario.getLogin());
+      }
+      
       try{
           PreparedStatement preparedStatement = conexao.obterConexao().prepareStatement(sql);
           
@@ -75,10 +86,72 @@ public class UsuariosDao {
     private void preencherValoresPreparedStatment(PreparedStatement preparedStatement, Usuarios usuario) throws SQLException {
             preparedStatement.setString(1, usuario.getLogin());
             preparedStatement.setString(2, usuario.getSenha());
-            preparedStatement.setBoolean(3, usuario.getTipo());
+            preparedStatement.setString(3, usuario.getTipo());
             
             if(usuario.getId() != 0){
                 preparedStatement.setLong(6, usuario.getId());
             }
          }
+    
+    public List<Usuarios> buscarTodosUsuarios(){
+    String sql = "SELECT FROM * usuarios";
+    List<Usuarios> usuarios = new ArrayList<>();
+            
+        try {
+            ResultSet result = conexao.obterConexao().prepareStatement(sql).executeQuery();
+            
+            while(result.next()){
+                usuarios.add(getUsuarios(result));
+                
+            }
+        } catch (Exception e) {
+        }
+        
+        return usuarios;
+    }
+    
+    private Usuarios getUsuarios(ResultSet result) throws SQLException{
+        Usuarios usuarios = new Usuarios();
+        usuarios.setId(result.getLong("id"));
+        usuarios.setLogin(result.getString("login"));
+        usuarios.setSenha(result.getString("senha"));
+        usuarios.setTipo(result.getString("tipo"));
+        
+        return usuarios;
+    }
+    
+    public Usuarios buscarUsuariosId(Long id){
+    String sql = String.format("SELECT * FROM usuarios WHERE id = %s", id);
+    List<Usuarios> usuarios = new ArrayList<>();
+            
+        try {
+            ResultSet result = conexao.obterConexao().prepareStatement(sql).executeQuery();
+            
+            if(result.next()){
+                return getUsuarios(result);
+                
+            }
+        } catch (Exception e) {
+        }
+        
+        return null;
+    }
+    
+    public Usuarios buscarUsuariosLogin(String login){
+    String sql = String.format("SELECT * FROM usuarios WHERE login = %s", login);
+    List<Usuarios> usuarios = new ArrayList<>();
+            
+        try {
+            ResultSet result = conexao.obterConexao().prepareStatement(sql).executeQuery();
+            
+            if(result.next()){
+                return getUsuarios(result);
+                
+            }
+        } catch (Exception e) {
+        }
+        
+        return null;
+    }
+   
 }
