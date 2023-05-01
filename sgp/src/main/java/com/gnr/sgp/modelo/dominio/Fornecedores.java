@@ -20,7 +20,8 @@ public class Fornecedores {
     public Fornecedores() {
     }
 
-    public Fornecedores( String nome, int telefone, String email, String endereco) {
+    public Fornecedores(Long id, String nome, int telefone, String email, String endereco) {
+        this.id = id;
         this.nome = nome;
         this.telefone = telefone;
         this.email = email;
