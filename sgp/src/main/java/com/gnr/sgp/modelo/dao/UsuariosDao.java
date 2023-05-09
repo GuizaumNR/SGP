@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  *
@@ -110,7 +109,9 @@ public class UsuariosDao {
                 usuarios.add(getUsuarios(result));
 
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
         }
 
         return usuarios;
@@ -128,7 +129,6 @@ public class UsuariosDao {
 
     public Usuarios buscarUsuariosId(Long id) {
         String sql = String.format("SELECT * FROM usuarios WHERE id = %s", id);
-        List<Usuarios> usuarios = new ArrayList<>();
 
         try {
             ResultSet result = conexao.obterConexao().prepareStatement(sql).executeQuery();
@@ -137,15 +137,17 @@ public class UsuariosDao {
                 return getUsuarios(result);
 
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
         }
 
         return null;
     }
 
     public Usuarios buscarUsuariosLogin(String login) {
-        String sql = String.format("SELECT * FROM usuarios WHERE login = %s", login);
-        List<Usuarios> usuarios = new ArrayList<>();
+        String sql = String.format("SELECT * FROM usuarios WHERE login = '%s'", login);
+        System.out.println(sql);
 
         try {
             ResultSet result = conexao.obterConexao().prepareStatement(sql).executeQuery();
@@ -154,7 +156,9 @@ public class UsuariosDao {
                 return getUsuarios(result);
 
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
         }
 
         return null;

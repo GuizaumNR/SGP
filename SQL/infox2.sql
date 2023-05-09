@@ -3,7 +3,7 @@ use dbinfox;
 CREATE TABLE usuarios (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     login VARCHAR(15) UNIQUE NOT NULL,
-    senha VARCHAR(15) NOT NULL,
+    senha VARCHAR(60) NOT NULL,
     tipo ENUM('admin', 'consulta') NOT NULL DEFAULT 'consulta'
 );
 
@@ -122,6 +122,8 @@ VALUES (LAST_INSERT_ID(), 1, 10, 1, 500.00, 5000.00);
 -- na coluna id_venda na tabela de vendas_animais. Isso garante que a venda esteja associada à transação correspondente na tabela de transações
 
 -- CONSULTAS
+
+select * from usuarios;
 
 -- Obter todos os animais disponíveis para compra:
 SELECT a.raca, a.sexo, a.idade, COUNT(*) - SUM(CASE WHEN t.tipo_transacao = 'compra' THEN t.quantidade ELSE -t.quantidade END) AS disponiveis

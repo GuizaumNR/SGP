@@ -9,10 +9,16 @@ package com.gnr.sgp.view.modelo;
  * @author Guilherme
  */
 public class LoginDTO {
-    
+       
     private String usuario;
     private String senha;
 
+    public LoginDTO(String usuario, String senha) {
+        this.usuario = usuario;
+        this.senha = senha;
+    }
+
+    
     public String getUsuario() {
         return usuario;
     }
