@@ -4,8 +4,10 @@
  */
 package com.gnr.sgp.controller;
 
+import com.gnr.sgp.TelaPrincipal;
 import com.gnr.sgp.modelo.dao.AutenticacaoDao;
 import com.gnr.sgp.modelo.dominio.Usuarios;
+import com.gnr.sgp.modelo.exception.NegocioException;
 import com.gnr.sgp.view.formulario.Login;
 import com.gnr.sgp.view.modelo.LoginDTO;
 import java.awt.event.ActionEvent;
@@ -16,10 +18,11 @@ import javax.swing.JOptionPane;
  *
  * @author Guilherme
  */
-public class LoginController implements ActionListener{
-    
+public class LoginController implements ActionListener {
+
     private final Login login;
     private AutenticacaoDao autenticacaoDao;
+    private String operador;
 
     public LoginController(Login login) {
         this.login = login;
@@ -28,30 +31,49 @@ public class LoginController implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-      String acao = ae.getActionCommand().toLowerCase();
-      
-      switch(acao){
-          case "login": login(); break;
-          case "cancelar": cancelar(); break;
-    }
+        String acao = ae.getActionCommand().toLowerCase();
+
+        switch (acao) {
+            case "login":
+                login();
+                break;
+            case "cancelar":
+                cancelar();
+                break;
+        }
     }
 
     private void login() {
         String usuario = this.login.getTxtLoginUsuario().getText();
         String senha = new String(this.login.getPassSenhaUsuario().getPassword());
-        
-        if(usuario.equals("") || senha.equals("")){
+
+        if (usuario.equals("") || senha.equals("")) {
             this.login.getLabelLoginMensagem().setText("Insira o usuário e a senha para prosseguir.");
             return;
         }
-        
+
         LoginDTO loginDto = new LoginDTO(usuario, senha);
-        
+
         Usuarios usuarioTemp = this.autenticacaoDao.login(loginDto);
-        
-        if(usuarioTemp != null){
-            JOptionPane.showConfirmDialog(null, usuarioTemp.getLogin());
-        }else{
+
+        if (usuarioTemp != null) {
+//            JOptionPane.showConfirmDialog(null, usuarioTemp.getLogin());
+            login.dispose();
+            
+            TelaPrincipal tela = new TelaPrincipal();
+            operador = usuarioTemp.getLogin();
+            tela.setOperador(operador);
+            tela.setVisible(true);
+            
+            try {
+                this.autenticacaoDao.permissao(usuarioTemp);
+                // O código aqui será executado se o usuário tiver permissão
+                System.out.println("Usuário tem permissão para executar esta ação.");
+            } catch (NegocioException e) {
+                // O código aqui será executado se o usuário não tiver permissão
+                System.out.println("Usuário não tem permissão para executar esta ação: " + e.getMessage());
+            }
+        } else {
             this.login.getLabelLoginMensagem().setText("Usuário ou senha incorretos.");
             limpaCampos();
         }
@@ -59,14 +81,15 @@ public class LoginController implements ActionListener{
 
     private void cancelar() {
         int confirmar = JOptionPane.showConfirmDialog(login, "Sair do sistema?", "Sair do sistema", JOptionPane.YES_NO_OPTION);
-        
-        if(confirmar == JOptionPane.YES_OPTION){
-            System.exit(0);        }
+
+        if (confirmar == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }
-    
-    private void limpaCampos(){
+
+    private void limpaCampos() {
         this.login.getTxtLoginUsuario().setText("");
         this.login.getPassSenhaUsuario().setText("");
     }
-    
+
 }

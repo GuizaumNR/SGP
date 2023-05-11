@@ -25,6 +25,7 @@ public class AutenticacaoDao {
     public boolean temPermissao(Usuarios usuario) {
         try {
             permissao(usuario);
+            JOptionPane.showMessageDialog(null, "Usuário é admin!", "Usuário com permissão.", 0);
             return true;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Usuário sem permissão.", 0);
@@ -33,7 +34,7 @@ public class AutenticacaoDao {
 
     }
 
-    private void permissao(Usuarios usuario) {
+    public void permissao(Usuarios usuario) {
         if (!usuario.getTipo().equals("admin")) {
             throw new NegocioException("Usuário sem permissão para efetuar esta ação.");
         }
