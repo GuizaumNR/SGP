@@ -6,9 +6,11 @@ package com.gnr.sgp;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
@@ -24,44 +26,48 @@ public class TelaPrincipal extends javax.swing.JFrame {
     Date dataSistema = new Date();
     SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
     Calendar now = Calendar.getInstance();
- 
+
     public TelaPrincipal() {
         setUndecorated(true);
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
         requestFocus();
-        
+
         atualizarDataHora();
         // Cria um Timer com intervalo de 1 segundo (1000 milissegundos)
         Timer timer = new Timer(1000, e -> atualizarDataHora());
         timer.start();
-        
+
         addWindowFocusListener(new WindowFocusListener() {
             public void windowGainedFocus(WindowEvent e) {
                 setExtendedState(JFrame.MAXIMIZED_BOTH);
             }
 
             public void windowLostFocus(WindowEvent e) {
-             
+
             }
         });
+
+        jButtonSair.setFocusable(false);
+        jButtonMinimizar.setFocusable(false);
+        
+//        URL resource = TelaPrincipal.class.getResource("/com.gnr.sgp.view.imagens/logo.png");
+//        ImageIcon icon = new ImageIcon(resource);
+//        LabelLogo.setIcon(icon);
+
+
     }
 
     public void setOperador(String operador) {
         labelOperador.setText("Operador: " + operador);
     }
-    
-    private void atualizarDataHora() {
-        // Atualiza a data
-        labelData.setText("Data: " + formato.format(dataSistema));
 
-        // Atualiza a hora
+    private void atualizarDataHora() {
+        // Atualiza data e hora
         now = Calendar.getInstance();
-        labelHora.setText("Hora: " + String.format("%1$tH:%1$tM:%1$tS", now));
+        labelDataEHora.setText(formato.format(dataSistema) + " " + String.format("%1$tH:%1$tM:%1$tS", now));
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -73,16 +79,21 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         painelTelaPrincipal = new javax.swing.JPanel();
-        jButtonSair = new javax.swing.JButton();
         labelOperador = new javax.swing.JLabel();
-        labelData = new javax.swing.JLabel();
-        labelHora = new javax.swing.JLabel();
+        labelDataEHora = new javax.swing.JLabel();
+        jPanelBotoes = new javax.swing.JPanel();
+        jButtonSair = new javax.swing.JButton();
         jButtonMinimizar = new javax.swing.JButton();
-        labelData1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        painelTelaPrincipal.setBackground(new java.awt.Color(198, 244, 184));
+        painelTelaPrincipal.setBackground(new java.awt.Color(237, 249, 237));
+
+        labelOperador.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+
+        labelDataEHora.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+
+        jPanelBotoes.setBackground(new java.awt.Color(198, 222, 198));
 
         jButtonSair.setBackground(new java.awt.Color(255, 51, 51));
         jButtonSair.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
@@ -94,13 +105,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        labelOperador.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        labelData.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        labelHora.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        jButtonMinimizar.setBackground(new java.awt.Color(204, 204, 204));
+        jButtonMinimizar.setBackground(new java.awt.Color(0, 204, 255));
         jButtonMinimizar.setFont(new java.awt.Font("Courier New", 1, 48)); // NOI18N
         jButtonMinimizar.setText("-");
         jButtonMinimizar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -110,48 +115,49 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        labelData1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        labelData1.setText("Copyright ©2023 Guilherme Rodrigues");
+        javax.swing.GroupLayout jPanelBotoesLayout = new javax.swing.GroupLayout(jPanelBotoes);
+        jPanelBotoes.setLayout(jPanelBotoesLayout);
+        jPanelBotoesLayout.setHorizontalGroup(
+            jPanelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelBotoesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButtonMinimizar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanelBotoesLayout.setVerticalGroup(
+            jPanelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelBotoesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonMinimizar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(7, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout painelTelaPrincipalLayout = new javax.swing.GroupLayout(painelTelaPrincipal);
         painelTelaPrincipal.setLayout(painelTelaPrincipalLayout);
         painelTelaPrincipalLayout.setHorizontalGroup(
             painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelTelaPrincipalLayout.createSequentialGroup()
-                .addGroup(painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelTelaPrincipalLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonMinimizar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelTelaPrincipalLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(labelOperador, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
-                        .addComponent(labelData1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                        .addComponent(labelData, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelHora, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelTelaPrincipalLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(labelOperador, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(labelDataEHora, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelTelaPrincipalLayout.createSequentialGroup()
+                .addContainerGap(894, Short.MAX_VALUE)
+                .addComponent(jPanelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         painelTelaPrincipalLayout.setVerticalGroup(
             painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelTelaPrincipalLayout.createSequentialGroup()
-                .addGroup(painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(painelTelaPrincipalLayout.createSequentialGroup()
-                        .addGroup(painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonMinimizar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 646, Short.MAX_VALUE)
-                        .addGroup(painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelData, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelHora, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(painelTelaPrincipalLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(labelOperador, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelData1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addComponent(jPanelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 649, Short.MAX_VALUE)
+                .addGroup(painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelDataEHora, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelOperador, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -163,7 +169,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(painelTelaPrincipal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(painelTelaPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -207,20 +213,17 @@ public class TelaPrincipal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-           
-          
+
             }
         });
-       
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonMinimizar;
     private javax.swing.JButton jButtonSair;
-    private javax.swing.JLabel labelData;
-    private javax.swing.JLabel labelData1;
-    private javax.swing.JLabel labelHora;
+    private javax.swing.JPanel jPanelBotoes;
+    private javax.swing.JLabel labelDataEHora;
     private javax.swing.JLabel labelOperador;
     private javax.swing.JPanel painelTelaPrincipal;
     // End of variables declaration//GEN-END:variables

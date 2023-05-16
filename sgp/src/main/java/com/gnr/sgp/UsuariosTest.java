@@ -15,7 +15,7 @@ public class UsuariosTest {
     
     
     public static void main(String[] args) {
-        Usuarios usuarioExemplo = new Usuarios(0l, "gui", "123", "admin");
+        Usuarios usuarioExemplo = new Usuarios(0l, "consulta", "123", "consulta");
         
         UsuariosDao usuariosDao = new UsuariosDao();
         String mensagem = usuariosDao.salvar(usuarioExemplo);

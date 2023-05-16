@@ -5,33 +5,52 @@
 package com.gnr.sgp.view.formulario;
 
 import com.gnr.sgp.controller.LoginController;
-import java.util.Locale;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import sun.awt.RequestFocusController;
 
 /**
  *
  * @author Guilherme
  */
 public class Login extends javax.swing.JFrame {
-    
+
     private final LoginController loginController;
+    private final String copy = "Copyright ©2023 Guilherme Rodrigues - Todos os direitos reservados.";
 
     /**
      * Creates new form Login
      */
     public Login() {
+
         initComponents();
         setLocationRelativeTo(null);
         requestFocus();
         this.loginController = new LoginController(this);
         eventos();
+        LabelCopy.setText(copy);
+
+        botaoLogin.setFocusable(false);
+        botaoLoginCancelar.setFocusable(false);
+        
+        if(txtLoginUsuario != null){
+        txtLoginUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passSenhaUsuario.requestFocus();
+            }
+        });
+        }
+        passSenhaUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoLogin.requestFocus();
+                loginController.login();
+                // Chame a ação de login aqui, se desejar.
+            }
+        });
     }
-    
-    private void eventos(){
+
+    private void eventos() {
         botaoLogin.addActionListener(loginController);
         botaoLoginCancelar.addActionListener(loginController);
     }
@@ -56,25 +75,27 @@ public class Login extends javax.swing.JFrame {
         botaoLoginCancelar = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
+        LabelCopy = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
 
-        jPanel1.setBackground(new java.awt.Color(232, 255, 232));
+        jPanel1.setBackground(new java.awt.Color(126, 231, 126));
 
         labelLoginMensagem.setBackground(new java.awt.Color(255, 255, 255));
         labelLoginMensagem.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        labelLoginMensagem.setForeground(new java.awt.Color(51, 204, 0));
+        labelLoginMensagem.setForeground(new java.awt.Color(51, 51, 51));
         labelLoginMensagem.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelLoginMensagem.setText(" ");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel2.setText("Copyright ©2023 Guilherme Rodrigues");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(51, 51, 51));
         jLabel3.setText("Usuário:");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(51, 51, 51));
         jLabel4.setText("Senha:");
 
         txtLoginUsuario.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
@@ -94,15 +115,28 @@ public class Login extends javax.swing.JFrame {
         });
 
         botaoLogin.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        botaoLogin.setForeground(new java.awt.Color(51, 51, 51));
         botaoLogin.setText("Login");
+        botaoLogin.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         botaoLoginCancelar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        botaoLoginCancelar.setForeground(new java.awt.Color(51, 51, 51));
         botaoLoginCancelar.setText("Cancelar");
+        botaoLoginCancelar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         botaoLoginCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botaoLoginCancelarActionPerformed(evt);
             }
         });
+
+        jSeparator1.setBackground(new java.awt.Color(102, 102, 102));
+        jSeparator1.setForeground(new java.awt.Color(51, 51, 51));
+
+        jSeparator2.setBackground(new java.awt.Color(102, 102, 102));
+        jSeparator2.setForeground(new java.awt.Color(51, 51, 51));
+
+        LabelCopy.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        LabelCopy.setForeground(new java.awt.Color(51, 51, 51));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -110,7 +144,7 @@ public class Login extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(labelLoginMensagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(109, Short.MAX_VALUE)
+                .addGap(109, 109, 109)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
@@ -129,9 +163,10 @@ public class Login extends javax.swing.JFrame {
                                 .addComponent(passSenhaUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)))
                         .addContainerGap(114, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE)
+                .addComponent(LabelCopy, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addComponent(jLabel2))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,9 +188,14 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botaoLoginCancelar)
                     .addComponent(botaoLogin))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(12, 12, 12))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(LabelCopy, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -172,10 +212,6 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtLoginUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginUsuarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtLoginUsuarioActionPerformed
-
     private void botaoLoginCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoLoginCancelarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_botaoLoginCancelarActionPerformed
@@ -183,6 +219,10 @@ public class Login extends javax.swing.JFrame {
     private void passSenhaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passSenhaUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_passSenhaUsuarioActionPerformed
+
+    private void txtLoginUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLoginUsuarioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -210,19 +250,19 @@ public class Login extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Login().setVisible(true);
-                
+
             }
         });
-        
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel LabelCopy;
     private javax.swing.JButton botaoLogin;
     private javax.swing.JButton botaoLoginCancelar;
     private javax.swing.JLabel jLabel2;
@@ -236,26 +276,24 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JTextField txtLoginUsuario;
     // End of variables declaration//GEN-END:variables
 
-    
-    public JTextField getTxtLoginUsuario(){
+    public JTextField getTxtLoginUsuario() {
         return txtLoginUsuario;
     }
-    
-    public JPasswordField getPassSenhaUsuario(){
+
+    public JPasswordField getPassSenhaUsuario() {
         return passSenhaUsuario;
     }
-    
-    public JButton getBotaoLogin(){
+
+    public JButton getBotaoLogin() {
         return botaoLogin;
     }
-    
-    public JButton getBotaoLoginCancelar(){
+
+    public JButton getBotaoLoginCancelar() {
         return botaoLoginCancelar;
     }
-    
-    public JLabel getLabelLoginMensagem(){
+
+    public JLabel getLabelLoginMensagem() {
         return labelLoginMensagem;
     }
-    
-}    
 
+}

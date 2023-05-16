@@ -7,7 +7,6 @@ package com.gnr.sgp.modelo.dao;
 import com.gnr.sgp.modelo.dominio.Usuarios;
 import com.gnr.sgp.modelo.exception.NegocioException;
 import com.gnr.sgp.view.modelo.LoginDTO;
-import javax.swing.JOptionPane;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -25,10 +24,8 @@ public class AutenticacaoDao {
     public boolean temPermissao(Usuarios usuario) {
         try {
             permissao(usuario);
-            JOptionPane.showMessageDialog(null, "Usuário é admin!", "Usuário com permissão.", 0);
             return true;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Usuário sem permissão.", 0);
             return false;
         }
 

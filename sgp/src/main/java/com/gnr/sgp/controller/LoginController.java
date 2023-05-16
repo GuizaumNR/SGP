@@ -23,7 +23,6 @@ public class LoginController implements ActionListener {
     private final Login login;
     private AutenticacaoDao autenticacaoDao;
     private String operador;
-    private boolean admin = false;
 
     public LoginController(Login login) {
         this.login = login;
@@ -44,7 +43,7 @@ public class LoginController implements ActionListener {
         }
     }
 
-    private void login() {
+    public void login() {
         String usuario = this.login.getTxtLoginUsuario().getText();
         String senha = new String(this.login.getPassSenhaUsuario().getPassword());
 
@@ -69,11 +68,11 @@ public class LoginController implements ActionListener {
                 this.autenticacaoDao.permissao(usuarioTemp);
                 // O código aqui será executado se o usuário tiver permissão
                 System.out.println("Usuário tem permissão para executar esta ação.");
-                admin = true;
+                
             } catch (NegocioException e) {
                 // O código aqui será executado se o usuário não tiver permissão
-                System.out.println("Usuário não tem permissão para executar esta ação: " + e.getMessage());
-                admin = false;
+                System.out.println("Error: " + e.getMessage());
+                
             }
         } else {
             this.login.getLabelLoginMensagem().setText("Usuário ou senha incorretos.");
