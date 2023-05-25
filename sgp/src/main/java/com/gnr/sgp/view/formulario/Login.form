@@ -60,9 +60,9 @@
                                   <Component id="jSeparator2" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="botaoLoginCancelar" min="-2" pref="118" max="-2" attributes="0"/>
+                                      <Component id="jButtonCancelar" min="-2" pref="118" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="botaoLogin" max="32767" attributes="0"/>
+                                      <Component id="jButtonLogin" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="passSenhaUsuario" alignment="0" pref="254" max="32767" attributes="0"/>
                               </Group>
@@ -97,8 +97,8 @@
                   <Component id="jSeparator2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="botaoLoginCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="botaoLogin" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonLogin" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="20" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -172,6 +172,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtLoginUsuarioActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JPasswordField" name="passSenhaUsuario">
           <Properties>
@@ -186,7 +189,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="passSenhaUsuarioActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="botaoLogin">
+        <Component class="javax.swing.JButton" name="jButtonLogin">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="18" style="1"/>
@@ -202,7 +205,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="botaoLoginCancelar">
+        <Component class="javax.swing.JButton" name="jButtonCancelar">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="18" style="1"/>
@@ -218,7 +221,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botaoLoginCancelarActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCancelarActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator1">

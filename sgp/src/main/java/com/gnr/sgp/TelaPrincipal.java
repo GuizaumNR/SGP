@@ -4,6 +4,7 @@
  */
 package com.gnr.sgp;
 
+import java.awt.BorderLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.net.URL;
@@ -12,6 +13,10 @@ import java.util.Calendar;
 import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 import javax.swing.Timer;
 
 /**
@@ -33,7 +38,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
         requestFocus();
-
+        menu();
+        setLogo();
         atualizarDataHora();
         // Cria um Timer com intervalo de 1 segundo (1000 milissegundos)
         Timer timer = new Timer(1000, e -> atualizarDataHora());
@@ -51,22 +57,48 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jButtonSair.setFocusable(false);
         jButtonMinimizar.setFocusable(false);
-        
+
 //        URL resource = TelaPrincipal.class.getResource("/com.gnr.sgp.view.imagens/logo.png");
 //        ImageIcon icon = new ImageIcon(resource);
 //        LabelLogo.setIcon(icon);
-
-
     }
 
     public void setOperador(String operador) {
         labelOperador.setText("Operador: " + operador);
     }
 
+    public void setPermissao(Boolean permissao) {
+        if (permissao) {
+
+        } else {
+
+        }
+    }
+
+    public void menu() {
+
+        //JSeparator separator = new JSeparator();
+        jPanelTop.setLayout(new BorderLayout());
+
+        jPanelTop.add(jPanelBotoes, BorderLayout.NORTH);
+        jPanelTop.add(jMenuBar, BorderLayout.SOUTH);
+
+    }
+
     private void atualizarDataHora() {
         // Atualiza data e hora
         now = Calendar.getInstance();
         labelDataEHora.setText(formato.format(dataSistema) + " " + String.format("%1$tH:%1$tM:%1$tS", now));
+    }
+
+    public void setLogo() {
+//        URL resource = getClass().getResource("/com/gnr/sgp/view/imagens/logo.png");
+//
+//        if (resource != null) {
+//            ImageIcon icon = new ImageIcon(resource);
+//            jLabelLogo.setIcon(icon);
+//        }
+
     }
 
     /**
@@ -78,22 +110,89 @@ public class TelaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuBar = new javax.swing.JMenuBar();
+        jMenuCadastro = new javax.swing.JMenu();
+        jMenuCadastroCliente = new javax.swing.JMenuItem();
+        jMenuCadastroFornecedor = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuConsulta = new javax.swing.JMenu();
+        jMenuRelatorio = new javax.swing.JMenu();
+        jMenuAjuda = new javax.swing.JMenu();
+        jMenuOpcoes = new javax.swing.JMenu();
         painelTelaPrincipal = new javax.swing.JPanel();
-        labelOperador = new javax.swing.JLabel();
-        labelDataEHora = new javax.swing.JLabel();
+        jPanelTop = new javax.swing.JPanel();
         jPanelBotoes = new javax.swing.JPanel();
-        jButtonSair = new javax.swing.JButton();
         jButtonMinimizar = new javax.swing.JButton();
+        jButtonSair = new javax.swing.JButton();
+        jPanelDown = new javax.swing.JPanel();
+        labelDataEHora = new javax.swing.JLabel();
+        labelOperador = new javax.swing.JLabel();
+        jDesktopPane1 = new javax.swing.JDesktopPane();
+
+        jMenuCadastro.setText("Cadastro");
+        jMenuCadastro.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+                jMenuCadastroAncestorMoved(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+
+        jMenuCadastroCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_DOWN_MASK));
+        jMenuCadastroCliente.setText("Novo Cliente");
+        jMenuCadastroCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuCadastroClienteActionPerformed(evt);
+            }
+        });
+        jMenuCadastro.add(jMenuCadastroCliente);
+
+        jMenuCadastroFornecedor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_DOWN_MASK));
+        jMenuCadastroFornecedor.setText("Novo Fornecedor");
+        jMenuCadastroFornecedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuCadastroFornecedorActionPerformed(evt);
+            }
+        });
+        jMenuCadastro.add(jMenuCadastroFornecedor);
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_DOWN_MASK));
+        jMenuItem1.setText("Novo Usuário");
+        jMenuCadastro.add(jMenuItem1);
+
+        jMenuBar.add(jMenuCadastro);
+
+        jMenuConsulta.setText("Consulta");
+        jMenuBar.add(jMenuConsulta);
+
+        jMenuRelatorio.setText("Relatório");
+        jMenuBar.add(jMenuRelatorio);
+
+        jMenuAjuda.setText("Ajuda");
+        jMenuBar.add(jMenuAjuda);
+
+        jMenuOpcoes.setText("Opções");
+        jMenuBar.add(jMenuOpcoes);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         painelTelaPrincipal.setBackground(new java.awt.Color(237, 249, 237));
 
-        labelOperador.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-
-        labelDataEHora.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jPanelTop.setBackground(new java.awt.Color(198, 222, 198));
 
         jPanelBotoes.setBackground(new java.awt.Color(198, 222, 198));
+
+        jButtonMinimizar.setBackground(new java.awt.Color(153, 153, 153));
+        jButtonMinimizar.setFont(new java.awt.Font("Courier New", 1, 48)); // NOI18N
+        jButtonMinimizar.setText("-");
+        jButtonMinimizar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jButtonMinimizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonMinimizarActionPerformed(evt);
+            }
+        });
 
         jButtonSair.setBackground(new java.awt.Color(255, 51, 51));
         jButtonSair.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
@@ -105,26 +204,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jButtonMinimizar.setBackground(new java.awt.Color(0, 204, 255));
-        jButtonMinimizar.setFont(new java.awt.Font("Courier New", 1, 48)); // NOI18N
-        jButtonMinimizar.setText("-");
-        jButtonMinimizar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jButtonMinimizar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonMinimizarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanelBotoesLayout = new javax.swing.GroupLayout(jPanelBotoes);
         jPanelBotoes.setLayout(jPanelBotoesLayout);
         jPanelBotoesLayout.setHorizontalGroup(
             jPanelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelBotoesLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonMinimizar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanelBotoesLayout.setVerticalGroup(
             jPanelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,32 +222,79 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonMinimizar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanelTopLayout = new javax.swing.GroupLayout(jPanelTop);
+        jPanelTop.setLayout(jPanelTopLayout);
+        jPanelTopLayout.setHorizontalGroup(
+            jPanelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanelBotoes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanelTopLayout.setVerticalGroup(
+            jPanelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelTopLayout.createSequentialGroup()
+                .addComponent(jPanelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 49, Short.MAX_VALUE))
+        );
+
+        jPanelDown.setBackground(new java.awt.Color(198, 222, 198));
+
+        labelDataEHora.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+
+        labelOperador.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+
+        javax.swing.GroupLayout jPanelDownLayout = new javax.swing.GroupLayout(jPanelDown);
+        jPanelDown.setLayout(jPanelDownLayout);
+        jPanelDownLayout.setHorizontalGroup(
+            jPanelDownLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelDownLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelOperador, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(labelDataEHora, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanelDownLayout.setVerticalGroup(
+            jPanelDownLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelDownLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanelDownLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(labelOperador, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelDataEHora, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
+        jDesktopPane1.setLayout(jDesktopPane1Layout);
+        jDesktopPane1Layout.setHorizontalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1039, Short.MAX_VALUE)
+        );
+        jDesktopPane1Layout.setVerticalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 520, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout painelTelaPrincipalLayout = new javax.swing.GroupLayout(painelTelaPrincipal);
         painelTelaPrincipal.setLayout(painelTelaPrincipalLayout);
         painelTelaPrincipalLayout.setHorizontalGroup(
             painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelTelaPrincipalLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(labelOperador, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(labelDataEHora, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelTelaPrincipalLayout.createSequentialGroup()
-                .addContainerGap(894, Short.MAX_VALUE)
-                .addComponent(jPanelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jPanelDown, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanelTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(painelTelaPrincipalLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         painelTelaPrincipalLayout.setVerticalGroup(
             painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelTelaPrincipalLayout.createSequentialGroup()
-                .addComponent(jPanelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 649, Short.MAX_VALUE)
-                .addGroup(painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelDataEHora, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelOperador, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+            .addGroup(painelTelaPrincipalLayout.createSequentialGroup()
+                .addComponent(jPanelTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jDesktopPane1)
+                .addGap(18, 18, 18)
+                .addComponent(jPanelDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -182,6 +318,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void jButtonMinimizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMinimizarActionPerformed
         setExtendedState(JFrame.ICONIFIED);
     }//GEN-LAST:event_jButtonMinimizarActionPerformed
+
+    private void jMenuCadastroClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuCadastroClienteActionPerformed
+
+    private void jMenuCadastroFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroFornecedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuCadastroFornecedorActionPerformed
+
+    private void jMenuCadastroAncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jMenuCadastroAncestorMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuCadastroAncestorMoved
 
     /**
      * @param args the command line arguments
@@ -222,7 +370,19 @@ public class TelaPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonMinimizar;
     private javax.swing.JButton jButtonSair;
+    private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JMenu jMenuAjuda;
+    private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenu jMenuCadastro;
+    private javax.swing.JMenuItem jMenuCadastroCliente;
+    private javax.swing.JMenuItem jMenuCadastroFornecedor;
+    private javax.swing.JMenu jMenuConsulta;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenu jMenuOpcoes;
+    private javax.swing.JMenu jMenuRelatorio;
     private javax.swing.JPanel jPanelBotoes;
+    private javax.swing.JPanel jPanelDown;
+    private javax.swing.JPanel jPanelTop;
     private javax.swing.JLabel labelDataEHora;
     private javax.swing.JLabel labelOperador;
     private javax.swing.JPanel painelTelaPrincipal;

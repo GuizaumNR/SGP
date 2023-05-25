@@ -67,10 +67,12 @@ public class LoginController implements ActionListener {
             try {
                 this.autenticacaoDao.permissao(usuarioTemp);
                 // O código aqui será executado se o usuário tiver permissão
+                tela.setPermissao(Boolean.TRUE);  
                 System.out.println("Usuário tem permissão para executar esta ação.");
                 
             } catch (NegocioException e) {
                 // O código aqui será executado se o usuário não tiver permissão
+                tela.setPermissao(Boolean.FALSE);  
                 System.out.println("Error: " + e.getMessage());
                 
             }
@@ -89,6 +91,7 @@ public class LoginController implements ActionListener {
     }
 
     private void limpaCampos() {
+        login.txtLoginUsuario.requestFocus();
         this.login.getTxtLoginUsuario().setText("");
         this.login.getPassSenhaUsuario().setText("");
     }

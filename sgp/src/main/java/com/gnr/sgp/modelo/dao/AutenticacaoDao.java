@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class AutenticacaoDao {
 
     private final UsuariosDao usuarioDao;
+    
 
     public AutenticacaoDao() {
         this.usuarioDao = new UsuariosDao();
@@ -24,6 +25,7 @@ public class AutenticacaoDao {
     public boolean temPermissao(Usuarios usuario) {
         try {
             permissao(usuario);
+            
             return true;
         } catch (Exception e) {
             return false;
