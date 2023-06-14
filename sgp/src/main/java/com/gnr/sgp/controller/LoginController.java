@@ -23,6 +23,7 @@ public class LoginController implements ActionListener {
     private final Login login;
     private AutenticacaoDao autenticacaoDao;
     private String operador;
+    
 
     public LoginController(Login login) {
         this.login = login;
