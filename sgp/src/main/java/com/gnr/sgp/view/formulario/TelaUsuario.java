@@ -8,13 +8,46 @@ package com.gnr.sgp.view.formulario;
  *
  * @author Guilherme
  */
+
+import com.gnr.sgp.modelo.conexao.Conexao;
+import java.sql.*;
+import com.gnr.sgp.modelo.conexao.ConexaoMysql;
+import javax.swing.JOptionPane;
+
 public class TelaUsuario extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form TelaUsuario
-     */
+   Conexao conexao = null;
+   PreparedStatement pst = null;
+   ResultSet rs = null;
+   
     public TelaUsuario() {
         initComponents();
+        conexao = new ConexaoMysql();
+    }
+    
+    private void consultar(){
+        
+        String sql = "select * from usuarios where login=?";
+        try {
+            pst=conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextUsuLogin.getText());
+            rs=pst.executeQuery();
+            if (rs.next()) {
+                jTextUsuNome.setText(rs.getString(5));
+                jTextUsuLogin.setText(rs.getString(2));
+                jPassUsuSenha.setText(rs.getString(3));
+                jComboUsuPerfil.setSelectedItem(rs.getString(4));
+            } else {
+                JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
+                jTextUsuNome.setText(null);
+                jTextUsuLogin.setText(null);
+                jPassUsuSenha.setText(null);
+                jComboUsuPerfil.setSelectedItem(null);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+               
+        }
     }
     
     public static String maxlength(String str) {
@@ -44,11 +77,12 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         jLabelUsuSenha = new javax.swing.JLabel();
         jPassUsuSenha = new javax.swing.JPasswordField();
         jComboUsuPerfil = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        jButtonUsuAdicionar = new javax.swing.JButton();
+        jButtonUsuConsultar = new javax.swing.JButton();
+        jButtonUsuEditar = new javax.swing.JButton();
+        jButtonUsuDeletar = new javax.swing.JButton();
 
+        setBorder(javax.swing.BorderFactory.createEtchedBorder());
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
@@ -82,35 +116,50 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         jLabelUsuSenha.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabelUsuSenha.setText("Senha:");
 
+        jPassUsuSenha.setMaximumSize(new java.awt.Dimension(64, 22));
         jPassUsuSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jPassUsuSenhaActionPerformed(evt);
             }
         });
 
-        jComboUsuPerfil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Consulta", "Administrador" }));
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com.gnr.sgp.view.imagens/create.png"))); // NOI18N
-        jButton1.setToolTipText("Adicionar");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.setPreferredSize(new java.awt.Dimension(80, 80));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jComboUsuPerfil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "consulta", "admin" }));
+        jComboUsuPerfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jComboUsuPerfilActionPerformed(evt);
             }
         });
 
-        jButton2.setMaximumSize(new java.awt.Dimension(80, 80));
-        jButton2.setPreferredSize(new java.awt.Dimension(80, 80));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonUsuAdicionar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\create.png"));
+        jButtonUsuAdicionar.setToolTipText("Adicionar");
+        jButtonUsuAdicionar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonUsuAdicionar.setPreferredSize(new java.awt.Dimension(80, 80));
+        jButtonUsuAdicionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonUsuAdicionarActionPerformed(evt);
             }
         });
 
-        jButton3.setPreferredSize(new java.awt.Dimension(80, 80));
+        jButtonUsuConsultar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\read.png"));
+        jButtonUsuConsultar.setToolTipText("Pesquisar");
+        jButtonUsuConsultar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonUsuConsultar.setMaximumSize(new java.awt.Dimension(80, 80));
+        jButtonUsuConsultar.setPreferredSize(new java.awt.Dimension(80, 80));
+        jButtonUsuConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUsuConsultarActionPerformed(evt);
+            }
+        });
 
-        jButton4.setPreferredSize(new java.awt.Dimension(80, 80));
+        jButtonUsuEditar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\update.png"));
+        jButtonUsuEditar.setToolTipText("Editar");
+        jButtonUsuEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonUsuEditar.setPreferredSize(new java.awt.Dimension(80, 80));
+
+        jButtonUsuDeletar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\delete.png"));
+        jButtonUsuDeletar.setToolTipText("Deletar");
+        jButtonUsuDeletar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonUsuDeletar.setPreferredSize(new java.awt.Dimension(80, 80));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -120,9 +169,9 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                 .addGap(114, 114, 114)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonUsuAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(65, 65, 65)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButtonUsuConsultar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelUsuNome)
@@ -139,13 +188,13 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                             .addComponent(jLabelUsuPerfil))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPassUsuSenha)
+                            .addComponent(jPassUsuSenha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jComboUsuPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonUsuEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(65, 65, 65)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(141, Short.MAX_VALUE))
+                        .addComponent(jButtonUsuDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(149, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,13 +211,13 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                     .addComponent(jLabelUsuPerfil)
                     .addComponent(jComboUsuPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextUsuLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 163, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonUsuAdicionar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonUsuConsultar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButtonUsuEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonUsuDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(135, 135, 135))
         );
 
@@ -189,20 +238,25 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         jPassUsuSenha.setText(maxlength(jPassUsuSenha.getText()));
     }//GEN-LAST:event_jPassUsuSenhaActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonUsuAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuAdicionarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonUsuAdicionarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButtonUsuConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuConsultarActionPerformed
+
+        consultar();
+    }//GEN-LAST:event_jButtonUsuConsultarActionPerformed
+
+    private void jComboUsuPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboUsuPerfilActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jComboUsuPerfilActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButtonUsuAdicionar;
+    private javax.swing.JButton jButtonUsuConsultar;
+    private javax.swing.JButton jButtonUsuDeletar;
+    private javax.swing.JButton jButtonUsuEditar;
     private javax.swing.JComboBox<String> jComboUsuPerfil;
     private javax.swing.JLabel jLabelUsuLogin;
     private javax.swing.JLabel jLabelUsuNome;
