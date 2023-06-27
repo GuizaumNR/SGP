@@ -40,27 +40,31 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace min="-2" pref="114" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jButtonUsuAdicionar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
                       <Component id="jButtonUsuConsultar" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabelUsuNome" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelUsuLogin" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jTextUsuLogin" max="32767" attributes="0"/>
-                          <Component id="jTextUsuNome" min="-2" pref="155" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabelUsuLogin" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jTextUsuLogin" min="-2" pref="155" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabelUsuNome" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jTextUsuNome" min="-2" pref="155" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -88,17 +92,17 @@
           <Group type="102" attributes="0">
               <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabelUsuNome" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTextUsuNome" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelUsuSenha" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jPassUsuSenha" linkSize="2" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="jLabelUsuLogin" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jTextUsuLogin" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="80" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabelUsuLogin" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabelUsuPerfil" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jComboUsuPerfil" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                  <Component id="jTextUsuLogin" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelUsuNome" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jTextUsuNome" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="163" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">

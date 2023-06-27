@@ -8,6 +8,7 @@ import com.gnr.sgp.view.formulario.TelaSobre;
 import com.gnr.sgp.view.formulario.TelaUsuario;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.awt.image.BufferedImage;
@@ -52,7 +53,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         LabelAviso.setText("Aviso! ");
         labelSuporte.setText("Suporte: Guilherme - (53) 99912-8134");
         menu();
-//        setLogo();
         atualizarDataHora();
         // Cria um Timer com intervalo de 1 segundo (1000 milissegundos)
         Timer timer = new Timer(1000, e -> atualizarDataHora());
@@ -71,11 +71,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jButtonSair.setFocusable(false);
         jButtonMinimizar.setFocusable(false);
 
-//        URL resource = getClass().getResource("/com.gnr.sgp.view.imagens/logo.png");
-//        ImageIcon icon = new ImageIcon(resource);
 //        jlabelLogo.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\logo.png"));
         
     }
+    
+//    ImageIcon img = new ImageIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\logo.png").getImage());
+//    this.setIconImage(img.getImage());
 
     public void setOperador(String operador) {
         labelOperador.setText("Operador: " + operador);
@@ -105,31 +106,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         now = Calendar.getInstance();
         labelDataEHora.setText(formato.format(dataSistema) + " " + String.format("%1$tH:%1$tM:%1$tS", now));
     }
-
-//    public void setLogo() throws IOException {
-////        URL resource = getClass().getResource("/com/gnr/sgp/view/imagens/logo.png");
-////
-////        if (resource != null) {
-////            ImageIcon icon = new ImageIcon(resource);
-////            labelLogo.setIcon(icon);
-////        }
-////
-//        try {
-//        InputStream resourceStream = TelaPrincipal.class.getResourceAsStream("/com/gnr/sgp/view/imagens/logo.png");
-//        if (resourceStream != null) {
-//            BufferedImage image = ImageIO.read(resourceStream);
-//            ImageIcon icon = new ImageIcon(image);
-//            labelLogo.setIcon(icon);
-//        } else {
-//            // Lidar com o caso em que o recurso não pôde ser encontrado
-//            // ou o fluxo de entrada é nulo
-//        }
-//    } catch (IOException e) {
-//        // Lidar com a exceção de E/S aqui
-//        e.printStackTrace();
-//    }
-//
-//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
