@@ -28,7 +28,6 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     public Login() {
-//System.out.println(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\resources\\create.png")); 
         initComponents();
         setLocationRelativeTo(null);
         requestFocus();
@@ -54,12 +53,6 @@ public class Login extends javax.swing.JFrame {
             }
         });
         
-//        try {
-////            setContentPane(new JLabel(new ImageIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\logo.png"));
-//            setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("\\src\\main\\java\\resources\\fundo.png")))));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     private void eventos() {

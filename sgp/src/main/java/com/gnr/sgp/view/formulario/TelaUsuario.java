@@ -12,6 +12,8 @@ package com.gnr.sgp.view.formulario;
 import com.gnr.sgp.modelo.conexao.Conexao;
 import java.sql.*;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
+import com.gnr.sgp.modelo.dao.UsuariosDao;
+import com.gnr.sgp.modelo.dominio.Usuarios;
 import com.gnr.sgp.view.modelo.Validador;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,7 +60,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
 //    }
 //    
     private void adicionar(){
+        Usuarios usuarioExemplo = new Usuarios(0l, jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
         
+        UsuariosDao usuariosDao = new UsuariosDao();
+        String mensagem = usuariosDao.salvar(usuarioExemplo);
+        System.out.println(mensagem);
     }
     
 
@@ -244,11 +250,10 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jPassUsuSenhaActionPerformed
 
     private void jButtonUsuAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuAdicionarActionPerformed
-        // TODO add your handling code here:
+        adicionar();
     }//GEN-LAST:event_jButtonUsuAdicionarActionPerformed
 
     private void jButtonUsuConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuConsultarActionPerformed
-
         consultar();
     }//GEN-LAST:event_jButtonUsuConsultarActionPerformed
 

@@ -69,12 +69,10 @@ public class LoginController implements ActionListener {
                 this.autenticacaoDao.permissao(usuarioTemp);
                 // O código aqui será executado se o usuário tiver permissão
                 tela.setPermissao(Boolean.TRUE);  
-                System.out.println("Usuário tem permissão para executar esta ação.");
                 
             } catch (NegocioException e) {
                 // O código aqui será executado se o usuário não tiver permissão
                 tela.setPermissao(Boolean.FALSE);  
-                System.out.println("Error: " + e.getMessage());
                 
             }
         } else {

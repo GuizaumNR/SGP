@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -37,12 +38,13 @@ public class UsuariosDao {
     ;
 
     private String adicionar(Usuarios usuario) {
-        String sql = "INSERT INTO usuarios(login, senha, tipo) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO usuarios(login, senha, tipo, nome) VALUES(?, ?, ?, ?)";
 
         Usuarios usuarioTemp = buscarUsuariosLogin(usuario.getLogin());
 
         if (usuarioTemp != null) {
-            return String.format("Erro: esse login %s já existe no banco de dados.", usuario.getLogin());
+            JOptionPane.showMessageDialog(null, "Erro: Este login já existe no banco de dados.");
+            return String.format("Erro: Este login %s já existe no banco de dados.", usuario.getLogin());
         }
 
         try {
@@ -53,13 +55,18 @@ public class UsuariosDao {
             int resultado = preparedStatement.executeUpdate();
 
             if (resultado == 1) {
+                JOptionPane.showMessageDialog(null, "Usuário adicionado com sucesso!");
                 return "Usuário adicionado com sucesso!";
             } else {
+                JOptionPane.showMessageDialog(null, "Não foi possível adicionar o usuário.");
                 return "Não foi possível adicionar o usuário.";
             }
 
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar o usuário.");
+            e.printStackTrace();
             return String.format("Error: %s", e.getMessage());
+             
         }
 
     }
@@ -92,6 +99,7 @@ public class UsuariosDao {
         preparedStatement.setString(1, usuario.getLogin());
         preparedStatement.setString(2, senhaCrypt);
         preparedStatement.setString(3, usuario.getTipo());
+        preparedStatement.setString(4, usuario.getNome());
 
         if (usuario.getId() != 0) {
             preparedStatement.setLong(6, usuario.getId());
@@ -111,7 +119,7 @@ public class UsuariosDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error: " + e.getMessage());
+            JOptionPane.showInputDialog(null,"Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
         }
 
         return usuarios;
@@ -123,7 +131,7 @@ public class UsuariosDao {
         usuarios.setLogin(result.getString("login"));
         usuarios.setSenha(result.getString("senha"));
         usuarios.setTipo(result.getString("tipo"));
-
+        usuarios.setNome(result.getString("nome"));
         return usuarios;
     }
 
@@ -139,7 +147,7 @@ public class UsuariosDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error: " + e.getMessage());
+           JOptionPane.showConfirmDialog(null,"Error: " + e.getMessage(),"Erro:", JOptionPane.ERROR);
         }
 
         return null;
@@ -147,7 +155,7 @@ public class UsuariosDao {
 
     public Usuarios buscarUsuariosLogin(String login) {
         String sql = String.format("SELECT * FROM usuarios WHERE login = '%s'", login);
-        System.out.println(sql);
+//        System.out.println(sql);
 
         try {
             ResultSet result = conexao.obterConexao().prepareStatement(sql).executeQuery();
@@ -158,7 +166,7 @@ public class UsuariosDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error: " + e.getMessage());
+           JOptionPane.showConfirmDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
         }
 
         return null;

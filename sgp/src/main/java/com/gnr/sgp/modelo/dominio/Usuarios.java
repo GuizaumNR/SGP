@@ -17,19 +17,30 @@ public class Usuarios {
     private String login;
     private String senha;
     private String tipo;
+    private String nome;
+
+   
 
     public Usuarios() {
         this.tipo = "consulta"; 
     }
     
    
-    public Usuarios(Long id, String login, String senha, String tipo) {
+    public Usuarios(Long id, String login, String senha, String tipo, String nome) {
         this.id = id;
         this.login = login;
         this.senha = senha;
         this.tipo = tipo;
+        this.nome = nome;
     }
 
+     public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getNome() {
+        return nome;
+    } 
     public Long getId() {
         return id;
     }
