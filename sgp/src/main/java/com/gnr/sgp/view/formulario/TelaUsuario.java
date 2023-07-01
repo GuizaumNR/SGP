@@ -8,7 +8,6 @@ package com.gnr.sgp.view.formulario;
  *
  * @author Guilherme
  */
-
 import com.gnr.sgp.modelo.conexao.Conexao;
 import java.sql.*;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
@@ -21,53 +20,62 @@ import javax.swing.JOptionPane;
 
 public class TelaUsuario extends javax.swing.JInternalFrame {
 
-   Conexao conexao = null;
-   PreparedStatement pst = null;
-   ResultSet rs = null;
-   
+    Conexao conexao = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+
     public TelaUsuario() {
         initComponents();
         conexao = new ConexaoMysql();
         jPassUsuSenha.setDocument(new Validador(4));
+        jTextUsuLogin.setDocument(new Validador(10));
+        jTextUsuNome.setDocument(new Validador(10));
+
     }
-    
-    private void consultar(){
-        
-        String sql = "select * from usuarios where login=?";
-//       if(jTextUsuLogin.hasFocus()){
-        try {
-            pst=conexao.obterConexao().prepareStatement(sql);
-            pst.setString(1, jTextUsuLogin.getText());
-            rs=pst.executeQuery();
-            if (rs.next()) {
-                jTextUsuNome.setText(rs.getString(5));
-                jTextUsuLogin.setText(rs.getString(2));
-                jPassUsuSenha.setText(rs.getString(3));
-                jComboUsuPerfil.setSelectedItem(rs.getString(4));
-            } else {
-                JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
+
+    private void consultar() {
+
+        UsuariosDao usuarioDAO = new UsuariosDao();
+        Usuarios usuarioEncontrado = usuarioDAO.buscarUsuariosLogin(jTextUsuLogin.getText());
+
+        if (usuarioEncontrado != null) {
+            jTextUsuNome.setText(usuarioEncontrado.getNome());
+            jTextUsuLogin.setText(usuarioEncontrado.getLogin());
+            jComboUsuPerfil.setSelectedItem(usuarioEncontrado.getTipo());
+        } else {
+             JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
                 jTextUsuNome.setText(null);
                 jTextUsuLogin.setText(null);
                 jPassUsuSenha.setText(null);
                 jComboUsuPerfil.setSelectedItem("consulta");
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao consultar o usuário.");
-            e.printStackTrace();      
         }
-       }
-    
-//    }
-//    
-    private void adicionar(){
-        Usuarios usuarioExemplo = new Usuarios(0l, jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
-        
+
+    }
+
+    private void adicionar() {
+        Usuarios usuario = new Usuarios(0l, jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
+
         UsuariosDao usuariosDao = new UsuariosDao();
-        String mensagem = usuariosDao.salvar(usuarioExemplo);
-        System.out.println(mensagem);
+        usuariosDao.adicionar(usuario);
+        
+        jTextUsuNome.setText(null);
+        jTextUsuLogin.setText(null);
+        jPassUsuSenha.setText(null);
+        jComboUsuPerfil.setSelectedItem("consulta");
+
     }
     
+    private void editar() {
+        Usuarios usuario = new Usuarios(0l, jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
 
+        UsuariosDao usuariosDao = new UsuariosDao();
+        usuariosDao.editar(usuario);
+
+//        jTextUsuNome.setText(null);
+//        jTextUsuLogin.setText(null);
+//        jPassUsuSenha.setText(null);
+//        jComboUsuPerfil.setSelectedItem("consulta");
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -163,6 +171,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         jButtonUsuEditar.setToolTipText("Editar");
         jButtonUsuEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonUsuEditar.setPreferredSize(new java.awt.Dimension(80, 80));
+        jButtonUsuEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUsuEditarActionPerformed(evt);
+            }
+        });
 
         jButtonUsuDeletar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\delete.png"));
         jButtonUsuDeletar.setToolTipText("Deletar");
@@ -246,11 +259,12 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextUsuNomeActionPerformed
 
     private void jPassUsuSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPassUsuSenhaActionPerformed
-        
+
     }//GEN-LAST:event_jPassUsuSenhaActionPerformed
 
     private void jButtonUsuAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuAdicionarActionPerformed
         adicionar();
+     
     }//GEN-LAST:event_jButtonUsuAdicionarActionPerformed
 
     private void jButtonUsuConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuConsultarActionPerformed
@@ -261,19 +275,23 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboUsuPerfilActionPerformed
 
+    private void jButtonUsuEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuEditarActionPerformed
+       editar();
+    }//GEN-LAST:event_jButtonUsuEditarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonUsuAdicionar;
     private javax.swing.JButton jButtonUsuConsultar;
     private javax.swing.JButton jButtonUsuDeletar;
     private javax.swing.JButton jButtonUsuEditar;
-    private javax.swing.JComboBox<String> jComboUsuPerfil;
+    public javax.swing.JComboBox<String> jComboUsuPerfil;
     private javax.swing.JLabel jLabelUsuLogin;
     private javax.swing.JLabel jLabelUsuNome;
     private javax.swing.JLabel jLabelUsuPerfil;
     private javax.swing.JLabel jLabelUsuSenha;
-    private javax.swing.JPasswordField jPassUsuSenha;
-    private javax.swing.JTextField jTextUsuLogin;
-    private javax.swing.JTextField jTextUsuNome;
+    public javax.swing.JPasswordField jPassUsuSenha;
+    public javax.swing.JTextField jTextUsuLogin;
+    public javax.swing.JTextField jTextUsuNome;
     // End of variables declaration//GEN-END:variables
 }

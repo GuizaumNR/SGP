@@ -3,9 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.gnr.sgp.modelo.dao;
+
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dominio.Usuarios;
+import com.gnr.sgp.view.formulario.TelaUsuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,26 +20,26 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  *
  * @author Guilherme
  */
-
 public class UsuariosDao {
 
     private final Conexao conexao;
+    TelaUsuario telaUsu;
 
     public UsuariosDao() {
         this.conexao = new ConexaoMysql();
     }
 
-    public String salvar(Usuarios usuario) {
-        if (usuario.getId() == 0) {
-            return adicionar(usuario);
-        } else {
-            return editar(usuario);
-        }
-    }
+//    public String salvar(Usuarios usuario) {
+//        if (usuario.getId() == 0) {
+//            return adicionar(usuario);
+//        } else {
+//            return editar(usuario);
+//        }
+//    }
 
     ;
 
-    private String adicionar(Usuarios usuario) {
+    public String adicionar(Usuarios usuario) {
         String sql = "INSERT INTO usuarios(login, senha, tipo, nome) VALUES(?, ?, ?, ?)";
 
         Usuarios usuarioTemp = buscarUsuariosLogin(usuario.getLogin());
@@ -55,6 +57,7 @@ public class UsuariosDao {
             int resultado = preparedStatement.executeUpdate();
 
             if (resultado == 1) {
+
                 JOptionPane.showMessageDialog(null, "Usuário adicionado com sucesso!");
                 return "Usuário adicionado com sucesso!";
             } else {
@@ -66,36 +69,47 @@ public class UsuariosDao {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar o usuário.");
             e.printStackTrace();
             return String.format("Error: %s", e.getMessage());
-             
+
         }
 
     }
 
-    private String editar(Usuarios usuario) {
-        String sql = "UPDATE usuarios SET login = ?, senha = ?, tipo = ? WHERE id = ? ";
+    public String editar(Usuarios usuario) {
+//        String sql = "UPDATE usuarios SET login = ?, senha = ?, tipo = ?, nome = ? WHERE id = ?";
+//        try {
+//            PreparedStatement preparedStatement = conexao.obterConexao().prepareStatement(sql);
+//
+//            preencherValoresPreparedStatment(preparedStatement, usuario);
+//
+//            int resultado = preparedStatement.executeUpdate();
+//
+//            if (resultado == 1) {
+//                 JOptionPane.showMessageDialog(null, "Usuário editado com sucesso!");
+//                 return "Usuário editado com sucesso!";
+//            } else {
+//                JOptionPane.showMessageDialog(null, "Não foi possível editar o usuário.");
+//                return "Não foi possível editar o usuário.";
+//            }
+//
+//        } catch (SQLException e) {
+//            return String.format("Error: %s", e.getMessage());
+//        }
+        String sql = "UPDATE usuarios SET senha = ?, tipo = ?, nome = ? WHERE login = ?";
         try {
             PreparedStatement preparedStatement = conexao.obterConexao().prepareStatement(sql);
-
             preencherValoresPreparedStatment(preparedStatement, usuario);
-
-            int resultado = preparedStatement.executeUpdate();
-
-            if (resultado == 1) {
-                return "Usuário editado com sucesso!";
-            } else {
-                return "Não foi possível editar o usuário.";
-            }
-
-        } catch (SQLException e) {
+        } catch (Exception e) {
             return String.format("Error: %s", e.getMessage());
         }
+        return null;
+        
     }
 
     private void preencherValoresPreparedStatment(PreparedStatement preparedStatement, Usuarios usuario) throws SQLException {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String senhaCrypt = passwordEncoder.encode(usuario.getSenha());
-                
+
         preparedStatement.setString(1, usuario.getLogin());
         preparedStatement.setString(2, senhaCrypt);
         preparedStatement.setString(3, usuario.getTipo());
@@ -119,7 +133,7 @@ public class UsuariosDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showInputDialog(null,"Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
+            JOptionPane.showInputDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
         }
 
         return usuarios;
@@ -147,7 +161,7 @@ public class UsuariosDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-           JOptionPane.showConfirmDialog(null,"Error: " + e.getMessage(),"Erro:", JOptionPane.ERROR);
+            JOptionPane.showConfirmDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
         }
 
         return null;
@@ -155,20 +169,14 @@ public class UsuariosDao {
 
     public Usuarios buscarUsuariosLogin(String login) {
         String sql = String.format("SELECT * FROM usuarios WHERE login = '%s'", login);
-//        System.out.println(sql);
-
         try {
             ResultSet result = conexao.obterConexao().prepareStatement(sql).executeQuery();
-
             if (result.next()) {
                 return getUsuarios(result);
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
-           JOptionPane.showConfirmDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
         }
-
         return null;
     }
 
