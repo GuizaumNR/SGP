@@ -4,6 +4,7 @@ package com.gnr.sgp.modelo.conexao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 public class ConexaoMysql implements Conexao {
 
@@ -17,9 +18,9 @@ public class ConexaoMysql implements Conexao {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (ClassNotFoundException e) {
-            System.out.println("Não foi possível encontrar o driver de conexão com o MySQL.");
+             JOptionPane.showMessageDialog(null,"Não foi possível encontrar o driver de conexão com o MySQL.");
         } catch (SQLException e) {
-            System.out.println("Não foi possível conectar ao banco de dados MySQL.");
+             JOptionPane.showMessageDialog(null,"Não foi possível conectar ao banco de dados MySQL.");
         }
     }
 

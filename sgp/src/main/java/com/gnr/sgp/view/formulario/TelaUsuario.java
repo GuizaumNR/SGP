@@ -17,6 +17,7 @@ import com.gnr.sgp.view.modelo.Validador;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class TelaUsuario extends javax.swing.JInternalFrame {
 
@@ -43,39 +44,76 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             jTextUsuLogin.setText(usuarioEncontrado.getLogin());
             jComboUsuPerfil.setSelectedItem(usuarioEncontrado.getTipo());
         } else {
-             JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
-                jTextUsuNome.setText(null);
-                jTextUsuLogin.setText(null);
-                jPassUsuSenha.setText(null);
-                jComboUsuPerfil.setSelectedItem("consulta");
+            JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
+            jTextUsuNome.setText(null);
+            jTextUsuLogin.setText(null);
+            jPassUsuSenha.setText(null);
+            jComboUsuPerfil.setSelectedItem("consulta");
         }
 
     }
 
     private void adicionar() {
-        Usuarios usuario = new Usuarios(0l, jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
+        if ((jTextUsuLogin.getText().isEmpty() || jPassUsuSenha.getText().isEmpty() || jComboUsuPerfil.getSelectedItem().toString().isEmpty() || jTextUsuNome.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
+        } else {
 
-        UsuariosDao usuariosDao = new UsuariosDao();
-        usuariosDao.adicionar(usuario);
-        
-        jTextUsuNome.setText(null);
-        jTextUsuLogin.setText(null);
-        jPassUsuSenha.setText(null);
-        jComboUsuPerfil.setSelectedItem("consulta");
+            Usuarios usuario = new Usuarios(0l, jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
 
+            UsuariosDao usuariosDao = new UsuariosDao();
+            usuariosDao.adicionar(usuario);
+
+//            jTextUsuNome.setText(null);
+//            jTextUsuLogin.setText(null);
+//            jPassUsuSenha.setText(null);
+//            jComboUsuPerfil.setSelectedItem("consulta");
+        }
     }
-    
+
     private void editar() {
-        Usuarios usuario = new Usuarios(0l, jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
 
-        UsuariosDao usuariosDao = new UsuariosDao();
-        usuariosDao.editar(usuario);
-
+//        Usuarios usuario = new Usuarios(0l, jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
+//
+//        UsuariosDao usuariosDao = new UsuariosDao();
+//        usuariosDao.editar(usuario);
 //        jTextUsuNome.setText(null);
 //        jTextUsuLogin.setText(null);
 //        jPassUsuSenha.setText(null);
 //        jComboUsuPerfil.setSelectedItem("consulta");
+        String sql = "UPDATE usuarios SET senha = ?, tipo = ?, nome = ? WHERE login = ?";
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String senhaCrypt = passwordEncoder.encode(jPassUsuSenha.getText());
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, senhaCrypt);
+            pst.setString(2, jComboUsuPerfil.getSelectedItem().toString());
+            pst.setString(3, jTextUsuNome.getText());
+            pst.setString(4, jTextUsuLogin.getText());
+            if ((jTextUsuLogin.getText().isEmpty() || jPassUsuSenha.getText().isEmpty() || jComboUsuPerfil.getSelectedItem().toString().isEmpty() || jTextUsuNome.getText().isEmpty())) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
+            } else {
+                int editado = pst.executeUpdate();
+                if (editado > 0) {
+                    JOptionPane.showMessageDialog(null, "Dados do usuário alterados com sucesso!");
+
+                      limpaCampos();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não foi possível alterar os dados do usuário.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showInputDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
+        }
     }
+
+    public void limpaCampos() {
+        jTextUsuNome.setText(null);
+        jTextUsuLogin.setText(null);
+        jPassUsuSenha.setText(null);
+        jComboUsuPerfil.setSelectedItem("consulta");
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -264,7 +302,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
 
     private void jButtonUsuAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuAdicionarActionPerformed
         adicionar();
-     
+
     }//GEN-LAST:event_jButtonUsuAdicionarActionPerformed
 
     private void jButtonUsuConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuConsultarActionPerformed
@@ -276,7 +314,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jComboUsuPerfilActionPerformed
 
     private void jButtonUsuEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuEditarActionPerformed
-       editar();
+        editar();
     }//GEN-LAST:event_jButtonUsuEditarActionPerformed
 
 

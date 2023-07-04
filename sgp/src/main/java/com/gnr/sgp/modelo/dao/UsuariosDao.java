@@ -23,7 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class UsuariosDao {
 
     private final Conexao conexao;
-    TelaUsuario telaUsu;
+    TelaUsuario telaUsu = new TelaUsuario();
 
     public UsuariosDao() {
         this.conexao = new ConexaoMysql();
@@ -36,7 +36,6 @@ public class UsuariosDao {
 //            return editar(usuario);
 //        }
 //    }
-
     ;
 
     public String adicionar(Usuarios usuario) {
@@ -56,8 +55,12 @@ public class UsuariosDao {
 
             int resultado = preparedStatement.executeUpdate();
 
-            if (resultado == 1) {
-
+            if (resultado > 1) {
+//                telaUsu.limpaCampos();
+                telaUsu.jTextUsuNome.setText(null);
+                telaUsu.jTextUsuLogin.setText(null);
+                telaUsu.jPassUsuSenha.setText(null);
+                telaUsu.jComboUsuPerfil.setSelectedItem("consulta");
                 JOptionPane.showMessageDialog(null, "Usuário adicionado com sucesso!");
                 return "Usuário adicionado com sucesso!";
             } else {
@@ -102,7 +105,7 @@ public class UsuariosDao {
             return String.format("Error: %s", e.getMessage());
         }
         return null;
-        
+
     }
 
     private void preencherValoresPreparedStatment(PreparedStatement preparedStatement, Usuarios usuario) throws SQLException {
