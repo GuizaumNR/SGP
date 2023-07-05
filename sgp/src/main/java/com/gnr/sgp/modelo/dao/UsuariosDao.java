@@ -28,14 +28,6 @@ public class UsuariosDao {
     public UsuariosDao() {
         this.conexao = new ConexaoMysql();
     }
-
-//    public String salvar(Usuarios usuario) {
-//        if (usuario.getId() == 0) {
-//            return adicionar(usuario);
-//        } else {
-//            return editar(usuario);
-//        }
-//    }
     ;
 
     public String adicionar(Usuarios usuario) {
@@ -45,67 +37,80 @@ public class UsuariosDao {
 
         if (usuarioTemp != null) {
             JOptionPane.showMessageDialog(null, "Erro: Este login já existe no banco de dados.");
-            return String.format("Erro: Este login %s já existe no banco de dados.", usuario.getLogin());
         }
 
         try {
-            PreparedStatement preparedStatement = conexao.obterConexao().prepareStatement(sql);
+            PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
 
-            preencherValoresPreparedStatment(preparedStatement, usuario);
+            preencherValoresPreparedStatment(pst, usuario);
 
-            int resultado = preparedStatement.executeUpdate();
+            int resultado = pst.executeUpdate();
 
             if (resultado > 1) {
-//                telaUsu.limpaCampos();
-                telaUsu.jTextUsuNome.setText(null);
-                telaUsu.jTextUsuLogin.setText(null);
-                telaUsu.jPassUsuSenha.setText(null);
-                telaUsu.jComboUsuPerfil.setSelectedItem("consulta");
                 JOptionPane.showMessageDialog(null, "Usuário adicionado com sucesso!");
-                return "Usuário adicionado com sucesso!";
             } else {
                 JOptionPane.showMessageDialog(null, "Não foi possível adicionar o usuário.");
-                return "Não foi possível adicionar o usuário.";
             }
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar o usuário.");
             e.printStackTrace();
-            return String.format("Error: %s", e.getMessage());
-
         }
-
+        return null;
     }
 
     public String editar(Usuarios usuario) {
-//        String sql = "UPDATE usuarios SET login = ?, senha = ?, tipo = ?, nome = ? WHERE id = ?";
-//        try {
-//            PreparedStatement preparedStatement = conexao.obterConexao().prepareStatement(sql);
-//
-//            preencherValoresPreparedStatment(preparedStatement, usuario);
-//
-//            int resultado = preparedStatement.executeUpdate();
-//
-//            if (resultado == 1) {
-//                 JOptionPane.showMessageDialog(null, "Usuário editado com sucesso!");
-//                 return "Usuário editado com sucesso!";
-//            } else {
-//                JOptionPane.showMessageDialog(null, "Não foi possível editar o usuário.");
-//                return "Não foi possível editar o usuário.";
-//            }
-//
-//        } catch (SQLException e) {
-//            return String.format("Error: %s", e.getMessage());
-//        }
         String sql = "UPDATE usuarios SET senha = ?, tipo = ?, nome = ? WHERE login = ?";
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String senhaCrypt = passwordEncoder.encode(usuario.getSenha());
         try {
-            PreparedStatement preparedStatement = conexao.obterConexao().prepareStatement(sql);
-            preencherValoresPreparedStatment(preparedStatement, usuario);
-        } catch (Exception e) {
-            return String.format("Error: %s", e.getMessage());
+            PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, senhaCrypt);
+            pst.setString(2, usuario.getTipo());
+            pst.setString(3, usuario.getNome());
+            pst.setString(4, usuario.getLogin());
+
+            int editado = pst.executeUpdate();
+            if (editado > 0) {
+                JOptionPane.showMessageDialog(null, "Dados do usuário alterados com sucesso!");;
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possível alterar os dados do usuário.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
         }
         return null;
 
+    }
+    
+    public String deletar(Usuarios usuario){
+         String sql = "delete from usuarios where login = ?";
+         
+         Usuarios usuarioTemp = buscarUsuariosLogin(usuario.getLogin());
+
+        if (usuarioTemp == null) {
+            JOptionPane.showMessageDialog(null, "Erro: Este login não existe no banco de dados.");
+        }
+
+            try {
+                PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
+                pst.setString(1, usuario.getLogin());
+                
+                int deletado = pst.executeUpdate();
+            if (deletado > 0) {
+                JOptionPane.showMessageDialog(null, "Dados do usuário deletados com sucesso!");;
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possível deletar os dados do usuário.");
+            }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
+            }
+        return null;
     }
 
     private void preencherValoresPreparedStatment(PreparedStatement preparedStatement, Usuarios usuario) throws SQLException {

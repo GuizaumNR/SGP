@@ -45,10 +45,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             jComboUsuPerfil.setSelectedItem(usuarioEncontrado.getTipo());
         } else {
             JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
-            jTextUsuNome.setText(null);
-            jTextUsuLogin.setText(null);
-            jPassUsuSenha.setText(null);
-            jComboUsuPerfil.setSelectedItem("consulta");
+            limpaCampos();
         }
 
     }
@@ -63,48 +60,37 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             UsuariosDao usuariosDao = new UsuariosDao();
             usuariosDao.adicionar(usuario);
 
-//            jTextUsuNome.setText(null);
-//            jTextUsuLogin.setText(null);
-//            jPassUsuSenha.setText(null);
-//            jComboUsuPerfil.setSelectedItem("consulta");
+            limpaCampos();
         }
     }
 
     private void editar() {
 
-//        Usuarios usuario = new Usuarios(0l, jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
-//
-//        UsuariosDao usuariosDao = new UsuariosDao();
-//        usuariosDao.editar(usuario);
-//        jTextUsuNome.setText(null);
-//        jTextUsuLogin.setText(null);
-//        jPassUsuSenha.setText(null);
-//        jComboUsuPerfil.setSelectedItem("consulta");
-        String sql = "UPDATE usuarios SET senha = ?, tipo = ?, nome = ? WHERE login = ?";
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String senhaCrypt = passwordEncoder.encode(jPassUsuSenha.getText());
-        try {
-            pst = conexao.obterConexao().prepareStatement(sql);
-            pst.setString(1, senhaCrypt);
-            pst.setString(2, jComboUsuPerfil.getSelectedItem().toString());
-            pst.setString(3, jTextUsuNome.getText());
-            pst.setString(4, jTextUsuLogin.getText());
-            if ((jTextUsuLogin.getText().isEmpty() || jPassUsuSenha.getText().isEmpty() || jComboUsuPerfil.getSelectedItem().toString().isEmpty() || jTextUsuNome.getText().isEmpty())) {
-                JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
-            } else {
-                int editado = pst.executeUpdate();
-                if (editado > 0) {
-                    JOptionPane.showMessageDialog(null, "Dados do usuário alterados com sucesso!");
+        if ((jTextUsuLogin.getText().isEmpty() || jPassUsuSenha.getText().isEmpty() || jComboUsuPerfil.getSelectedItem().toString().isEmpty() || jTextUsuNome.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
+        } else {
+            Usuarios usuario = new Usuarios(0l, jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
 
-                      limpaCampos();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Não foi possível alterar os dados do usuário.");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showInputDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
+            UsuariosDao usuariosDao = new UsuariosDao();
+            usuariosDao.editar(usuario);
+
+            limpaCampos();
         }
+    }
+
+    public void deletar() {
+
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar o usuário " + jTextUsuLogin.getText() + " do banco de dados?", "Atenção", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            Usuarios usuario = new Usuarios(0l, jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
+
+            UsuariosDao usuariosDao = new UsuariosDao();
+            usuariosDao.deletar(usuario);
+
+            limpaCampos();
+
+        }
+
     }
 
     public void limpaCampos() {
@@ -219,6 +205,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         jButtonUsuDeletar.setToolTipText("Deletar");
         jButtonUsuDeletar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonUsuDeletar.setPreferredSize(new java.awt.Dimension(80, 80));
+        jButtonUsuDeletar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUsuDeletarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -316,6 +307,10 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     private void jButtonUsuEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuEditarActionPerformed
         editar();
     }//GEN-LAST:event_jButtonUsuEditarActionPerformed
+
+    private void jButtonUsuDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuDeletarActionPerformed
+        deletar();
+    }//GEN-LAST:event_jButtonUsuDeletarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
