@@ -4,6 +4,7 @@
  */
 package com.gnr.sgp;
 
+import com.gnr.sgp.view.formulario.TelaFornecedor;
 import com.gnr.sgp.view.formulario.TelaSobre;
 import com.gnr.sgp.view.formulario.TelaUsuario;
 import java.awt.BorderLayout;
@@ -441,7 +442,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuCadastroClienteActionPerformed
 
     private void jMenuCadastroFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroFornecedorActionPerformed
-        // TODO add your handling code here:
+      
+        TelaFornecedor fornecedor = new TelaFornecedor();
+        fornecedor.setVisible(true);
+        jDesktok.add(fornecedor);
     }//GEN-LAST:event_jMenuCadastroFornecedorActionPerformed
 
     private void jMenuCadastroAncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jMenuCadastroAncestorMoved
