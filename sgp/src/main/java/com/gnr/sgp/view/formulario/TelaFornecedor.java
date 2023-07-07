@@ -4,6 +4,12 @@
  */
 package com.gnr.sgp.view.formulario;
 
+import com.gnr.sgp.modelo.dao.FornecedoresDao;
+import com.gnr.sgp.modelo.dao.UsuariosDao;
+import com.gnr.sgp.modelo.dominio.Fornecedores;
+import com.gnr.sgp.modelo.dominio.Usuarios;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Guilherme
@@ -15,6 +21,28 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
      */
     public TelaFornecedor() {
         initComponents();
+    }
+    
+    public void adicionar(){
+         if ((jTextFornNome.getText().isEmpty() || jTextFornTelefone.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
+        } else {
+
+            Fornecedores fornecedor = new Fornecedores(0l, jTextFornNome.getText(), jTextFornTelefone.getText(), jTextFornEmail.getText(), jTextFornEndereco.getText());
+
+            FornecedoresDao fornecedoresDao = new FornecedoresDao();
+            fornecedoresDao.adicionar(fornecedor);
+            
+            limpaCampos();
+        }
+    }
+    
+    public void limpaCampos() {
+        jTextFornBusca.setText(null);
+        jTextFornNome.setText(null);
+        jTextFornTelefone.setText(null);
+        jTextFornEmail.setText(null);
+        jTextFornEndereco.setText(null);
     }
 
     /**
@@ -211,7 +239,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonFornAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFornAdicionarActionPerformed
-        
+        adicionar();
     }//GEN-LAST:event_jButtonFornAdicionarActionPerformed
 
     private void jButtonFornEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFornEditarActionPerformed
@@ -239,10 +267,10 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabelFornTelefone;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableForn;
-    private javax.swing.JTextField jTextFornBusca;
-    private javax.swing.JTextField jTextFornEmail;
-    private javax.swing.JTextField jTextFornEndereco;
-    private javax.swing.JTextField jTextFornNome;
-    private javax.swing.JTextField jTextFornTelefone;
+    public javax.swing.JTextField jTextFornBusca;
+    public javax.swing.JTextField jTextFornEmail;
+    public javax.swing.JTextField jTextFornEndereco;
+    public javax.swing.JTextField jTextFornNome;
+    public javax.swing.JTextField jTextFornTelefone;
     // End of variables declaration//GEN-END:variables
 }

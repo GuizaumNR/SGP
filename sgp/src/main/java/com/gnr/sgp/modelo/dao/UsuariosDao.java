@@ -46,7 +46,7 @@ public class UsuariosDao {
 
             int resultado = pst.executeUpdate();
 
-            if (resultado > 1) {
+            if (resultado > 0) {
                 JOptionPane.showMessageDialog(null, "Usuário adicionado com sucesso!");
             } else {
                 JOptionPane.showMessageDialog(null, "Não foi possível adicionar o usuário.");
@@ -87,7 +87,7 @@ public class UsuariosDao {
     }
     
     public String deletar(Usuarios usuario){
-         String sql = "delete from usuarios where login = ?";
+         String sql = "DELETE FROM usuarios WHERE login = ?";
          
          Usuarios usuarioTemp = buscarUsuariosLogin(usuario.getLogin());
 
@@ -128,24 +128,7 @@ public class UsuariosDao {
         }
     }
 
-    public List<Usuarios> buscarTodosUsuarios() {
-        String sql = "SELECT FROM * usuarios";
-        List<Usuarios> usuarios = new ArrayList<>();
 
-        try {
-            ResultSet result = conexao.obterConexao().prepareStatement(sql).executeQuery();
-
-            while (result.next()) {
-                usuarios.add(getUsuarios(result));
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showInputDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
-        }
-
-        return usuarios;
-    }
 
     private Usuarios getUsuarios(ResultSet result) throws SQLException {
         Usuarios usuarios = new Usuarios();
@@ -155,24 +138,6 @@ public class UsuariosDao {
         usuarios.setTipo(result.getString("tipo"));
         usuarios.setNome(result.getString("nome"));
         return usuarios;
-    }
-
-    public Usuarios buscarUsuariosId(Long id) {
-        String sql = String.format("SELECT * FROM usuarios WHERE id = %s", id);
-
-        try {
-            ResultSet result = conexao.obterConexao().prepareStatement(sql).executeQuery();
-
-            if (result.next()) {
-                return getUsuarios(result);
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showConfirmDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
-        }
-
-        return null;
     }
 
     public Usuarios buscarUsuariosLogin(String login) {

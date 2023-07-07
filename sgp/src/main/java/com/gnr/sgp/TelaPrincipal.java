@@ -76,8 +76,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
     }
     
-//    ImageIcon img = new ImageIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\logo.png").getImage());
-//    this.setIconImage(img.getImage());
 
     public void setOperador(String operador) {
         labelOperador.setText("Operador: " + operador);
