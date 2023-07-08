@@ -4,11 +4,18 @@
  */
 package com.gnr.sgp.view.formulario;
 
+import com.gnr.sgp.modelo.conexao.Conexao;
+import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.FornecedoresDao;
 import com.gnr.sgp.modelo.dao.UsuariosDao;
 import com.gnr.sgp.modelo.dominio.Fornecedores;
 import com.gnr.sgp.modelo.dominio.Usuarios;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
+//importando recursos da biblioteca rs2xml 
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -19,12 +26,18 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
     /**
      * Creates new form TelaFornecedor
      */
+    private final Conexao conexao;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+
     public TelaFornecedor() {
+        this.conexao = new ConexaoMysql();
         initComponents();
+
     }
-    
-    public void adicionar(){
-         if ((jTextFornNome.getText().isEmpty() || jTextFornTelefone.getText().isEmpty())) {
+
+    public void adicionar() {
+        if ((jTextFornNome.getText().isEmpty() || jTextFornTelefone.getText().isEmpty())) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
         } else {
 
@@ -32,11 +45,34 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
 
             FornecedoresDao fornecedoresDao = new FornecedoresDao();
             fornecedoresDao.adicionar(fornecedor);
-            
+
             limpaCampos();
         }
     }
-    
+
+    public void pesquisarClienteNome() {
+        String sql = String.format("SELECT * FROM fornecedores WHERE nome like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextFornBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableForn.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void setarCampos() {
+        int setar = jTableForn.getSelectedRow();
+        jTextFornNome.setText(jTableForn.getModel().getValueAt(setar, 1).toString());
+        jTextFornEndereco.setText(jTableForn.getModel().getValueAt(setar, 2).toString());
+        jTextFornTelefone.setText(jTableForn.getModel().getValueAt(setar, 3).toString());
+        jTextFornEmail.setText(jTableForn.getModel().getValueAt(setar, 4).toString());
+
+    }
+
     public void limpaCampos() {
         jTextFornBusca.setText(null);
         jTextFornNome.setText(null);
@@ -135,6 +171,11 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
         jTextFornEmail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jTextFornBusca.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextFornBusca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFornBuscaKeyReleased(evt);
+            }
+        });
 
         jTableForn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableForn.setModel(new javax.swing.table.DefaultTableModel(
@@ -148,6 +189,11 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
                 "Id", "Nome", "Endereço", "Telefone", "Email"
             }
         ));
+        jTableForn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableFornMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableForn);
         if (jTableForn.getColumnModel().getColumnCount() > 0) {
             jTableForn.getColumnModel().getColumn(0).setPreferredWidth(15);
@@ -243,16 +289,27 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButtonFornAdicionarActionPerformed
 
     private void jButtonFornEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFornEditarActionPerformed
-     
+
     }//GEN-LAST:event_jButtonFornEditarActionPerformed
 
     private void jButtonFornDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFornDeletarActionPerformed
-       
+
     }//GEN-LAST:event_jButtonFornDeletarActionPerformed
 
     private void jTextFornNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFornNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFornNomeActionPerformed
+
+    private void jTextFornBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFornBuscaKeyReleased
+        //enquanto for digitando fazer isto
+
+        pesquisarClienteNome();
+    }//GEN-LAST:event_jTextFornBuscaKeyReleased
+
+    private void jTableFornMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFornMouseClicked
+        //evento para setar os campos clicando com o botao esquerdo do mouse
+        setarCampos();
+    }//GEN-LAST:event_jTableFornMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

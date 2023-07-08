@@ -68,6 +68,8 @@ public class FornecedoresDao {
         return fornecedor;
     }
     
+    
+    
      public Fornecedores buscarFornedoresNome(String nome) {
         String sql = String.format("SELECT * FROM fornecedores WHERE nome = '%s'", nome);
         try {
