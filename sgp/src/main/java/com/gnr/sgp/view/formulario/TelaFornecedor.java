@@ -50,8 +50,22 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
         }
     }
 
-    public void pesquisarClienteNome() {
+    public void pesquisarFornecedorNome() {
         String sql = String.format("SELECT * FROM fornecedores WHERE nome like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextFornBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableForn.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+    
+     public void pesquisarFornecedorId() {
+        String sql = String.format("SELECT * FROM fornecedores WHERE id like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextFornBusca.getText() + "%");
@@ -106,6 +120,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableForn = new javax.swing.JTable();
         jLabelFornBusca = new javax.swing.JLabel();
+        jComboFornPesquisa = new javax.swing.JComboBox<>();
 
         setTitle("Fornecedores");
         setMinimumSize(new java.awt.Dimension(680, 480));
@@ -195,23 +210,27 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
             }
         });
         jScrollPane1.setViewportView(jTableForn);
-        if (jTableForn.getColumnModel().getColumnCount() > 0) {
-            jTableForn.getColumnModel().getColumn(0).setPreferredWidth(15);
-        }
 
         jLabelFornBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
         jLabelFornBusca.setText(" ");
+
+        jComboFornPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "nome", "id" }));
+        jComboFornPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboFornPesquisaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(60, 60, 60)
+                                .addGap(112, 112, 112)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jLabelFornEndereco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -224,38 +243,39 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
                                     .addComponent(jTextFornTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jTextFornNome, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jTextFornEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 612, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 123, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(244, 244, 244)
+                                .addComponent(jButtonFornAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(86, 86, 86)
+                                .addComponent(jButtonFornEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(80, 80, 80)
+                                .addComponent(jButtonFornDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 71, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(jTextFornBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabelFornBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabelFornCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jComboFornPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFornBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabelFornBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabelFornCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1))))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(192, 192, 192)
-                .addComponent(jButtonFornAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(86, 86, 86)
-                .addComponent(jButtonFornEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(80, 80, 80)
-                .addComponent(jButtonFornDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabelFornCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextFornBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelFornCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFornBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboFornPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jLabelFornBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(8, 8, 8)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -302,8 +322,12 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
 
     private void jTextFornBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFornBuscaKeyReleased
         //enquanto for digitando fazer isto
+        if (jComboFornPesquisa.getSelectedItem().toString() == "nome") {
+            pesquisarFornecedorNome();
+        } else if (jComboFornPesquisa.getSelectedItem().toString() == "id") {
+            pesquisarFornecedorId();
+        }
 
-        pesquisarClienteNome();
     }//GEN-LAST:event_jTextFornBuscaKeyReleased
 
     private void jTableFornMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFornMouseClicked
@@ -311,11 +335,16 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
         setarCampos();
     }//GEN-LAST:event_jTableFornMouseClicked
 
+    private void jComboFornPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboFornPesquisaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboFornPesquisaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonFornAdicionar;
     private javax.swing.JButton jButtonFornDeletar;
     private javax.swing.JButton jButtonFornEditar;
+    private javax.swing.JComboBox<String> jComboFornPesquisa;
     private javax.swing.JLabel jLabelFornBusca;
     private javax.swing.JLabel jLabelFornCampos;
     private javax.swing.JLabel jLabelFornEmail;
