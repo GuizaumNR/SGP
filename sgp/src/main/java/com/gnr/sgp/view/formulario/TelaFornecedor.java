@@ -122,6 +122,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
         jLabelFornBusca = new javax.swing.JLabel();
         jComboFornPesquisa = new javax.swing.JComboBox<>();
 
+        setBackground(new java.awt.Color(227, 234, 227));
         setTitle("Fornecedores");
         setMinimumSize(new java.awt.Dimension(680, 480));
         setName(""); // NOI18N

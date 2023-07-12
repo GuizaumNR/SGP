@@ -11,22 +11,23 @@ package com.gnr.sgp.modelo.dominio;
 public class Animais {
     private long id;
     private String descricao;
-    private String raca;
+    private String quantidade;
     private String idade;
     private String sexo;
-    private Fornecedores id_fornecedores;
+    
 
     public Animais() {
     }
 
-    public Animais(long id, String descricao, String raca, String idade, String sexo, Fornecedores id_fornecedores) {
+    public Animais(long id, String descricao, String quantidade, String idade, String sexo) {
         this.id = id;
         this.descricao = descricao;
-        this.raca = raca;
+        this.quantidade = quantidade;
         this.idade = idade;
         this.sexo = sexo;
-        this.id_fornecedores = id_fornecedores;
     }
+
+   
 
     public long getId() {
         return id;
@@ -44,12 +45,12 @@ public class Animais {
         this.descricao = descricao;
     }
 
-    public String getRaca() {
-        return raca;
+     public String getQuantidade() {
+        return quantidade;
     }
 
-    public void setRaca(String raca) {
-        this.raca = raca;
+    public void setQuantidade(String quantidade) {
+        this.quantidade = quantidade;
     }
 
     public String getIdade() {
@@ -66,14 +67,6 @@ public class Animais {
 
     public void setSexo(String sexo) {
         this.sexo = sexo;
-    }
-
-    public Fornecedores getId_fornecedores() {
-        return id_fornecedores;
-    }
-
-    public void setId_fornecedores(Fornecedores id_fornecedores) {
-        this.id_fornecedores = id_fornecedores;
     }
     
 }

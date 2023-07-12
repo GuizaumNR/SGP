@@ -169,7 +169,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         });
 
         jButtonUsuAdicionar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\create.png"));
-        jButtonUsuAdicionar.setToolTipText("Adicionar");
+        jButtonUsuAdicionar.setToolTipText("Adicionar Usuário");
         jButtonUsuAdicionar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonUsuAdicionar.setPreferredSize(new java.awt.Dimension(80, 80));
         jButtonUsuAdicionar.addActionListener(new java.awt.event.ActionListener() {
@@ -179,7 +179,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         });
 
         jButtonUsuConsultar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\read.png"));
-        jButtonUsuConsultar.setToolTipText("Pesquisar");
+        jButtonUsuConsultar.setToolTipText("Pesquisar Usuário");
         jButtonUsuConsultar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonUsuConsultar.setMaximumSize(new java.awt.Dimension(80, 80));
         jButtonUsuConsultar.setPreferredSize(new java.awt.Dimension(80, 80));
@@ -190,7 +190,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         });
 
         jButtonUsuEditar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\update.png"));
-        jButtonUsuEditar.setToolTipText("Editar");
+        jButtonUsuEditar.setToolTipText("Editar Usuário");
         jButtonUsuEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonUsuEditar.setPreferredSize(new java.awt.Dimension(80, 80));
         jButtonUsuEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -200,7 +200,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         });
 
         jButtonUsuDeletar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\delete.png"));
-        jButtonUsuDeletar.setToolTipText("Deletar");
+        jButtonUsuDeletar.setToolTipText("Deletar Usuário");
         jButtonUsuDeletar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonUsuDeletar.setPreferredSize(new java.awt.Dimension(80, 80));
         jButtonUsuDeletar.addActionListener(new java.awt.event.ActionListener() {

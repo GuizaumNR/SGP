@@ -4,6 +4,7 @@
  */
 package com.gnr.sgp;
 
+import com.gnr.sgp.view.formulario.TelaAnimal;
 import com.gnr.sgp.view.formulario.TelaFornecedor;
 import com.gnr.sgp.view.formulario.TelaSobre;
 import com.gnr.sgp.view.formulario.TelaUsuario;
@@ -44,6 +45,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
     SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
     Calendar now = Calendar.getInstance();
 
+    TelaUsuario telaUsuario = new TelaUsuario();
+    TelaFornecedor telaFornecedor = new TelaFornecedor();
+    TelaAnimal telaAnimal = new TelaAnimal();
+
     public TelaPrincipal() {
         setUndecorated(true);
         initComponents();
@@ -51,7 +56,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setVisible(true);
         requestFocus();
         labelVersao.setText("Versão: " + VERSION);
-        LabelAviso.setText("Aviso! ");
+        LabelAviso.setText("Espaço para avisos do manejo.");
         labelSuporte.setText("Suporte: Guilherme - (53) 99912-8134");
         menu();
         atualizarDataHora();
@@ -73,9 +78,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jButtonMinimizar.setFocusable(false);
 
 //        jlabelLogo.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\logo.png"));
-        
+        jDesktok.add(telaFornecedor);
+        jDesktok.add(telaUsuario);
+        jDesktok.add(telaAnimal);
+
     }
-    
 
     public void setOperador(String operador) {
         labelOperador.setText("Operador: " + operador);
@@ -117,7 +124,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jMenuBar = new javax.swing.JMenuBar();
         jMenuCadastro = new javax.swing.JMenu();
-        jMenuCadastroCliente = new javax.swing.JMenuItem();
+        jMenuCadastroAnimal = new javax.swing.JMenuItem();
         jMenuCadastroFornecedor = new javax.swing.JMenuItem();
         jMenuCadastroUsuario = new javax.swing.JMenuItem();
         jMenuCadastroManejo = new javax.swing.JMenuItem();
@@ -164,14 +171,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jMenuCadastroCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_DOWN_MASK));
-        jMenuCadastroCliente.setText("Animais");
-        jMenuCadastroCliente.addActionListener(new java.awt.event.ActionListener() {
+        jMenuCadastroAnimal.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_DOWN_MASK));
+        jMenuCadastroAnimal.setText("Animais");
+        jMenuCadastroAnimal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuCadastroClienteActionPerformed(evt);
+                jMenuCadastroAnimalActionPerformed(evt);
             }
         });
-        jMenuCadastro.add(jMenuCadastroCliente);
+        jMenuCadastro.add(jMenuCadastroAnimal);
 
         jMenuCadastroFornecedor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_DOWN_MASK));
         jMenuCadastroFornecedor.setText("Fornecedores");
@@ -435,15 +442,20 @@ public class TelaPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuCadastroClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroClienteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuCadastroClienteActionPerformed
+    private void jMenuCadastroAnimalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroAnimalActionPerformed
+       telaAnimal.setVisible(true);
+    }//GEN-LAST:event_jMenuCadastroAnimalActionPerformed
 
     private void jMenuCadastroFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroFornecedorActionPerformed
-      
-        TelaFornecedor fornecedor = new TelaFornecedor();
-        fornecedor.setVisible(true);
-        jDesktok.add(fornecedor);
+
+        if (!telaUsuario.isVisible()) {
+            telaFornecedor.setVisible(true);
+
+        } else {
+            telaUsuario.setVisible(false);
+            telaFornecedor.setVisible(true);
+
+        }
     }//GEN-LAST:event_jMenuCadastroFornecedorActionPerformed
 
     private void jMenuCadastroAncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jMenuCadastroAncestorMoved
@@ -478,9 +490,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonMinimizarActionPerformed
 
     private void jMenuCadastroUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroUsuarioActionPerformed
-        TelaUsuario usuario = new TelaUsuario();
-        usuario.setVisible(true);
-        jDesktok.add(usuario);
+        if (!telaFornecedor.isVisible()) {
+            telaUsuario.setVisible(true);
+
+        } else {
+            telaFornecedor.setVisible(false);
+            telaUsuario.setVisible(true);
+
+        }
     }//GEN-LAST:event_jMenuCadastroUsuarioActionPerformed
 
     private void jMenuCadastroManejoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroManejoActionPerformed
@@ -536,7 +553,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuAjudaSobre;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenu jMenuCadastro;
-    private javax.swing.JMenuItem jMenuCadastroCliente;
+    private javax.swing.JMenuItem jMenuCadastroAnimal;
     private javax.swing.JMenuItem jMenuCadastroFornecedor;
     private javax.swing.JMenuItem jMenuCadastroManejo;
     private javax.swing.JMenuItem jMenuCadastroUsuario;
