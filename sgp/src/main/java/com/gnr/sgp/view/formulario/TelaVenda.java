@@ -14,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -37,30 +39,87 @@ public class TelaVenda extends javax.swing.JInternalFrame {
     public TelaVenda() {
         this.conexao = new ConexaoMysql();
         initComponents();
+        
+        // Adiciona o ouvinte de evento ao jTextFieldVendaQuantidade
+        jTextFieldVendaQuantidade.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+            }
 
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+            }
+        });
+
+        // Adiciona o ouvinte de evento ao jTextFieldVendaMediaKg
+        jTextFieldVendaMediaKg.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+            }
+        });
+
+        // Adiciona o ouvinte de evento ao jTextFieldVendaPrecoKg
+        jTextFieldVendaPrecoKg.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+            }
        
+        });
     }
+    
+    private void atualizarValorTotal() {
+        try {
+            int quantidade = Integer.parseInt(jTextFieldVendaQuantidade.getText());
+            double mediaKg = Double.parseDouble(jTextFieldVendaMediaKg.getText());
+            double precoKg = Double.parseDouble(jTextFieldVendaPrecoKg.getText());
+            double valorTotal = quantidade * mediaKg * precoKg;
 
+            jTextFieldVendaTotal.setText(String.format("%.2f", valorTotal));
+        } catch (NumberFormatException ex) {
+            jTextFieldVendaTotal.setText("Valor Inválido");
+        }
+    }
+    
     public void adicionar() {
-        if ((jTextFieldVendaAnimal.getText().isEmpty() || jTextFieldVendaQuantidade.getText().isEmpty() || jTextFieldVendaMediaKg.getText().isEmpty() || jTextFieldVendaPrecoKg.getText().isEmpty() || jTextFieldVendaComprador.getText().isEmpty())) {
+        if ((jTextFieldVendaAnimal.getText().isEmpty() || jTextFieldVendaQuantidade.getText().isEmpty() || jTextFieldVendaMediaKg.getText().isEmpty() || jTextFieldVendaPrecoKg.getText().isEmpty()  || jTextFieldVendaComprador.getText().isEmpty() || jTextFieldVendaTotal.getText().isEmpty())) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
         } else {
-            setValores();
-     
+//            setValores();
+
             VendasAnimais venda = new VendasAnimais(01, Integer.parseInt(jTextFieldVendaAnimal.getText()), quantidade, mediaKg, precoKg, valorTotal, jTextFieldVendaComprador.getText());
 
             VendasAnimaisDao vendasDao = new VendasAnimaisDao();
             vendasDao.Adicionar(venda);
         }
-    }
-
-    public void setValores() {
-        quantidade = Integer.parseInt(jTextFieldVendaQuantidade.getText());
-        mediaKg = Double.parseDouble(jTextFieldVendaMediaKg.getText());
-        precoKg = Double.parseDouble(jTextFieldVendaPrecoKg.getText());
-        valorTotal = (quantidade * mediaKg) * precoKg;
-
-        jTextFieldVendaTotal.setText(" " + valorTotal);
     }
 
     public void pesquisarAnimalId() {
@@ -118,19 +177,19 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         setPreferredSize(new java.awt.Dimension(820, 620));
 
         jLabelVendaTotal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabelVendaTotal.setText("Total:");
+        jLabelVendaTotal.setText("* Total:");
 
         jLabelVendaAnimal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabelVendaAnimal.setText("ID Animal:");
+        jLabelVendaAnimal.setText("* ID Animal:");
 
         jLabelVendaQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabelVendaQuantidade.setText("Quantidade:");
+        jLabelVendaQuantidade.setText("* Quantidade:");
 
         jLabelVendaMediaKg.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabelVendaMediaKg.setText("Média Kg:");
+        jLabelVendaMediaKg.setText("* Média Kg:");
 
         jLabelVendaPrecoKg.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabelVendaPrecoKg.setText("Preço Kg:");
+        jLabelVendaPrecoKg.setText("* Preço Kg:");
 
         jTextVendaBusca.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTextVendaBusca.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -165,7 +224,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(jTableVenda);
 
         jLabelVendaAnimal1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabelVendaAnimal1.setText("Comprador:");
+        jLabelVendaAnimal1.setText("* Comprador:");
 
         jLabelVendaPesquisar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabelVendaPesquisar.setText("Pesquisar ID:");

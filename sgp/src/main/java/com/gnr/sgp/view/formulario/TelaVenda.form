@@ -155,7 +155,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="24" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Total:"/>
+        <Property name="text" type="java.lang.String" value="* Total:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelVendaAnimal">
@@ -163,7 +163,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="24" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="ID Animal:"/>
+        <Property name="text" type="java.lang.String" value="* ID Animal:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelVendaQuantidade">
@@ -171,7 +171,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="24" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Quantidade:"/>
+        <Property name="text" type="java.lang.String" value="* Quantidade:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelVendaMediaKg">
@@ -179,7 +179,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="24" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="M&#xe9;dia Kg:"/>
+        <Property name="text" type="java.lang.String" value="* M&#xe9;dia Kg:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelVendaPrecoKg">
@@ -187,7 +187,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="24" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Pre&#xe7;o Kg:"/>
+        <Property name="text" type="java.lang.String" value="* Pre&#xe7;o Kg:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextVendaBusca">
@@ -265,7 +265,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="24" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Comprador:"/>
+        <Property name="text" type="java.lang.String" value="* Comprador:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldVendaComprador">

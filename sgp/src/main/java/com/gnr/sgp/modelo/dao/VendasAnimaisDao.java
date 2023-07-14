@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 public class VendasAnimaisDao {
 
     private final Conexao conexao;
-    String operador;
+    String operador = "Vazio";
 
     public VendasAnimaisDao() {
         this.conexao = new ConexaoMysql();
