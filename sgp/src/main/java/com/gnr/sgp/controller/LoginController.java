@@ -6,6 +6,7 @@ package com.gnr.sgp.controller;
 
 import com.gnr.sgp.TelaPrincipal;
 import com.gnr.sgp.modelo.dao.AutenticacaoDao;
+import com.gnr.sgp.modelo.dao.VendasAnimaisDao;
 import com.gnr.sgp.modelo.dominio.Usuarios;
 import com.gnr.sgp.modelo.exception.NegocioException;
 import com.gnr.sgp.view.formulario.Login;
@@ -61,9 +62,12 @@ public class LoginController implements ActionListener {
             login.dispose();
             
             TelaPrincipal tela = new TelaPrincipal();
-            operador = usuarioTemp.getLogin();
+            operador = usuarioTemp.getNome();
             tela.setOperador(operador);
             tela.setVisible(true);
+            
+            VendasAnimaisDao venda = new VendasAnimaisDao();
+            venda.setOperador(operador);
             
             try {
                 this.autenticacaoDao.permissao(usuarioTemp);

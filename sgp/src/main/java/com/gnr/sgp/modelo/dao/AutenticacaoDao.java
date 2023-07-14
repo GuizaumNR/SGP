@@ -25,7 +25,6 @@ public class AutenticacaoDao {
     public boolean temPermissao(Usuarios usuario) {
         try {
             permissao(usuario);
-            
             return true;
         } catch (Exception e) {
             return false;

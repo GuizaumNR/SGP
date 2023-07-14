@@ -8,8 +8,10 @@ import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.AnimaisDao;
 import com.gnr.sgp.modelo.dao.FornecedoresDao;
+import com.gnr.sgp.modelo.dao.UsuariosDao;
 import com.gnr.sgp.modelo.dominio.Animais;
 import com.gnr.sgp.modelo.dominio.Fornecedores;
+import com.gnr.sgp.modelo.dominio.Usuarios;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,6 +46,30 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
             AnimaisDao animaisDao = new AnimaisDao();
             animaisDao.adicionar(animal);
 
+        }
+    }
+    
+    public void deletar() {
+
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar " + jTextAnimDescricao.getText() + " do banco de dados?", "Atenção", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            Animais animal = new Animais(0l, jTextAnimDescricao.getText(), jTextAnimQuantidade.getText(), jComboAnimIdade.getSelectedItem().toString(), jComboAnimSexo.getSelectedItem().toString());
+
+            AnimaisDao animaisDao = new AnimaisDao();
+            animaisDao.deletar(animal);
+        }
+
+    }
+    
+     private void editar() {
+
+      if ((jTextAnimDescricao.getText().isEmpty() || jTextAnimQuantidade.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
+        } else {
+            Animais animal = new Animais(0l, jTextAnimDescricao.getText(), jTextAnimQuantidade.getText(), jComboAnimIdade.getSelectedItem().toString(), jComboAnimSexo.getSelectedItem().toString());
+
+            AnimaisDao animaisDao = new AnimaisDao();
+            animaisDao.editar(animal);
         }
     }
     
@@ -101,6 +127,15 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
             e.printStackTrace();
         }
     }
+    
+    public void setarCampos() {
+        int setar = jTableAnim.getSelectedRow();
+        jTextAnimDescricao.setText(jTableAnim.getModel().getValueAt(setar, 1).toString());
+        jTextAnimQuantidade.setText(jTableAnim.getModel().getValueAt(setar, 2).toString());
+        jComboAnimIdade.setSelectedItem(jTableAnim.getModel().getValueAt(setar, 3).toString());
+        jComboAnimSexo.setSelectedItem(jTableAnim.getModel().getValueAt(setar, 4).toString());
+
+    }
         /**
          * This method is called from within the constructor to initialize the
          * form. WARNING: Do NOT modify this code. The content of this method is
@@ -126,6 +161,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         jTextAnimQuantidade = new javax.swing.JTextField();
         jComboAnimIdade = new javax.swing.JComboBox<>();
         jComboAnimSexo = new javax.swing.JComboBox<>();
+        jButtonAnimEditar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(227, 234, 227));
         setTitle("Animais");
@@ -148,13 +184,13 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         jTableAnim.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableAnim.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Id", "Descrição", "Quant", "Idade", "Sexo", "Raça"
+                "Id", "Descrição", "Quant", "Idade", "Sexo"
             }
         ));
         jTableAnim.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -221,6 +257,16 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
 
         jComboAnimSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "boi", "touro_reprodutor", "femea" }));
 
+        jButtonAnimEditar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\update.png"));
+        jButtonAnimEditar.setToolTipText("Editar Usuário");
+        jButtonAnimEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonAnimEditar.setPreferredSize(new java.awt.Dimension(80, 80));
+        jButtonAnimEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAnimEditarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -242,7 +288,9 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(191, 191, 191)
                         .addComponent(jButtonAnimDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(263, 263, 263)
+                        .addGap(92, 92, 92)
+                        .addComponent(jButtonAnimEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(91, 91, 91)
                         .addComponent(jButtonAnimAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -263,11 +311,11 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
                             .addComponent(jLabelAnimQuantidade, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabelAnimIdade, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextAnimQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboAnimIdade, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboAnimIdade, 0, 115, Short.MAX_VALUE)
+                            .addComponent(jTextAnimQuantidade))
                         .addGap(346, 346, 346)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -300,7 +348,8 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
                 .addGap(75, 75, 75)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButtonAnimDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonAnimAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonAnimAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonAnimEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(69, 69, 69))
         );
 
@@ -322,7 +371,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextAnimBuscaKeyReleased
 
     private void jTableAnimMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAnimMouseClicked
-        //evento para setar os campos clicando com o botao esquerdo do mouse
+        setarCampos();
 
     }//GEN-LAST:event_jTableAnimMouseClicked
 
@@ -335,7 +384,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButtonAnimAdicionarActionPerformed
 
     private void jButtonAnimDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnimDeletarActionPerformed
-
+        deletar();
     }//GEN-LAST:event_jButtonAnimDeletarActionPerformed
 
     private void jTextAnimDescricaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextAnimDescricaoActionPerformed
@@ -346,10 +395,15 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonAnimDeletarMouseReleased
 
+    private void jButtonAnimEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnimEditarActionPerformed
+        editar();
+    }//GEN-LAST:event_jButtonAnimEditarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAnimAdicionar;
     private javax.swing.JButton jButtonAnimDeletar;
+    private javax.swing.JButton jButtonAnimEditar;
     private javax.swing.JComboBox<String> jComboAnimIdade;
     private javax.swing.JComboBox<String> jComboAnimPesquisa;
     private javax.swing.JComboBox<String> jComboAnimSexo;

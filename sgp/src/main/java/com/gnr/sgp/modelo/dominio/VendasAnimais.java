@@ -10,61 +10,82 @@ package com.gnr.sgp.modelo.dominio;
  */
 public class VendasAnimais {
  
-    private Animais id_animal;
+    private long id;
+    private int id_animal;
     private int quantidade;
-    private Fornecedores id_fornecedor;
-    private double valor_peso;
+    private double media_kg;
+    private double preco_peso;
     private double valor_total;
+    private String comprador;
 
-    public VendasAnimais() {
+     public VendasAnimais() {
+         
     }
     
-    public VendasAnimais(Animais id_animal, int quantidade, Fornecedores id_fornecedor, double valor_peso, double valor_total) {
+    public VendasAnimais(long id, int id_animal, int quantidade, double media_kg, double preco_peso, double valor_total, String comprador) {
+        this.id = id;
         this.id_animal = id_animal;
         this.quantidade = quantidade;
-        this.id_fornecedor = id_fornecedor;
-        this.valor_peso = valor_peso;
+        this.media_kg = media_kg;
+        this.preco_peso = preco_peso;
         this.valor_total = valor_total;
+        this.comprador = comprador;
     }
 
-    public Animais getId_animal() {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public int getId_animal() {
         return id_animal;
+    }
+
+    public void setId_animal(int id_animal) {
+        this.id_animal = id_animal;
     }
 
     public int getQuantidade() {
         return quantidade;
     }
 
-    public Fornecedores getId_fornecedor() {
-        return id_fornecedor;
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 
-    public double getValor_peso() {
-        return valor_peso;
+    public double getMedia_kg() {
+        return media_kg;
+    }
+
+    public void setMedia_kg(double media_kg) {
+        this.media_kg = media_kg;
+    }
+
+    public double getPreco_peso() {
+        return preco_peso;
+    }
+
+    public void setPreco_peso(double preco_peso) {
+        this.preco_peso = preco_peso;
     }
 
     public double getValor_total() {
         return valor_total;
     }
 
-    public void setId_animal(Animais id_animal) {
-        this.id_animal = id_animal;
-    }
-
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public void setId_fornecedor(Fornecedores id_fornecedor) {
-        this.id_fornecedor = id_fornecedor;
-    }
-
-    public void setValor_peso(double valor_peso) {
-        this.valor_peso = valor_peso;
-    }
-
     public void setValor_total(double valor_total) {
         this.valor_total = valor_total;
+    }
+
+    public String getComprador() {
+        return comprador;
+    }
+
+    public void setComprador(String comprador) {
+        this.comprador = comprador;
     }
     
     

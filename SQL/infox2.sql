@@ -10,9 +10,9 @@ CREATE TABLE usuarios (
 
 CREATE TABLE fornecedores (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    nome VARCHAR(50) UNIQUE NOT NULL,
+    nome VARCHAR(100) UNIQUE NOT NULL,
     telefone VARCHAR(20),
-    email VARCHAR(50),
+    email VARCHAR(100),
     endereco VARCHAR(100)
 );
 
@@ -27,51 +27,61 @@ CREATE TABLE animais (
 
 CREATE TABLE compras_animais (
     id_compra INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    data DATE NOT NULL,
+    data_compra TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     id_animal INT NOT NULL,
     quantidade INT NOT NULL,
-    media_kilos DECIMAL(10,2) NOT NULL,
-    valor_kilo DECIMAL(10, 2) NOT NULL,
+    media_kg DECIMAL(10,2) NOT NULL,
+    preco_kg DECIMAL(10, 2) NOT NULL,
+    valor_total decimal(10,2) NOT NULL,
     criador VARCHAR(100) NOT NULL,
     pagador ENUM("alemao","negocio","adiantamento"),
+    operador VARCHAR(100) NOT NULL,
     
     FOREIGN KEY (id_animal) REFERENCES animais(id)
 );
 
+
 CREATE TABLE vendas_animais (
     id_venda INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    data DATE,
-    id_animal INT,
-    preco DECIMAL(10, 2),
-    comprador VARCHAR(100),
+    data_venda TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    id_animal INT NOT NULL,
+    media_kg DECIMAL(10,2) NOT NULL,
+    preco_kg DECIMAL(10, 2) NOT NULL,
+    valor_total decimal(10,2) NOT NULL,
+    comprador VARCHAR(100) NOT NULL,
+    operador VARCHAR(100) NOT NULL,
+    
     FOREIGN KEY (id_animal) REFERENCES animais(id)
 );
 
 CREATE TABLE movimentacoes (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     tipo ENUM('nascimento', 'morte') NOT NULL,
-    data_movimentacao DATE NOT NULL,
+    data_movimentacao TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     animal_id INT NOT NULL,
     quantidade INT NOT NULL,
     observacao VARCHAR(200),
+    operador VARCHAR(100) NOT NULL,
     FOREIGN KEY (animal_id) REFERENCES animais (id)
 );
 
 CREATE TABLE lucros (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    descricao VARCHAR(100) NOT NULL,
+    descricao VARCHAR(200) NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
-    data_lucro DATE NOT NULL
+    data_lucro TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    operador VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE despesas (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    descricao VARCHAR(100) NOT NULL,
+    descricao VARCHAR(200) NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
-    data_despesa DATE NOT NULL
+    data_despesa TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    operador VARCHAR(100) NOT NULL
 );
 
--- alterar quantidade UPDATE tabela SET quantidade = nova_quantidade WHERE id_item = item_id
+-- alterar quantidade venda UPDATE animais SET quantidade = quantidade - ? WHERE id_animal = ?
 
 -- CONSULTAS
 

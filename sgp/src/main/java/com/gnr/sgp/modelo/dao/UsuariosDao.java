@@ -73,7 +73,7 @@ public class UsuariosDao {
 
             int editado = pst.executeUpdate();
             if (editado > 0) {
-                JOptionPane.showMessageDialog(null, "Dados do usuário alterados com sucesso!");;
+                JOptionPane.showMessageDialog(null, "Dados do usuário alterados com sucesso!");
 
             } else {
                 JOptionPane.showMessageDialog(null, "Não foi possível alterar os dados do usuário.");
