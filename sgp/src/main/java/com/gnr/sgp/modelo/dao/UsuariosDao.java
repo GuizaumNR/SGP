@@ -37,7 +37,7 @@ public class UsuariosDao {
 
         if (usuarioTemp != null) {
             JOptionPane.showMessageDialog(null, "Erro: Este login já existe no banco de dados.");
-        }
+        }else {
 
         try {
             PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
@@ -55,6 +55,7 @@ public class UsuariosDao {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar o usuário.");
             e.printStackTrace();
+        }
         }
         return null;
     }

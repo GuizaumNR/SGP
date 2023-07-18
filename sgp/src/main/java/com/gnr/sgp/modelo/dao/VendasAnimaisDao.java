@@ -6,7 +6,6 @@ package com.gnr.sgp.modelo.dao;
 
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
-import com.gnr.sgp.modelo.dominio.Fornecedores;
 import com.gnr.sgp.modelo.dominio.VendasAnimais;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -19,7 +18,7 @@ import javax.swing.JOptionPane;
 public class VendasAnimaisDao {
 
     private final Conexao conexao;
-    String operador = "Vazio";
+    String operador = "Guilherme";
 
     public VendasAnimaisDao() {
         this.conexao = new ConexaoMysql();

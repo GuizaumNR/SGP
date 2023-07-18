@@ -32,7 +32,7 @@ public class AnimaisDao {
         Animais animalTemp = buscarAnimaisDescricao(animal.getDescricao());
         if (animalTemp != null) {
             JOptionPane.showMessageDialog(null, "Erro: Esta descrição já existe no banco de dados.");
-        }
+        }else{
         
         try {
             PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
@@ -53,6 +53,7 @@ public class AnimaisDao {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar o animal.");
             e.printStackTrace();
+        }
         }
         return null;
     }
@@ -97,8 +98,7 @@ public class AnimaisDao {
 
             int editado = pst.executeUpdate();
             if (editado > 0) {
-                JOptionPane.showMessageDialog(null, "Dados do animal alterados com sucesso!");;
-
+                JOptionPane.showMessageDialog(null, "Dados do animal alterados com sucesso!");
             } else {
                 JOptionPane.showMessageDialog(null, "Não foi possível alterar os dados do animal.");
             }

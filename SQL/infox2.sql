@@ -2,7 +2,7 @@ use dbinfox;
 
 CREATE TABLE usuarios (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    nome varchar(30) not null,
+    nome varchar(30) NOT NULL,
     login VARCHAR(15) UNIQUE NOT NULL,
     senha VARCHAR(60) NOT NULL,
     tipo ENUM('admin', 'consulta') NOT NULL DEFAULT 'consulta'
@@ -18,12 +18,14 @@ CREATE TABLE fornecedores (
 
 CREATE TABLE animais (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	descricao VARCHAR(100) NOT NULL,
+	descricao VARCHAR(100) UNIQUE NOT NULL,
     quantidade INT NOT NULL,
     idade ENUM('terneiro', 'novilho', 'vaca_velha') NOT NULL,
     sexo ENUM('boi', 'touro_reprodutor', 'femea') NOT NULL,
     raca VARCHAR(100) NOT NULL
 );
+
+
 
 CREATE TABLE compras_animais (
     id_compra INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -86,8 +88,13 @@ CREATE TABLE despesas (
 -- CONSULTAS
 
 select * from usuarios;
+select * from animais;
 select * from fornecedores;
+select * from vendas_animais;
+
+
 describe usuarios;
+describe animais;
 
 
 

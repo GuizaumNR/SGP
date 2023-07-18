@@ -113,7 +113,10 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         if ((jTextFieldVendaAnimal.getText().isEmpty() || jTextFieldVendaQuantidade.getText().isEmpty() || jTextFieldVendaMediaKg.getText().isEmpty() || jTextFieldVendaPrecoKg.getText().isEmpty()  || jTextFieldVendaComprador.getText().isEmpty() || jTextFieldVendaTotal.getText().isEmpty())) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
         } else {
-//            setValores();
+            quantidade = Integer.parseInt(jTextFieldVendaQuantidade.getText());
+            mediaKg = Double.parseDouble(jTextFieldVendaMediaKg.getText());
+            precoKg = Double.parseDouble(jTextFieldVendaPrecoKg.getText());
+            valorTotal = quantidade * mediaKg * precoKg;
 
             VendasAnimais venda = new VendasAnimais(01, Integer.parseInt(jTextFieldVendaAnimal.getText()), quantidade, mediaKg, precoKg, valorTotal, jTextFieldVendaComprador.getText());
 

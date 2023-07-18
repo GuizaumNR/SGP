@@ -6,6 +6,7 @@ package com.gnr.sgp.modelo.dao;
 
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
+import com.gnr.sgp.modelo.dominio.Animais;
 import com.gnr.sgp.modelo.dominio.Fornecedores;
 import com.gnr.sgp.modelo.dominio.Usuarios;
 import com.gnr.sgp.view.formulario.TelaFornecedor;
@@ -33,7 +34,7 @@ public class FornecedoresDao {
         Fornecedores fornecedorTemp = buscarFornedoresNome(fornecedor.getNome());
         if (fornecedorTemp != null) {
             JOptionPane.showMessageDialog(null, "Erro: Este nome já existe no banco de dados.");
-        }
+        }else{
         
         try {
             PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
@@ -55,7 +56,60 @@ public class FornecedoresDao {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar o fornecedor.");
             e.printStackTrace();
         }
+        }
         return null;
+    }
+    
+    public String deletar(Fornecedores fornecedor){
+         String sql = "DELETE FROM fornecedores WHERE nome = ?";
+         
+         Fornecedores fornecedorTemp = buscarFornedoresNome(fornecedor.getNome());
+
+        if (fornecedorTemp == null) {
+            JOptionPane.showMessageDialog(null, "Erro: Este nome não existe no banco de dados.", "Erro", JOptionPane.ERROR);
+        }
+
+            try {
+                PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
+                pst.setString(1, fornecedor.getNome());
+                
+                int deletado = pst.executeUpdate();
+            if (deletado > 0) {
+                JOptionPane.showMessageDialog(null, "Dados do fornecedor deletados com sucesso!");
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possível deletar os dados do fornecedor.");
+            }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Erro", JOptionPane.ERROR);
+            }
+        return null;
+    }
+    
+    public String editar(Fornecedores fornecedor) {
+        String sql = "UPDATE fornecedores SET telefone = ?, email = ?, endereco = ? WHERE nome = ?";
+
+        try {
+            PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, fornecedor.getTelefone());
+            pst.setString(2, fornecedor.getEmail());
+            pst.setString(3, fornecedor.getEndereco());
+            pst.setString(4, fornecedor.getNome());
+
+            int editado = pst.executeUpdate();
+            if (editado > 0) {
+                JOptionPane.showMessageDialog(null, "Dados do fornecedor alterados com sucesso!");
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possível alterar os dados do fornecedor.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
+        }
+        return null;
+
     }
     
     private Fornecedores getFornecedores(ResultSet result) throws SQLException {

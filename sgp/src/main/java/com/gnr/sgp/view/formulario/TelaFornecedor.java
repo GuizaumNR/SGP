@@ -49,7 +49,34 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
             limpaCampos();
         }
     }
+    
+    public void editar() {
+        if ((jTextFornNome.getText().isEmpty() || jTextFornTelefone.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
+        } else {
 
+            Fornecedores fornecedor = new Fornecedores(0l, jTextFornNome.getText(), jTextFornTelefone.getText(), jTextFornEmail.getText(), jTextFornEndereco.getText());
+
+            FornecedoresDao fornecedoresDao = new FornecedoresDao();
+            fornecedoresDao.editar(fornecedor);
+
+            limpaCampos();
+        }
+    }
+
+    public void deletar() {
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar o fornecedor " + jTextFornNome.getText() + " do banco de dados?", "Atenção", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+
+            Fornecedores fornecedor = new Fornecedores(0l, jTextFornNome.getText(), jTextFornTelefone.getText(), jTextFornEmail.getText(), jTextFornEndereco.getText());
+
+            FornecedoresDao fornecedoresDao = new FornecedoresDao();
+            fornecedoresDao.deletar(fornecedor);
+
+            limpaCampos();
+        }
+    }
+    
     public void pesquisarFornecedorNome() {
         String sql = String.format("SELECT * FROM fornecedores WHERE nome like ?");
         try {
@@ -310,11 +337,11 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButtonFornAdicionarActionPerformed
 
     private void jButtonFornEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFornEditarActionPerformed
-
+        editar();
     }//GEN-LAST:event_jButtonFornEditarActionPerformed
 
     private void jButtonFornDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFornDeletarActionPerformed
-
+        deletar();
     }//GEN-LAST:event_jButtonFornDeletarActionPerformed
 
     private void jTextFornNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFornNomeActionPerformed
