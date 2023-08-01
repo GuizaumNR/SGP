@@ -10,6 +10,8 @@ import com.gnr.sgp.modelo.dao.FornecedoresDao;
 import com.gnr.sgp.modelo.dao.UsuariosDao;
 import com.gnr.sgp.modelo.dominio.Fornecedores;
 import com.gnr.sgp.modelo.dominio.Usuarios;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,6 +35,15 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
     public TelaFornecedor() {
         this.conexao = new ConexaoMysql();
         initComponents();
+        
+        setLocation(-5, -5);
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                // Define a posição do componente para (0, 0)
+                setLocation(-5, -5);
+            }
+        });
 
     }
 
@@ -150,6 +161,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
         jComboFornPesquisa = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(227, 234, 227));
+        setBorder(javax.swing.BorderFactory.createEtchedBorder());
         setTitle("Fornecedores");
         setMinimumSize(new java.awt.Dimension(680, 480));
         setName(""); // NOI18N
@@ -278,7 +290,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
                                 .addComponent(jButtonFornEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(80, 80, 80)
                                 .addComponent(jButtonFornDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 71, Short.MAX_VALUE))
+                        .addGap(0, 79, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,7 +317,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
                         .addComponent(jLabelFornBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(8, 8, 8)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelFornNome)
                     .addComponent(jTextFornNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))

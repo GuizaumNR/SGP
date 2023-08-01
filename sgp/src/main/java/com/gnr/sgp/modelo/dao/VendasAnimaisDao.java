@@ -25,7 +25,7 @@ public class VendasAnimaisDao {
     }
 
     public String Adicionar(VendasAnimais venda) {
-        String sql = "INSERT INTO vendas_animais (id_animal, quantidade, media_kg, preco_kg, valor_total, comprador, operador) VALUES( ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO compras_animais (id_animal, quantidade, media_kg, preco_kg, valor_total, comprador, vendedor, local_venda, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
             pst.setInt(1, venda.getId_animal());
@@ -34,7 +34,9 @@ public class VendasAnimaisDao {
             pst.setDouble(4, venda.getPreco_peso());
             pst.setDouble(5, venda.getValor_total());
             pst.setString(6, venda.getComprador());
-            pst.setString(7, operador);
+            pst.setString(7, venda.getVendedor());
+            pst.setString(8, venda.getLocal());
+            pst.setString(9, venda.getOperador());
 
             int resultado = pst.executeUpdate();
 

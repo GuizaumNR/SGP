@@ -17,12 +17,15 @@ public class VendasAnimais {
     private double preco_peso;
     private double valor_total;
     private String comprador;
+    private String vendedor;
+    private String local;
+    private String operador;
 
      public VendasAnimais() {
          
     }
-    
-    public VendasAnimais(long id, int id_animal, int quantidade, double media_kg, double preco_peso, double valor_total, String comprador) {
+
+    public VendasAnimais(long id, int id_animal, int quantidade, double media_kg, double preco_peso, double valor_total, String comprador, String vendedor, String local, String operador) {
         this.id = id;
         this.id_animal = id_animal;
         this.quantidade = quantidade;
@@ -30,6 +33,9 @@ public class VendasAnimais {
         this.preco_peso = preco_peso;
         this.valor_total = valor_total;
         this.comprador = comprador;
+        this.vendedor = vendedor;
+        this.local = local;
+        this.operador = operador;
     }
 
     public long getId() {
@@ -87,6 +93,31 @@ public class VendasAnimais {
     public void setComprador(String comprador) {
         this.comprador = comprador;
     }
+
+    public String getVendedor() {
+        return vendedor;
+    }
+
+    public void setVendedor(String vendedor) {
+        this.vendedor = vendedor;
+    }
+
+    public String getLocal() {
+        return local;
+    }
+
+    public void setLocal(String local) {
+        this.local = local;
+    }
+
+    public String getOperador() {
+        return operador;
+    }
+
+    public void setOperador(String operador) {
+        this.operador = operador;
+    }
+
     
     
 }

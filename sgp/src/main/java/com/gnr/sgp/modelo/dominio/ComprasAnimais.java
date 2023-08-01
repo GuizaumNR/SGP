@@ -10,62 +10,114 @@ package com.gnr.sgp.modelo.dominio;
  */
 public class ComprasAnimais {
     
-    private Animais id_animal;
+    private Long id_compra;
+    private int id_animal;
     private int quantidade;
-    private Fornecedores id_fornecedor;
-    private double valor_peso;
+    private double media_kg;
+    private double preco_kg;
     private double valor_total;
-
+    private String criador;
+    private String pagador;
+    private String local;
+    private String operador;
+    
     public ComprasAnimais() {
     }
 
-    public ComprasAnimais( Animais id_animal, int quantidade, Fornecedores id_fornecedor, double valor_peso, double valor_total) {
+    public ComprasAnimais(Long id_compra, int id_animal, int quantidade, double media_kg, double preco_kg, double valor_total, String criador, String pagador, String local, String operador) {
+        this.id_compra = id_compra;
         this.id_animal = id_animal;
         this.quantidade = quantidade;
-        this.id_fornecedor = id_fornecedor;
-        this.valor_peso = valor_peso;
+        this.media_kg = media_kg;
+        this.preco_kg = preco_kg;
         this.valor_total = valor_total;
+        this.criador = criador;
+        this.pagador = pagador;
+        this.local = local;
+        this.operador = operador;
     }
 
-    public Animais getId_animal() {
+    public Long getId_compra() {
+        return id_compra;
+    }
+
+    public void setId_compra(Long id_compra) {
+        this.id_compra = id_compra;
+    }
+
+    public int getId_animal() {
         return id_animal;
+    }
+
+    public void setId_animal(int id_animal) {
+        this.id_animal = id_animal;
     }
 
     public int getQuantidade() {
         return quantidade;
     }
 
-    public Fornecedores getId_fornecedor() {
-        return id_fornecedor;
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 
-    public double getValor_peso() {
-        return valor_peso;
+    public double getMedia_kg() {
+        return media_kg;
+    }
+
+    public void setMedia_kg(double media_kg) {
+        this.media_kg = media_kg;
+    }
+
+    public double getPreco_kg() {
+        return preco_kg;
+    }
+
+    public void setPreco_kg(double preco_kg) {
+        this.preco_kg = preco_kg;
     }
 
     public double getValor_total() {
         return valor_total;
     }
 
-    public void setId_animal(Animais id_animal) {
-        this.id_animal = id_animal;
-    }
-
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public void setId_fornecedor(Fornecedores id_fornecedor) {
-        this.id_fornecedor = id_fornecedor;
-    }
-
-    public void setValor_peso(double valor_peso) {
-        this.valor_peso = valor_peso;
-    }
-
     public void setValor_total(double valor_total) {
         this.valor_total = valor_total;
     }
+
+    public String getCriador() {
+        return criador;
+    }
+
+    public void setCriador(String criador) {
+        this.criador = criador;
+    }
+
+    public String getPagador() {
+        return pagador;
+    }
+
+    public void setPagador(String pagador) {
+        this.pagador = pagador;
+    }
+
+    public String getLocal() {
+        return local;
+    }
+
+    public void setLocal(String local) {
+        this.local = local;
+    }
+
+    public String getOperador() {
+        return operador;
+    }
+
+    public void setOperador(String operador) {
+        this.operador = operador;
+    }
+
+    
     
     
 }

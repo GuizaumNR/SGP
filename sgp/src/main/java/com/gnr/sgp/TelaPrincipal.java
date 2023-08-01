@@ -5,30 +5,20 @@
 package com.gnr.sgp;
 
 import com.gnr.sgp.view.formulario.TelaAnimal;
+import com.gnr.sgp.view.formulario.TelaCompra;
 import com.gnr.sgp.view.formulario.TelaFornecedor;
 import com.gnr.sgp.view.formulario.TelaSobre;
 import com.gnr.sgp.view.formulario.TelaUsuario;
 import com.gnr.sgp.view.formulario.TelaVenda;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JSeparator;
+       
 import javax.swing.Timer;
 
 /**
@@ -50,6 +40,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     TelaFornecedor telaFornecedor = new TelaFornecedor();
     TelaAnimal telaAnimal = new TelaAnimal();
     TelaVenda telaVenda = new TelaVenda();
+    TelaCompra telaCompra = new TelaCompra();
 
     public TelaPrincipal() {
         setUndecorated(true);
@@ -84,6 +75,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jDesktok.add(telaUsuario);
         jDesktok.add(telaAnimal);
         jDesktok.add(telaVenda);
+        jDesktok.add(telaCompra);
 
     }
 
@@ -183,6 +175,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jMenuCaixaCompra.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_DOWN_MASK));
         jMenuCaixaCompra.setText("Compra");
+        jMenuCaixaCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuCaixaCompraActionPerformed(evt);
+            }
+        });
         jMenuCaixa.add(jMenuCaixaCompra);
 
         jMenuBar.add(jMenuCaixa);
@@ -501,25 +498,27 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuCadastroAnimalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroAnimalActionPerformed
-        if (!telaUsuario.isVisible() && !telaFornecedor.isVisible() && !telaVenda.isVisible()) {
+        if (!telaUsuario.isVisible() && !telaFornecedor.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible()) {
         telaAnimal.setVisible(true);
         } else{
             telaUsuario.setVisible(false);
             telaFornecedor.setVisible(false);
             telaVenda.setVisible(false);
+            telaCompra.setVisible(false);
             telaAnimal.setVisible(true);
         }
     }//GEN-LAST:event_jMenuCadastroAnimalActionPerformed
 
     private void jMenuCadastroFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroFornecedorActionPerformed
 
-        if (!telaUsuario.isVisible() && !telaAnimal.isVisible() && !telaVenda.isVisible()) {
+        if (!telaUsuario.isVisible() && !telaAnimal.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible()) {
             telaFornecedor.setVisible(true);
 
         } else {
             telaUsuario.setVisible(false);
             telaAnimal.setVisible(false);
             telaVenda.setVisible(false);
+            telaCompra.setVisible(false);
             telaFornecedor.setVisible(true);
 
         }
@@ -557,13 +556,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonMinimizarActionPerformed
 
     private void jMenuCadastroUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroUsuarioActionPerformed
-        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaVenda.isVisible()) {
+        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible()) {
             telaUsuario.setVisible(true);
 
         } else {
             telaFornecedor.setVisible(false);
             telaAnimal.setVisible(false);
             telaVenda.setVisible(false);
+            telaCompra.setVisible(false);
             telaUsuario.setVisible(true);
 
         }
@@ -590,17 +590,31 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuRelatorioVendasActionPerformed
 
     private void jMenuCaixaVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCaixaVendaActionPerformed
-       if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible()) {
+       if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible()  && !telaCompra.isVisible()) {
             telaVenda.setVisible(true);
 
         } else {
             telaFornecedor.setVisible(false);
             telaAnimal.setVisible(false);
             telaUsuario.setVisible(false);
+            telaCompra.setVisible(false);
             telaVenda.setVisible(true);
 
         }
     }//GEN-LAST:event_jMenuCaixaVendaActionPerformed
+
+    private void jMenuCaixaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCaixaCompraActionPerformed
+        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaVenda.isVisible()) {
+            telaCompra.setVisible(true);
+
+        } else {
+            telaFornecedor.setVisible(false);
+            telaAnimal.setVisible(false);
+            telaUsuario.setVisible(false);
+            telaVenda.setVisible(false);
+            telaCompra.setVisible(true);
+        }
+    }//GEN-LAST:event_jMenuCaixaCompraActionPerformed
 
     /**
      * @param args the command line arguments

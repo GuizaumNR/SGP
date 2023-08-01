@@ -7,13 +7,10 @@ package com.gnr.sgp.modelo.dao;
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dominio.Animais;
-import com.gnr.sgp.modelo.dominio.Fornecedores;
-import com.gnr.sgp.modelo.dominio.Usuarios;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  *
@@ -116,7 +113,7 @@ public class AnimaisDao {
         animal.setDescricao(result.getString("descricao"));
         animal.setQuantidade(result.getString("quantidade"));
         animal.setIdade(result.getString("idade"));
-       animal.setSexo(result.getString("sexo"));
+        animal.setSexo(result.getString("sexo"));
         return animal;
     }
     

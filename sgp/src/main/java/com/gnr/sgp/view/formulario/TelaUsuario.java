@@ -14,6 +14,8 @@ import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.UsuariosDao;
 import com.gnr.sgp.modelo.dominio.Usuarios;
 import com.gnr.sgp.view.modelo.Validador;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -31,7 +33,15 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         jPassUsuSenha.setDocument(new Validador(4));
         jTextUsuLogin.setDocument(new Validador(10));
         jTextUsuNome.setDocument(new Validador(10));
-
+        
+        setLocation(-5, -5);
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                // Define a posição do componente para (0, 0)
+                setLocation(-5, -5);
+            }
+        });
     }
 
     private void consultar() {

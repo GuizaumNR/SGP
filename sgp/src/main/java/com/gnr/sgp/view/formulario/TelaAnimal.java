@@ -7,11 +7,9 @@ package com.gnr.sgp.view.formulario;
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.AnimaisDao;
-import com.gnr.sgp.modelo.dao.FornecedoresDao;
-import com.gnr.sgp.modelo.dao.UsuariosDao;
 import com.gnr.sgp.modelo.dominio.Animais;
-import com.gnr.sgp.modelo.dominio.Fornecedores;
-import com.gnr.sgp.modelo.dominio.Usuarios;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,6 +32,15 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
     public TelaAnimal() {
         this.conexao = new ConexaoMysql();
         initComponents();
+        
+        setLocation(-5, -5);
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                // Define a posição do componente para (0, 0)
+                setLocation(-5, -5);
+            }
+        });
     }
 
     public void adicionar() {
@@ -164,8 +171,10 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         jButtonAnimEditar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(227, 234, 227));
+        setBorder(javax.swing.BorderFactory.createEtchedBorder());
         setTitle("Animais");
         setMinimumSize(new java.awt.Dimension(680, 480));
+        setNormalBounds(new java.awt.Rectangle(0, 0, 48, 0));
         setPreferredSize(new java.awt.Dimension(820, 620));
 
         jLabelAnimIdade.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -282,7 +291,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
                                 .addComponent(jTextAnimBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabelAnimBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE)
                                 .addComponent(jLabelAnimCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1)))
                     .addGroup(layout.createSequentialGroup()
@@ -315,7 +324,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
                             .addComponent(jComboAnimIdade, 0, 115, Short.MAX_VALUE)
                             .addComponent(jTextAnimQuantidade))
                         .addGap(346, 346, 346)))
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
