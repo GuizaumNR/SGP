@@ -81,6 +81,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     public void setOperador(String operador) {
         labelOperador.setText("Operador: " + operador);
+        telaCompra.setOperador(operador);
+        telaVenda.setOperador(operador);
     }
 
     public void setPermissao(Boolean permissao) {
@@ -605,6 +607,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void jMenuCaixaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCaixaCompraActionPerformed
         if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaVenda.isVisible()) {
+            
+            
             telaCompra.setVisible(true);
 
         } else {

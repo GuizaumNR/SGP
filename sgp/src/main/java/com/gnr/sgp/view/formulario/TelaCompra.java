@@ -38,6 +38,8 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     double precoKg = 0;
     double valorTotal = 0;
     
+    String operador;
+    
     public TelaCompra() {
         this.conexao = new ConexaoMysql();
         initComponents();
@@ -132,11 +134,15 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             precoKg = Double.parseDouble(jTextFieldCompPrecoKg.getText());
             valorTotal = quantidade * mediaKg * precoKg;
 
-            ComprasAnimais compra = new ComprasAnimais(null, Integer.parseInt( jTextFieldCompAnimal.getText()), quantidade, mediaKg, precoKg, valorTotal, jTextFieldCompCriador.getText(), jComboCompPagamento.getSelectedItem().toString(), jTextFieldCompLocal.getText(),"Guilherme");
+            ComprasAnimais compra = new ComprasAnimais(null, Integer.parseInt( jTextFieldCompAnimal.getText()), quantidade, mediaKg, precoKg, valorTotal, jTextFieldCompCriador.getText(), jComboCompPagamento.getSelectedItem().toString(), jTextFieldCompLocal.getText(), operador);
            
             ComprasAnimaisDao comprasDao = new ComprasAnimaisDao();
             comprasDao.Adicionar(compra);
         }
+    }
+    
+    public void setOperador(String operador) {
+         this.operador = operador;
     }
     
     public void pesquisarAnimalId() {

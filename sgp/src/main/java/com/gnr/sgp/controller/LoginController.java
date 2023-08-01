@@ -10,6 +10,7 @@ import com.gnr.sgp.modelo.dao.VendasAnimaisDao;
 import com.gnr.sgp.modelo.dominio.Usuarios;
 import com.gnr.sgp.modelo.exception.NegocioException;
 import com.gnr.sgp.view.formulario.Login;
+import com.gnr.sgp.view.formulario.TelaCompra;
 import com.gnr.sgp.view.modelo.LoginDTO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -66,8 +67,7 @@ public class LoginController implements ActionListener {
             tela.setOperador(operador);
             tela.setVisible(true);
             
-            VendasAnimaisDao venda = new VendasAnimaisDao();
-            venda.setOperador(operador);
+          
             
             try {
                 this.autenticacaoDao.permissao(usuarioTemp);

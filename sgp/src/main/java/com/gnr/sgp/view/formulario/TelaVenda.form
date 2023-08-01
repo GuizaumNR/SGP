@@ -142,6 +142,7 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jTextFieldVendaMediaKg" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                               <Component id="jTextFieldVendaLocal" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                              <Component id="jLabelVendaLocal" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -158,8 +159,6 @@
                               <Component id="jLabelVendaComprador" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabelVendaLocal" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>

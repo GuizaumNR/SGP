@@ -25,7 +25,7 @@ public class VendasAnimaisDao {
     }
 
     public String Adicionar(VendasAnimais venda) {
-        String sql = "INSERT INTO compras_animais (id_animal, quantidade, media_kg, preco_kg, valor_total, comprador, vendedor, local_venda, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO vendas_animais (id_animal, quantidade, media_kg, preco_kg, valor_total, comprador, vendedor, local_venda, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
             pst.setInt(1, venda.getId_animal());
@@ -59,7 +59,7 @@ public class VendasAnimaisDao {
                 } catch (SQLException e) {
                     System.out.println("Erro ao atualizar a quantidade de animais: " + e.getMessage());
                 }
-//                TelaFornecedor.limpaCampos(null);
+
             } else {
                 JOptionPane.showMessageDialog(null, "Não foi possível finalizar a venda.");
             }
