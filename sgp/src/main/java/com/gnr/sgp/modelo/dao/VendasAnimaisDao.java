@@ -8,6 +8,7 @@ import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dominio.VendasAnimais;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
@@ -26,6 +27,8 @@ public class VendasAnimaisDao {
 
     public String Adicionar(VendasAnimais venda) {
         String sql = "INSERT INTO vendas_animais (id_animal, quantidade, media_kg, preco_kg, valor_total, comprador, vendedor, local_venda, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        if(verificarQuantidadeMenorZero(venda.getId_animal(), venda.getQuantidade()) && venda.getQuantidade() > 0){
         try {
             PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
             pst.setInt(1, venda.getId_animal());
@@ -68,11 +71,32 @@ public class VendasAnimaisDao {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro ao finalizar a venda.");
             e.printStackTrace();
         }
-
+        }else{
+            JOptionPane.showMessageDialog(null, "Quantidade de animais insuficiente para esta operação.");
+        }
         return null;
     }
 
     public void setOperador(String operador) {
         this.operador = operador;
+    }
+    
+     public boolean verificarQuantidadeMenorZero(int id_animal, int quantidadeVenda) {
+        String sql = "SELECT quantidade FROM animais WHERE id = ?";
+        try {
+            PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setInt(1, id_animal);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                int quantidade = rs.getInt("quantidade") - quantidadeVenda;
+                return quantidade >= 0;
+            } else {
+                return true;
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao verificar quantidade de animais: " + e.getMessage());
+            return false;
+        }
     }
 }
