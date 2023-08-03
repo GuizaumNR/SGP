@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 //importando recursos da biblioteca rs2xml 
 import net.proteanit.sql.DbUtils;
 
@@ -131,6 +132,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
         jTextFornTelefone.setText(null);
         jTextFornEmail.setText(null);
         jTextFornEndereco.setText(null);
+        ((DefaultTableModel) jTableForn.getModel()).setRowCount(0);
     }
 
     /**
@@ -232,6 +234,11 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
             }
         });
 
+        jTableForn = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         jTableForn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableForn.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -244,6 +251,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
                 "Id", "Nome", "Endereço", "Telefone", "Email"
             }
         ));
+        jTableForn.getTableHeader().setReorderingAllowed(false);
         jTableForn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableFornMouseClicked(evt);

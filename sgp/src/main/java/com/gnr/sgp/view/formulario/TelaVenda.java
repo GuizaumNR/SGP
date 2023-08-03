@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -135,11 +136,25 @@ public class TelaVenda extends javax.swing.JInternalFrame {
 
             VendasAnimaisDao vendasDao = new VendasAnimaisDao();
             vendasDao.Adicionar(venda);
+            
+            limpaCampos();
         }
     }
     
     public void setOperador(String operador) {
          this.operador = operador;
+    }
+    
+    public void limpaCampos(){
+        jTextFieldVendaAnimal.setText(null);
+        jTextFieldVendaQuantidade.setText(null);
+        jTextFieldVendaMediaKg.setText(null);
+        jTextFieldVendaPrecoKg.setText(null);
+        jTextFieldVendaVendedor.setText(null);
+        jTextFieldVendaComprador.setText(null);
+        jTextFieldVendaLocal.setText(null);
+        jTextFieldVendaTotal.setText(null);
+        ((DefaultTableModel) jTableVenda.getModel()).setRowCount(0);
     }
     
     public void pesquisarAnimalId() {
@@ -269,6 +284,11 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         jLabelAnimCampos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabelAnimCampos.setText("* Campos obrigatórios");
 
+        jTableVenda = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         jTableVenda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableVenda.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -281,12 +301,16 @@ public class TelaVenda extends javax.swing.JInternalFrame {
                 "Id", "Descrição", "Quant", "Idade", "Sexo"
             }
         ));
+        jTableVenda.setFocusable(false);
+        jTableVenda.getTableHeader().setReorderingAllowed(false);
         jTableVenda.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableVendaMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jTableVenda);
+
+        jTextFieldVendaAnimal.setEditable(false);
 
         jLabelVendaComprador.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabelVendaComprador.setText("* Comprador:");

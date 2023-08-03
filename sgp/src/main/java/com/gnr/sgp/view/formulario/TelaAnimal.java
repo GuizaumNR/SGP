@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -52,6 +53,8 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
 
             AnimaisDao animaisDao = new AnimaisDao();
             animaisDao.adicionar(animal);
+            
+            limpaCampos();
 
         }
     }
@@ -64,6 +67,8 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
 
             AnimaisDao animaisDao = new AnimaisDao();
             animaisDao.deletar(animal);
+            
+            limpaCampos();
         }
 
     }
@@ -77,6 +82,8 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
 
             AnimaisDao animaisDao = new AnimaisDao();
             animaisDao.editar(animal);
+            
+            limpaCampos();
         }
     }
     
@@ -143,6 +150,15 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         jComboAnimSexo.setSelectedItem(jTableAnim.getModel().getValueAt(setar, 4).toString());
 
     }
+    
+    public void limpaCampos(){
+        jTextAnimBusca.setText(null);
+        jTextAnimDescricao.setText(null);
+        jTextAnimQuantidade.setText(null);
+        jComboAnimIdade.setSelectedItem("terneiro");
+        jComboAnimSexo.setSelectedItem("boi");
+        ((DefaultTableModel) jTableAnim.getModel()).setRowCount(0);
+    }
         /**
          * This method is called from within the constructor to initialize the
          * form. WARNING: Do NOT modify this code. The content of this method is
@@ -174,7 +190,6 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
         setTitle("Animais");
         setMinimumSize(new java.awt.Dimension(680, 480));
-        setNormalBounds(new java.awt.Rectangle(0, 0, 48, 0));
         setPreferredSize(new java.awt.Dimension(820, 620));
 
         jLabelAnimIdade.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -190,6 +205,11 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
             }
         });
 
+        jTableAnim = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         jTableAnim.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableAnim.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -202,6 +222,8 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
                 "Id", "Descrição", "Quant", "Idade", "Sexo"
             }
         ));
+        jTableAnim.setFocusable(false);
+        jTableAnim.getTableHeader().setReorderingAllowed(false);
         jTableAnim.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableAnimMouseClicked(evt);

@@ -7,9 +7,7 @@ package com.gnr.sgp.view.formulario;
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.ComprasAnimaisDao;
-import com.gnr.sgp.modelo.dao.VendasAnimaisDao;
 import com.gnr.sgp.modelo.dominio.ComprasAnimais;
-import com.gnr.sgp.modelo.dominio.VendasAnimais;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.sql.PreparedStatement;
@@ -18,6 +16,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -138,6 +137,8 @@ public class TelaCompra extends javax.swing.JInternalFrame {
            
             ComprasAnimaisDao comprasDao = new ComprasAnimaisDao();
             comprasDao.Adicionar(compra);
+            
+            limpaCampos();
         }
     }
     
@@ -145,6 +146,17 @@ public class TelaCompra extends javax.swing.JInternalFrame {
          this.operador = operador;
     }
     
+    public void limpaCampos(){
+        jTextFieldCompAnimal.setText(null);
+        jTextFieldCompQuantidade.setText(null);
+        jTextFieldCompMediaKg.setText(null);
+        jTextFieldCompPrecoKg.setText(null);
+        jTextFieldCompCriador.setText(null);
+        jComboCompPagamento.setSelectedItem("alemao");
+        jTextFieldCompLocal.setText(null);
+        jTextFieldCompTotal.setText(null);
+        ((DefaultTableModel) jTableComp.getModel()).setRowCount(0);
+    }
     public void pesquisarAnimalId() {
         String sql = String.format("SELECT * FROM animais WHERE id like ?");
         try {
@@ -243,6 +255,11 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         setTitle("Compra");
         setMinimumSize(new java.awt.Dimension(680, 480));
 
+        jTableComp = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         jTableComp.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableComp.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -255,14 +272,18 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                 "Id", "Descrição", "Quant", "Idade", "Sexo"
             }
         ));
+        jTableComp.setFocusable(false);
         jTableComp.setMinimumSize(new java.awt.Dimension(680, 480));
         jTableComp.setPreferredSize(new java.awt.Dimension(820, 420));
+        jTableComp.getTableHeader().setReorderingAllowed(false);
         jTableComp.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableCompMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jTableComp);
+
+        jTextFieldCompAnimal.setEditable(false);
 
         jLabelCompAnimal1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabelCompAnimal1.setText("* Criador:");
@@ -271,7 +292,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         jLabelCompTotal.setText("* Total:");
 
         jLabelCompAnimal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabelCompAnimal.setText("* Id:");
+        jLabelCompAnimal.setText("* Id Animal:");
 
         jLabelCompQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabelCompQuantidade.setText("* Quantidade:");
@@ -408,19 +429,18 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelCompMediaKg)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextFieldCompMediaKg, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelCompLocal)
-                            .addComponent(jTextFieldCompLocal, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))))
+                            .addComponent(jTextFieldCompLocal, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))
+                        .addComponent(jTextFieldCompMediaKg, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabelCompPrecoKg, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextFieldCompPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelCompTotal)
-                            .addComponent(jTextFieldCompTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabelCompTotal)
+                        .addComponent(jTextFieldCompTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldCompPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(57, 57, 57)
                 .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(75, 75, 75))

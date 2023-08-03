@@ -297,17 +297,24 @@
                 </Column>
               </TableColumnModel>
             </Property>
+            <Property name="focusable" type="boolean" value="false"/>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-              <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
             </Property>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTableVendaMouseClicked"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTableVenda = new javax.swing.JTable(){&#xa;public boolean isCellEditable(int rowIndex, int colIndex){&#xa;        return false;&#xa;}&#xa;};"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JTextField" name="jTextFieldVendaAnimal">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldVendaQuantidade">
     </Component>
