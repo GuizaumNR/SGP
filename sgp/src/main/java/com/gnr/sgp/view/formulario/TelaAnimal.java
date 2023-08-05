@@ -144,11 +144,16 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
     
     public void setarCampos() {
         int setar = jTableAnim.getSelectedRow();
-        jTextAnimDescricao.setText(jTableAnim.getModel().getValueAt(setar, 1).toString());
-        jTextAnimQuantidade.setText(jTableAnim.getModel().getValueAt(setar, 2).toString());
-        jComboAnimIdade.setSelectedItem(jTableAnim.getModel().getValueAt(setar, 3).toString());
-        jComboAnimSexo.setSelectedItem(jTableAnim.getModel().getValueAt(setar, 4).toString());
-
+        String valorDesc = jTableAnim.getModel().getValueAt(setar, 1).toString();
+        String valorQuant = jTableAnim.getModel().getValueAt(setar, 2).toString();
+        String valorIdade = jTableAnim.getModel().getValueAt(setar, 3).toString();
+        String valorSexo = jTableAnim.getModel().getValueAt(setar, 4).toString();
+        if(valorDesc != null && valorQuant != null && valorIdade != null && valorSexo != null){
+        jTextAnimDescricao.setText(valorDesc);
+        jTextAnimQuantidade.setText(valorQuant);
+        jComboAnimIdade.setSelectedItem(valorIdade);
+        jComboAnimSexo.setSelectedItem(valorSexo);
+        }
     }
     
     public void limpaCampos(){

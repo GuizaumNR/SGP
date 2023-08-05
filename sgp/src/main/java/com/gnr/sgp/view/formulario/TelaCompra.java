@@ -28,7 +28,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     /**
      * Creates new form TelaCompra
      */
-     private final Conexao conexao;
+    private final Conexao conexao;
     PreparedStatement pst = null;
     ResultSet rs = null;
 
@@ -36,9 +36,9 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     double mediaKg = 0;
     double precoKg = 0;
     double valorTotal = 0;
-    
+
     String operador;
-    
+
     public TelaCompra() {
         this.conexao = new ConexaoMysql();
         initComponents();
@@ -95,9 +95,9 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             public void changedUpdate(DocumentEvent e) {
                 atualizarValorTotal();
             }
-       
+
         });
-        
+
         setLocation(-5, -5);
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -106,11 +106,9 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                 setLocation(-5, -5);
             }
         });
-        
+
     }
-    
-    
-    
+
     private void atualizarValorTotal() {
         try {
             int quantidade = Integer.parseInt(jTextFieldCompQuantidade.getText());
@@ -123,9 +121,9 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             jTextFieldCompTotal.setText("Valor Inválido");
         }
     }
-    
+
     public void adicionar() {
-        if ((jTextFieldCompAnimal.getText().isEmpty() || jTextFieldCompQuantidade.getText().isEmpty() || jTextFieldCompMediaKg.getText().isEmpty() || jTextFieldCompPrecoKg.getText().isEmpty()  || jTextFieldCompCriador.getText().isEmpty() || jTextFieldCompTotal.getText().isEmpty())) {
+        if ((jTextFieldCompAnimal.getText().isEmpty() || jTextFieldCompQuantidade.getText().isEmpty() || jTextFieldCompMediaKg.getText().isEmpty() || jTextFieldCompPrecoKg.getText().isEmpty() || jTextFieldCompCriador.getText().isEmpty() || jTextFieldCompTotal.getText().isEmpty())) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
         } else {
             quantidade = Integer.parseInt(jTextFieldCompQuantidade.getText());
@@ -133,20 +131,20 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             precoKg = Double.parseDouble(jTextFieldCompPrecoKg.getText());
             valorTotal = quantidade * mediaKg * precoKg;
 
-            ComprasAnimais compra = new ComprasAnimais(null, Integer.parseInt( jTextFieldCompAnimal.getText()), quantidade, mediaKg, precoKg, valorTotal, jTextFieldCompCriador.getText(), jComboCompPagamento.getSelectedItem().toString(), jTextFieldCompLocal.getText(), operador);
-           
+            ComprasAnimais compra = new ComprasAnimais(null, Integer.parseInt(jTextFieldCompAnimal.getText()), quantidade, mediaKg, precoKg, valorTotal, jTextFieldCompCriador.getText(), jComboCompPagamento.getSelectedItem().toString(), jTextFieldCompLocal.getText(), operador);
+
             ComprasAnimaisDao comprasDao = new ComprasAnimaisDao();
             comprasDao.Adicionar(compra);
-            
+
             limpaCampos();
         }
     }
-    
+
     public void setOperador(String operador) {
-         this.operador = operador;
+        this.operador = operador;
     }
-    
-    public void limpaCampos(){
+
+    public void limpaCampos() {
         jTextFieldCompAnimal.setText(null);
         jTextFieldCompQuantidade.setText(null);
         jTextFieldCompMediaKg.setText(null);
@@ -157,6 +155,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         jTextFieldCompTotal.setText(null);
         ((DefaultTableModel) jTableComp.getModel()).setRowCount(0);
     }
+
     public void pesquisarAnimalId() {
         String sql = String.format("SELECT * FROM animais WHERE id like ?");
         try {
@@ -170,7 +169,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         }
 
     }
-    
+
     public void pesquisarAnimalDescricao() {
         String sql = String.format("SELECT * FROM animais WHERE descricao like ?");
         try {
@@ -183,8 +182,8 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             e.printStackTrace();
         }
     }
-    
-        public void pesquisarAnimalIdade() {
+
+    public void pesquisarAnimalIdade() {
         String sql = String.format("SELECT * FROM animais WHERE idade like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
@@ -197,8 +196,8 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         }
 
     }
-        
-         public void pesquisarAnimalSexo() {
+
+    public void pesquisarAnimalSexo() {
         String sql = String.format("SELECT * FROM animais WHERE sexo like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
@@ -211,11 +210,14 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         }
 
     }
-         public void setarCampo() {
+
+    public void setarCampo() {
         int setar = jTableComp.getSelectedRow();
-        jTextFieldCompAnimal.setText(jTableComp.getModel().getValueAt(setar, 0).toString());
+        String valor = jTableComp.getModel().getValueAt(setar, 0).toString();
+        if(valor != null){
+        jTextFieldCompAnimal.setText(valor);
+        }
     }
-         
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -454,14 +456,13 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTableCompMouseClicked
 
     private void jTextCompBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextCompBuscaKeyReleased
-        if(jComboCompPesquisa.getSelectedItem().toString() == "id"){
+        if (jComboCompPesquisa.getSelectedItem().toString() == "id") {
             pesquisarAnimalId();
-        }else if (jComboCompPesquisa.getSelectedItem().toString() == "descricao") {
+        } else if (jComboCompPesquisa.getSelectedItem().toString() == "descricao") {
             pesquisarAnimalDescricao();
         } else if (jComboCompPesquisa.getSelectedItem().toString() == "idade") {
             pesquisarAnimalIdade();
-        }
-        else if (jComboCompPesquisa.getSelectedItem().toString() == "sexo") {
+        } else if (jComboCompPesquisa.getSelectedItem().toString() == "sexo") {
             pesquisarAnimalSexo();
         }
     }//GEN-LAST:event_jTextCompBuscaKeyReleased

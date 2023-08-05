@@ -214,7 +214,10 @@ public class TelaVenda extends javax.swing.JInternalFrame {
 
     public void setarCampo() {
         int setar = jTableVenda.getSelectedRow();
-        jTextFieldVendaAnimal.setText(jTableVenda.getModel().getValueAt(setar, 0).toString());
+        String valor = jTableVenda.getModel().getValueAt(setar, 0).toString();
+        if(valor != null){
+        jTextFieldVendaAnimal.setText(valor);
+        }
     }
 
     /**

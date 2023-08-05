@@ -119,11 +119,16 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
 
     public void setarCampos() {
         int setar = jTableForn.getSelectedRow();
-        jTextFornNome.setText(jTableForn.getModel().getValueAt(setar, 1).toString());
-        jTextFornEndereco.setText(jTableForn.getModel().getValueAt(setar, 2).toString());
-        jTextFornTelefone.setText(jTableForn.getModel().getValueAt(setar, 3).toString());
-        jTextFornEmail.setText(jTableForn.getModel().getValueAt(setar, 4).toString());
-
+        String valorNome = jTableForn.getModel().getValueAt(setar, 1).toString();
+        String valorEnd = jTableForn.getModel().getValueAt(setar, 2).toString();
+        String valorTele = jTableForn.getModel().getValueAt(setar, 3).toString();
+        String valorEmail = jTableForn.getModel().getValueAt(setar, 4).toString();
+        if(valorNome != null && valorEnd != null && valorTele != null && valorEmail != null){
+        jTextFornNome.setText(valorNome);
+        jTextFornEndereco.setText(valorEnd);
+        jTextFornTelefone.setText(valorTele);
+        jTextFornEmail.setText(valorEmail);
+        }
     }
 
     public void limpaCampos() {
