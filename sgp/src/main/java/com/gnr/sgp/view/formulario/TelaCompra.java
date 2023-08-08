@@ -256,6 +256,9 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
         setTitle("Compra");
         setMinimumSize(new java.awt.Dimension(680, 480));
+        setPreferredSize(new java.awt.Dimension(820, 620));
+
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(75, 80));
 
         jTableComp = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex){
@@ -361,7 +364,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                         .addComponent(jLabelCompBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
                         .addComponent(jLabelCompCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()

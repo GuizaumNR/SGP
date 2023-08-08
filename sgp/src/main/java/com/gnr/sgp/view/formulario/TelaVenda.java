@@ -305,6 +305,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
             }
         ));
         jTableVenda.setFocusable(false);
+        jTableVenda.setPreferredSize(new java.awt.Dimension(462, 402));
         jTableVenda.getTableHeader().setReorderingAllowed(false);
         jTableVenda.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
