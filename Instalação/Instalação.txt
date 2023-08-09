@@ -8,3 +8,10 @@ Para desenvolvimento a primeira opção
 Development computer
 Login e senha o mesmo do sistema (root, admin)
 Começar junto do windows
+
+Baixe o Maven: Faça o download da versão do Maven adequada para o seu sistema operacional a partir do site oficial: https://maven.apache.org/download.cgi
+Instale o Maven: Descompacte o arquivo baixado em um diretório no seu computador. Não há necessidade de executar um instalador. Basta descompactar e você terá a estrutura do Maven.
+Configurar Variáveis de Ambiente: Adicione o diretório do Maven ao seu PATH do sistema. Isso permitirá que o sistema encontre o executável do Maven (mvn) a partir de qualquer local no terminal.
+Verifique a Instalação: Abra um novo terminal e execute o comando mvn -v para verificar se o Maven foi instalado corretamente e se a sua configuração de ambiente está funcionando.
+Se você está tendo dificuldades em configurar o Maven, é possível que existam recursos online que fornecem guias detalhados de instalação e configuração para o seu sistema operacional específico. 
+Certifique-se de seguir essas instruções para garantir que o Maven funcione corretamente em seu ambiente.
