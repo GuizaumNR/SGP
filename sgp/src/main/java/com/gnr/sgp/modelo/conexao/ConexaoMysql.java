@@ -11,7 +11,7 @@ public class ConexaoMysql implements Conexao {
     private static Connection connection;
     private static final String URL = "jdbc:mysql://localhost:3306/dbinfox";
     private static final String USER = "root";
-    private static final String PASSWORD = "guilherme2015";
+    private static final String PASSWORD = "admin";
 
     static {
         try {

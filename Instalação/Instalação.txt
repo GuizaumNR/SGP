@@ -1,0 +1,10 @@
+MySQL:
+Custom
+MySQL Server versão 8 (mais atualizada)
+MySQL Workbench (mais atualizado)
+
+Configuração do servidor
+Para desenvolvimento a primeira opção
+Development computer
+Login e senha o mesmo do sistema (root, admin)
+Começar junto do windows

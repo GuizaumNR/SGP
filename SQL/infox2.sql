@@ -1,3 +1,5 @@
+CREATE DATABASE dbinfox;
+
 CREATE TABLE usuarios (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     nome varchar(30) NOT NULL,
@@ -119,7 +121,11 @@ ORDER BY total_vendido DESC;
 -- lista de vendas entre determinadas datas
 SELECT *
 FROM vendas_animais
-WHERE data_venda >= '2023-01-01' AND data_venda <= '2023-07-31';
+WHERE data_venda >= '2023-01-01' AND data_venda <= '2023-12-31';
+
+SELECT *
+FROM compras_animais
+WHERE data_compra >= '2023-08-03' AND data_compra <= '2023-08-31';
 
 describe usuarios;
 describe animais;
