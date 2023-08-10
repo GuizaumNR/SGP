@@ -13,14 +13,6 @@
     </properties>
     
     <dependencies>
-         
-        <!-- Maven Dependency -->
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>apache-maven</artifactId>
-            <version>3.8.4</version> <!-- Use a versão desejada -->
-            <scope>provided</scope>
-        </dependency>
     
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>

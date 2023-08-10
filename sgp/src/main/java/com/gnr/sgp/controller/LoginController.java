@@ -59,6 +59,10 @@ public class LoginController implements ActionListener {
 
         Usuarios usuarioTemp = this.autenticacaoDao.login(loginDto);
 
+        if(this.login.getTxtLoginUsuario().getText() == "admin"){
+            System.out.println("admin");
+        }
+        
         if (usuarioTemp != null) {
             login.dispose();
             

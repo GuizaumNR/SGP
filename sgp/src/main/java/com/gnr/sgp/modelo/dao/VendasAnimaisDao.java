@@ -7,6 +7,14 @@ package com.gnr.sgp.modelo.dao;
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dominio.VendasAnimais;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,51 +35,84 @@ public class VendasAnimaisDao {
 
     public String Adicionar(VendasAnimais venda) {
         String sql = "INSERT INTO vendas_animais (id_animal, quantidade, media_kg, preco_kg, valor_total, comprador, vendedor, local_venda, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
-        if(verificarQuantidadeMenorZero(venda.getId_animal(), venda.getQuantidade()) && venda.getQuantidade() > 0){
-        try {
-            PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
-            pst.setInt(1, venda.getId_animal());
-            pst.setInt(2, venda.getQuantidade());
-            pst.setDouble(3, venda.getMedia_kg());
-            pst.setDouble(4, venda.getPreco_peso());
-            pst.setDouble(5, venda.getValor_total());
-            pst.setString(6, venda.getComprador());
-            pst.setString(7, venda.getVendedor());
-            pst.setString(8, venda.getLocal());
-            pst.setString(9, venda.getOperador());
 
-            int resultado = pst.executeUpdate();
+        if (verificarQuantidadeMenorZero(venda.getId_animal(), venda.getQuantidade()) && venda.getQuantidade() > 0) {
+            try {
+                PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
+                pst.setInt(1, venda.getId_animal());
+                pst.setInt(2, venda.getQuantidade());
+                pst.setDouble(3, venda.getMedia_kg());
+                pst.setDouble(4, venda.getPreco_peso());
+                pst.setDouble(5, venda.getValor_total());
+                pst.setString(6, venda.getComprador());
+                pst.setString(7, venda.getVendedor());
+                pst.setString(8, venda.getLocal());
+                pst.setString(9, venda.getOperador());
 
-            if (resultado > 0) {
-                JOptionPane.showMessageDialog(null, "Venda finalizada com sucesso!");
+                int resultado = pst.executeUpdate();
 
-                String sqlUpdate = "UPDATE animais SET quantidade = quantidade - ? WHERE id = ?";
-                try {
-                    PreparedStatement pstmt = conexao.obterConexao().prepareStatement(sqlUpdate);
-                    pstmt.setInt(1, venda.getQuantidade());
-                    pstmt.setInt(2, venda.getId_animal());
+                if (resultado > 0) {
+                    JOptionPane.showMessageDialog(null, "Venda finalizada com sucesso!");
 
-                    int resultado2 = pstmt.executeUpdate();
+                    String sqlUpdate = "UPDATE animais SET quantidade = quantidade - ? WHERE id = ?";
+                    try {
+                        PreparedStatement pstmt = conexao.obterConexao().prepareStatement(sqlUpdate);
+                        pstmt.setInt(1, venda.getQuantidade());
+                        pstmt.setInt(2, venda.getId_animal());
 
-                    if (resultado2 > 0) {
-                        System.out.println("Quantidade de animais atualizada com sucesso!");
-                    } else {
-                        System.out.println("Não foi possível atualizar a quantidade de animais.");
+                        int resultado2 = pstmt.executeUpdate();
+
+                        if (resultado2 > 0) {
+                            JOptionPane.showMessageDialog(null, "Quantidade de animais atualizada com sucesso!");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Não foi possível atualizar a quantidade de animais.");
+                        }
+
+                        Document documentoPDF = new Document();
+
+                        try {
+                            String username = System.getProperty("user.name");
+                            PdfWriter.getInstance(documentoPDF, new FileOutputStream("C:\\Users\\"+ username + "\\Desktop\\venda" + venda.getValor_total()+".pdf"));
+//                            PdfWriter.getInstance(documentoPDF, new FileOutputStream("C:\\Users\\Guilherme\\Documents\\venda" + venda.getId() + ".pdf"));
+
+                            documentoPDF.open();
+
+                            documentoPDF.setPageSize(PageSize.A4);
+
+                        PdfPTable table = new PdfPTable(11);
+			table.addCell("ID");
+			table.addCell("Data");
+			table.addCell("Descrição");
+			table.addCell("Quantidade");
+			table.addCell("Média Kg");
+			table.addCell("Preço Kg");	
+                        table.addCell("Valor Total");	
+                        table.addCell("Vendedor");	
+                        table.addCell("Comprador");	
+                        table.addCell("Local");	
+                        table.addCell("Operador");	
+			
+			// Code 4
+			documentoPDF.add(table);		
+			documentoPDF.close();
+                        } catch (DocumentException de) {
+                            de.printStackTrace();
+                        } catch (IOException ioe) {
+                            ioe.printStackTrace();
+                        }
+                    } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(null, "Erro ao atualizar a quantidade de animais: " + e.getMessage());
                     }
-                } catch (SQLException e) {
-                    System.out.println("Erro ao atualizar a quantidade de animais: " + e.getMessage());
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não foi possível finalizar a venda.");
                 }
 
-            } else {
-                JOptionPane.showMessageDialog(null, "Não foi possível finalizar a venda.");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Ocorreu um erro ao finalizar a venda.");
+                e.printStackTrace();
             }
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao finalizar a venda.");
-            e.printStackTrace();
-        }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Quantidade de animais insuficiente para esta operação.");
         }
         return null;
@@ -80,8 +121,8 @@ public class VendasAnimaisDao {
     public void setOperador(String operador) {
         this.operador = operador;
     }
-    
-     public boolean verificarQuantidadeMenorZero(int id_animal, int quantidadeVenda) {
+
+    public boolean verificarQuantidadeMenorZero(int id_animal, int quantidadeVenda) {
         String sql = "SELECT quantidade FROM animais WHERE id = ?";
         try {
             PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
@@ -98,5 +139,9 @@ public class VendasAnimaisDao {
             JOptionPane.showMessageDialog(null, "Erro ao verificar quantidade de animais: " + e.getMessage());
             return false;
         }
+    }
+
+    public void criarDocumento() {
+
     }
 }

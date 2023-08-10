@@ -10,9 +10,17 @@ import com.gnr.sgp.view.formulario.TelaFornecedor;
 import com.gnr.sgp.view.formulario.TelaSobre;
 import com.gnr.sgp.view.formulario.TelaUsuario;
 import com.gnr.sgp.view.formulario.TelaVenda;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.BorderLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -76,7 +84,39 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jDesktok.add(telaAnimal);
         jDesktok.add(telaVenda);
         jDesktok.add(telaCompra);
+        
+        Document documentoPDF = new Document();
 
+                        try {
+                            String username = System.getProperty("user.name");
+//                            PdfWriter.getInstance(documentoPDF, new FileOutputStream("C:\\Users\\"+ username + "\\Desktop\\venda" + venda.getValor_total()+".pdf"));
+                            PdfWriter.getInstance(documentoPDF, new FileOutputStream("C:\\Users\\Guilherme\\Documents\\venda" + String.format("%1$tM", now) + ".pdf"));
+
+                            documentoPDF.open();
+
+                            documentoPDF.setPageSize(PageSize.A4);
+
+                            PdfPTable table = new PdfPTable(11);
+			table.addCell("ID");
+			table.addCell("Data");
+			table.addCell("Descrição");
+			table.addCell("Quantidade");
+			table.addCell("Média Kg");
+			table.addCell("Preço Kg");	
+                        table.addCell("Valor Total");	
+                        table.addCell("Vendedor");	
+                        table.addCell("Comprador");	
+                        table.addCell("Local");	
+                        table.addCell("Operador");		
+			
+			// Code 4
+			documentoPDF.add(table);		
+			documentoPDF.close(); 
+                        } catch (DocumentException de) {
+                            de.printStackTrace();
+                        } catch (IOException ioe) {
+                            ioe.printStackTrace();
+                        }
     }
 
     public void setOperador(String operador) {
