@@ -4,29 +4,47 @@
  */
 package com.gnr.sgp;
 
+import com.gnr.sgp.modelo.conexao.Conexao;
+import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.view.formulario.TelaAnimal;
 import com.gnr.sgp.view.formulario.TelaCompra;
 import com.gnr.sgp.view.formulario.TelaFornecedor;
 import com.gnr.sgp.view.formulario.TelaSobre;
 import com.gnr.sgp.view.formulario.TelaUsuario;
 import com.gnr.sgp.view.formulario.TelaVenda;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.kernel.color.DeviceGray;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import static com.itextpdf.kernel.pdf.PdfName.Font;
+import com.itextpdf.kernel.pdf.PdfPage;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.kernel.pdf.canvas.draw.DottedLine;
+import com.itextpdf.kernel.pdf.canvas.draw.ILineDrawer;
+import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.LineSeparator;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.HorizontalAlignment;
+import com.itextpdf.layout.property.TextAlignment;
 import java.awt.BorderLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-       
+
 import javax.swing.Timer;
 
 /**
@@ -50,7 +68,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
     TelaVenda telaVenda = new TelaVenda();
     TelaCompra telaCompra = new TelaCompra();
 
+    Conexao conexao;
+
     public TelaPrincipal() {
+
+        this.conexao = new ConexaoMysql();
+
         setUndecorated(true);
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -84,39 +107,106 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jDesktok.add(telaAnimal);
         jDesktok.add(telaVenda);
         jDesktok.add(telaCompra);
-        
-        Document documentoPDF = new Document();
 
-                        try {
-                            String username = System.getProperty("user.name");
-//                            PdfWriter.getInstance(documentoPDF, new FileOutputStream("C:\\Users\\"+ username + "\\Desktop\\venda" + venda.getValor_total()+".pdf"));
-                            PdfWriter.getInstance(documentoPDF, new FileOutputStream("C:\\Users\\Guilherme\\Documents\\venda" + String.format("%1$tM", now) + ".pdf"));
+        try {
+            criarDocumento();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-                            documentoPDF.open();
+    public void criarDocumento() throws SQLException {
+        String inicio = "2023-08-2";
+        String fim = "2023-08-31";
 
-                            documentoPDF.setPageSize(PageSize.A4);
+        String sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, vendedor, comprador, local_venda, operador "
+                + "FROM vendas_animais v "
+                + "JOIN animais a ON v.id_animal = a.id "
+                + "WHERE data_venda BETWEEN '" + inicio + "' AND '" + fim + "' "
+                + "ORDER BY data_venda";
 
-                            PdfPTable table = new PdfPTable(11);
-			table.addCell("ID");
-			table.addCell("Data");
-			table.addCell("Descrição");
-			table.addCell("Quantidade");
-			table.addCell("Média Kg");
-			table.addCell("Preço Kg");	
-                        table.addCell("Valor Total");	
-                        table.addCell("Vendedor");	
-                        table.addCell("Comprador");	
-                        table.addCell("Local");	
-                        table.addCell("Operador");		
-			
-			// Code 4
-			documentoPDF.add(table);		
-			documentoPDF.close(); 
-                        } catch (DocumentException de) {
-                            de.printStackTrace();
-                        } catch (IOException ioe) {
-                            ioe.printStackTrace();
-                        }
+        try {
+            String username = System.getProperty("user.name");
+            String data = new SimpleDateFormat("dd_MM_yyyy").format(new Date());
+            String path = "C:\\Users\\" + username + "\\Documents\\Relatorio_" + data + ".pdf";
+
+            PdfWriter pdfWriter = new PdfWriter(path);
+            PdfDocument documentoPDF = new PdfDocument(pdfWriter);
+            Document document = new Document(documentoPDF, PageSize.A4);
+
+            Table table = new Table(new float[]{3, 3, 4, 2, 2, 2, 3, 3, 3, 3, 1}); // Proporções de largura para cada coluna, a primeira coluna terá 1/11 da largura total...
+
+            table.setWidthPercent(100);
+            table.setHorizontalAlignment(HorizontalAlignment.CENTER);
+            // Definindo fontes
+            PdfFont fontBold = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
+            PdfFont fontNormal = PdfFontFactory.createFont(FontConstants.HELVETICA);
+
+            
+            PdfPage firstPage = documentoPDF.addNewPage();
+            PdfCanvas canvas = new PdfCanvas(firstPage);
+            canvas.beginText()
+                    .setFontAndSize(fontNormal, 8)
+                    .moveText(36, 806)
+                    .showText("Pecuária MML")
+                    .endText();
+
+
+            String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+            canvas.beginText()
+                    .setFontAndSize(fontNormal, 8)
+                    .moveText(485, 806)
+                    .showText("Emissão: " + currentDate)
+                    .endText();
+
+
+            SolidLine separatorLine = new SolidLine(1);
+            document.add(new Paragraph("")).add(new LineSeparator(separatorLine));
+            
+            
+            document.add(new Paragraph("Relatório de Vendas")
+                    .setFont(fontBold)
+                    .setFontSize(18)
+                    .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
+            document.add(new Paragraph("Período: " + inicio + " a " + fim)
+                    .setFont(fontNormal)
+                    .setFontSize(12)
+                    .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
+            document.add(new Paragraph(""));
+
+            
+            PdfFont headerFont = PdfFontFactory.createFont();
+            String[] headers = {"ID", "Data", "Animal", "Qtde", "Média Kg", "Preço Kg", "Total", "Vend", "Comp", "Local", "Operador"};
+            for (String header : headers) {
+                Cell cell = new Cell().add(header).setFont(headerFont).setFontSize(10).setBackgroundColor(DeviceGray.BLACK).setTextAlignment(TextAlignment.CENTER).setFontColor(DeviceGray.WHITE);
+                table.addCell(cell);
+            }
+
+            // Linhas da tabela com os dados do ResultSet
+            PdfFont dataFont = PdfFontFactory.createFont();
+            PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
+            ResultSet resultPDF = pstPDF.executeQuery();
+            while (resultPDF.next()) {
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_venda")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("data_formatada")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("animal_descricao")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("quantidade")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("media_kg")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("preco_kg")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("valor_total")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("vendedor")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("comprador")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("local_venda")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("operador")));
+            }
+
+            table.setAutoLayout();
+            document.add(table);
+            document.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setOperador(String operador) {
@@ -541,8 +631,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void jMenuCadastroAnimalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroAnimalActionPerformed
         if (!telaUsuario.isVisible() && !telaFornecedor.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible()) {
-        telaAnimal.setVisible(true);
-        } else{
+            telaAnimal.setVisible(true);
+        } else {
             telaUsuario.setVisible(false);
             telaFornecedor.setVisible(false);
             telaVenda.setVisible(false);
@@ -632,7 +722,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuRelatorioVendasActionPerformed
 
     private void jMenuCaixaVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCaixaVendaActionPerformed
-       if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible()  && !telaCompra.isVisible()) {
+        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaCompra.isVisible()) {
             telaVenda.setVisible(true);
 
         } else {
@@ -647,8 +737,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void jMenuCaixaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCaixaCompraActionPerformed
         if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaVenda.isVisible()) {
-            
-            
+
             telaCompra.setVisible(true);
 
         } else {

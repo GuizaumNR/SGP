@@ -15,3 +15,5 @@ Configurar Variáveis de Ambiente: Adicione o diretório do Maven ao seu PATH do
 Verifique a Instalação: Abra um novo terminal e execute o comando mvn -v para verificar se o Maven foi instalado corretamente e se a sua configuração de ambiente está funcionando.
 Se você está tendo dificuldades em configurar o Maven, é possível que existam recursos online que fornecem guias detalhados de instalação e configuração para o seu sistema operacional específico. 
 Certifique-se de seguir essas instruções para garantir que o Maven funcione corretamente em seu ambiente.
+
+mvn clean install
