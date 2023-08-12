@@ -33,6 +33,8 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.IOException;
@@ -71,7 +73,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
     Conexao conexao;
 
     public TelaPrincipal() {
-
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = (int) screenSize.getWidth();
+        int screenHeight = (int) screenSize.getHeight();
+        
+        setSize(screenWidth, screenHeight); // Define o tamanho da janela com base no tamanho da tela
         this.conexao = new ConexaoMysql();
 
         setUndecorated(true);
@@ -134,8 +140,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
             PdfDocument documentoPDF = new PdfDocument(pdfWriter);
             Document document = new Document(documentoPDF, PageSize.A4);
 
-            Table table = new Table(new float[]{3, 3, 4, 2, 2, 2, 3, 3, 3, 3, 1}); // Proporções de largura para cada coluna, a primeira coluna terá 1/11 da largura total...
-
+          float[] columnWidths = {1, 3, 4, 2, 2, 1, 4, 3, 3, 3, 3};
+Table table = new Table(columnWidths);
             table.setWidthPercent(100);
             table.setHorizontalAlignment(HorizontalAlignment.CENTER);
             // Definindo fontes
@@ -155,7 +161,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
             canvas.beginText()
                     .setFontAndSize(fontNormal, 8)
-                    .moveText(485, 806)
+                    .moveText(484, 806)
                     .showText("Emissão: " + currentDate)
                     .endText();
 
@@ -187,18 +193,19 @@ public class TelaPrincipal extends javax.swing.JFrame {
             PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
             ResultSet resultPDF = pstPDF.executeQuery();
             while (resultPDF.next()) {
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_venda")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("data_formatada")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("animal_descricao")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("quantidade")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("media_kg")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("preco_kg")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("valor_total")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("vendedor")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("comprador")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("local_venda")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).add(resultPDF.getString("operador")));
-            }
+    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_venda")));
+    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
+    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_descricao")));
+    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
+    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("media_kg")));
+    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(14).add(resultPDF.getString("preco_kg")));
+    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(40).add(resultPDF.getString("valor_total")));
+    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("vendedor")));
+    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("comprador")));
+    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_venda")));
+    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("operador")));
+}
+
 
             table.setAutoLayout();
             document.add(table);
