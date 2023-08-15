@@ -310,8 +310,8 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="LabelAviso" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <Component id="jDesktok" pref="684" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" pref="390" max="-2" attributes="0"/>
+                          <Component id="jDesktok" pref="1479" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -442,14 +442,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="labelVersao" pref="125" max="32767" attributes="0"/>
+                      <Component id="labelVersao" pref="252" max="32767" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="labelSuporte" pref="547" max="32767" attributes="0"/>
+                      <Component id="labelSuporte" pref="674" max="32767" attributes="0"/>
                       <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                      <Component id="labelOperador" pref="211" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="labelDataEHora" pref="161" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Component id="labelOperador" pref="338" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="labelDataEHora" pref="186" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -522,7 +522,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="678" max="-2" attributes="0"/>
-                      <Component id="jlabelLogo" max="32767" attributes="0"/>
+                      <Component id="jlabelLogo" pref="795" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
