@@ -72,22 +72,20 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     Conexao conexao;
 
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    int screenWidth = (int) screenSize.getWidth();
+    int screenHeight = (int) screenSize.getHeight();
+
     public TelaPrincipal() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = (int) screenSize.getWidth();
-        int screenHeight = (int) screenSize.getHeight();
+
         
-        if(screenHeight > 1080){
-        System.out.println(screenHeight + " " + screenWidth);
-        setSize(1080, 720);
-        }
-        
+
 //        setSize(screenWidth, screenHeight); // Define o tamanho da janela com base no tamanho da tela
-        
         this.conexao = new ConexaoMysql();
 
         setUndecorated(true);
         initComponents();
+        setSize(1080, 720);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
         requestFocus();
@@ -146,15 +144,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
             PdfDocument documentoPDF = new PdfDocument(pdfWriter);
             Document document = new Document(documentoPDF, PageSize.A4);
 
-          float[] columnWidths = {1, 3, 4, 2, 2, 1, 4, 3, 3, 3, 3};
-Table table = new Table(columnWidths);
+            float[] columnWidths = {1, 3, 4, 2, 2, 1, 4, 3, 3, 3, 3};
+            Table table = new Table(columnWidths);
             table.setWidthPercent(100);
             table.setHorizontalAlignment(HorizontalAlignment.CENTER);
             // Definindo fontes
             PdfFont fontBold = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
             PdfFont fontNormal = PdfFontFactory.createFont(FontConstants.HELVETICA);
 
-            
             PdfPage firstPage = documentoPDF.addNewPage();
             PdfCanvas canvas = new PdfCanvas(firstPage);
             canvas.beginText()
@@ -163,7 +160,6 @@ Table table = new Table(columnWidths);
                     .showText("Pecuária MML")
                     .endText();
 
-
             String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
             canvas.beginText()
                     .setFontAndSize(fontNormal, 8)
@@ -171,11 +167,9 @@ Table table = new Table(columnWidths);
                     .showText("Emissão: " + currentDate)
                     .endText();
 
-
             SolidLine separatorLine = new SolidLine(1);
             document.add(new Paragraph("")).add(new LineSeparator(separatorLine));
-            
-            
+
             document.add(new Paragraph("Relatório de Vendas")
                     .setFont(fontBold)
                     .setFontSize(18)
@@ -186,7 +180,6 @@ Table table = new Table(columnWidths);
                     .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
             document.add(new Paragraph(""));
 
-            
             PdfFont headerFont = PdfFontFactory.createFont();
             String[] headers = {"ID", "Data", "Animal", "Qtde", "Média Kg", "Preço Kg", "Total", "Vend", "Comp", "Local", "Operador"};
             for (String header : headers) {
@@ -199,19 +192,18 @@ Table table = new Table(columnWidths);
             PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
             ResultSet resultPDF = pstPDF.executeQuery();
             while (resultPDF.next()) {
-    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_venda")));
-    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
-    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_descricao")));
-    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
-    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("media_kg")));
-    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(14).add(resultPDF.getString("preco_kg")));
-    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(40).add(resultPDF.getString("valor_total")));
-    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("vendedor")));
-    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("comprador")));
-    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_venda")));
-    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("operador")));
-}
-
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_venda")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_descricao")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("media_kg")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(14).add(resultPDF.getString("preco_kg")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(40).add(resultPDF.getString("valor_total")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("vendedor")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("comprador")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_venda")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("operador")));
+            }
 
             table.setAutoLayout();
             document.add(table);
@@ -580,6 +572,9 @@ Table table = new Table(columnWidths);
         );
 
         jDesktok.setBackground(new java.awt.Color(237, 249, 237));
+        if (screenWidth <= 1366) {
+            jDesktok.setPreferredSize(new java.awt.Dimension(820, 620));
+        }
         jDesktok.setMinimumSize(new java.awt.Dimension(640, 480));
         jDesktok.setPreferredSize(new java.awt.Dimension(730, 545));
 

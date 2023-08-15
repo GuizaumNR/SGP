@@ -10,6 +10,8 @@ import com.gnr.sgp.modelo.dao.FornecedoresDao;
 import com.gnr.sgp.modelo.dao.VendasAnimaisDao;
 import com.gnr.sgp.modelo.dominio.Fornecedores;
 import com.gnr.sgp.modelo.dominio.VendasAnimais;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.sql.PreparedStatement;
@@ -40,8 +42,16 @@ public class TelaVenda extends javax.swing.JInternalFrame {
     double valorTotal = 0;
     
     String operador;
+    
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    int screenWidth = (int) screenSize.getWidth();
+    int screenHeight = (int) screenSize.getHeight();
 
     public TelaVenda() {
+         if (screenWidth <= 1369) {
+            this.setPreferredSize(new java.awt.Dimension(820, 620));
+        }
+         
         this.conexao = new ConexaoMysql();
         initComponents();
         

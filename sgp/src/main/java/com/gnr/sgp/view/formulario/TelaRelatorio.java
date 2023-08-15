@@ -4,6 +4,9 @@
  */
 package com.gnr.sgp.view.formulario;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 /**
  *
  * @author Guilherme
@@ -13,7 +16,16 @@ public class TelaRelatorio extends javax.swing.JInternalFrame {
     /**
      * Creates new form TelaRelatorio
      */
+    
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    int screenWidth = (int) screenSize.getWidth();
+    int screenHeight = (int) screenSize.getHeight();
+    
     public TelaRelatorio() {
+         if (screenWidth <= 1369) {
+            this.setPreferredSize(new java.awt.Dimension(820, 620));
+        }
+         
         initComponents();
     }
 

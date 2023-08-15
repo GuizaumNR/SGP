@@ -8,6 +8,8 @@ import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.ComprasAnimaisDao;
 import com.gnr.sgp.modelo.dominio.ComprasAnimais;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.sql.PreparedStatement;
@@ -38,8 +40,16 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     double valorTotal = 0;
 
     String operador;
-
+    
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    int screenWidth = (int) screenSize.getWidth();
+    int screenHeight = (int) screenSize.getHeight();
+    
     public TelaCompra() {
+         if (screenWidth <= 1369) {
+            this.setPreferredSize(new java.awt.Dimension(820, 620));
+        }
+         
         this.conexao = new ConexaoMysql();
         initComponents();
 //        componentMoved(e);

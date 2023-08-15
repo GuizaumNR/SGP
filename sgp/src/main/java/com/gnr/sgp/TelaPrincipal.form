@@ -506,7 +506,7 @@
         </Container>
         <Container class="javax.swing.JDesktopPane" name="jDesktok">
           <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor" postCode="if (screenWidth &lt;= 1366) {&#xa;            jDesktok.setPreferredSize(new java.awt.Dimension(820, 620));&#xa;        }">
               <Color blue="ed" green="f9" red="ed" type="rgb"/>
             </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
