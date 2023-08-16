@@ -310,7 +310,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="jDesktok" min="-2" pref="820" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="jlabelLogo" pref="242" max="32767" attributes="0"/>
                       </Group>
                       <Component id="LabelAviso" alignment="1" max="32767" attributes="0"/>
@@ -446,13 +446,13 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="labelVersao" min="-2" pref="216" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="labelVersao" pref="216" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                       <Component id="labelSuporte" pref="289" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
-                      <Component id="labelOperador" min="-2" pref="245" max="-2" attributes="0"/>
+                      <Component id="labelOperador" pref="245" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                      <Component id="labelDataEHora" min="-2" pref="230" max="-2" attributes="0"/>
+                      <Component id="labelDataEHora" pref="230" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -465,9 +465,9 @@
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Component id="labelVersao" min="-2" pref="34" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="labelSuporte" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="labelSuporte" alignment="0" min="-2" pref="34" max="-2" attributes="0"/>
                                   <Component id="labelOperador" min="-2" pref="34" max="-2" attributes="0"/>
                                   <Component id="labelDataEHora" min="-2" pref="34" max="-2" attributes="0"/>
                               </Group>
@@ -546,7 +546,7 @@
         <Component class="javax.swing.JLabel" name="jlabelLogo">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new javax.swing.ImageIcon(System.getProperty(&quot;user.dir&quot;) + &quot;\\src\\main\\java\\resources\\logo.png&quot;)" type="code"/>
+              <Connection code="new javax.swing.ImageIcon(System.getProperty(&quot;user.dir&quot;) + &quot;\\src\\main\\java\\resources\\create.png&quot;)" type="code"/>
             </Property>
           </Properties>
         </Component>

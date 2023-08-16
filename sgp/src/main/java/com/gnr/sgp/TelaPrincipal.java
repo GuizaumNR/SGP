@@ -118,7 +118,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jDesktok.add(telaVenda);
         jDesktok.add(telaCompra);
         
-//        ajustarTamanhoTelasInternas();
+        ajustarTamanhoTelasInternas();
         
         try {
             criarDocumento();
@@ -128,15 +128,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
     
     private void ajustarTamanhoTelasInternas() {
-    int internalFrameWidth = 820; // Por exemplo, 80% da largura da tela principal
-    int internalFrameHeight = 620; // Por exemplo, 80% da altura da tela principal
+   int internalFrameWidth = (int) (screenWidth * 0.8); // Por exemplo, 80% da largura da tela principal
+    int internalFrameHeight = (int) (screenHeight * 0.7); // Por exemplo, 80% da altura da tela principal
 
     jDesktok.setSize(internalFrameWidth, internalFrameHeight);
-    telaUsuario.setSize(internalFrameWidth, internalFrameHeight);
-    telaFornecedor.setSize(internalFrameWidth, internalFrameHeight);
-    telaAnimal.setSize(internalFrameWidth, internalFrameHeight);
-    telaVenda.setSize(internalFrameWidth, internalFrameHeight);
-    telaCompra.setSize(internalFrameWidth, internalFrameHeight);
+//    telaUsuario.setSize(internalFrameWidth, internalFrameHeight);
+//    telaFornecedor.setSize(internalFrameWidth, internalFrameHeight);
+//    telaAnimal.setSize(internalFrameWidth, internalFrameHeight);
+//    telaVenda.setSize(internalFrameWidth, internalFrameHeight);
+//    telaCompra.setSize(internalFrameWidth, internalFrameHeight);
     
 }
 
@@ -561,13 +561,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jPanelDownLayout.setHorizontalGroup(
             jPanelDownLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelDownLayout.createSequentialGroup()
-                .addComponent(labelVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labelVersao, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(labelSuporte, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
                 .addGap(46, 46, 46)
-                .addComponent(labelOperador, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labelOperador, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                 .addGap(42, 42, 42)
-                .addComponent(labelDataEHora, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(labelDataEHora, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
         );
         jPanelDownLayout.setVerticalGroup(
             jPanelDownLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -577,9 +577,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanelDownLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(labelVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(labelSuporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanelDownLayout.createSequentialGroup()
                         .addGroup(jPanelDownLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelSuporte, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(labelOperador, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(labelDataEHora, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -606,7 +606,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         LabelAviso.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jlabelLogo.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\logo.png"));
+        jlabelLogo.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\create.png"));
 
         javax.swing.GroupLayout painelTelaPrincipalLayout = new javax.swing.GroupLayout(painelTelaPrincipal);
         painelTelaPrincipal.setLayout(painelTelaPrincipalLayout);
@@ -619,7 +619,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addGroup(painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(painelTelaPrincipalLayout.createSequentialGroup()
                         .addComponent(jDesktok, javax.swing.GroupLayout.PREFERRED_SIZE, 820, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jlabelLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE))
                     .addComponent(LabelAviso, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
