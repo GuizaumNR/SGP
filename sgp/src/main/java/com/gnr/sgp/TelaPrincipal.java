@@ -566,8 +566,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addComponent(labelSuporte, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
                 .addGap(46, 46, 46)
                 .addComponent(labelOperador, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
-                .addGap(42, 42, 42)
-                .addComponent(labelDataEHora, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addComponent(labelDataEHora, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanelDownLayout.setVerticalGroup(
             jPanelDownLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -606,7 +607,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         LabelAviso.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jlabelLogo.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\create.png"));
+        jlabelLogo.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\logo.png"));
 
         javax.swing.GroupLayout painelTelaPrincipalLayout = new javax.swing.GroupLayout(painelTelaPrincipal);
         painelTelaPrincipal.setLayout(painelTelaPrincipalLayout);
