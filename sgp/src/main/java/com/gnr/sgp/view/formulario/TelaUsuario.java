@@ -29,16 +29,10 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     PreparedStatement pst = null;
     ResultSet rs = null;
     
-     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    int screenWidth = (int) screenSize.getWidth();
-    int screenHeight = (int) screenSize.getHeight();
 
     public TelaUsuario() {
-        if (screenWidth <= 1369) {
-            this.setPreferredSize(new java.awt.Dimension(820, 620));
-        }
-        
-        initComponents();
+       
+      initComponents();
         conexao = new ConexaoMysql();
         jPassUsuSenha.setDocument(new Validador(4));
         jTextUsuLogin.setDocument(new Validador(10));

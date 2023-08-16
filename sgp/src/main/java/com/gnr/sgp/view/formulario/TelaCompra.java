@@ -41,14 +41,8 @@ public class TelaCompra extends javax.swing.JInternalFrame {
 
     String operador;
     
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    int screenWidth = (int) screenSize.getWidth();
-    int screenHeight = (int) screenSize.getHeight();
-    
     public TelaCompra() {
-         if (screenWidth <= 1369) {
-            this.setPreferredSize(new java.awt.Dimension(820, 620));
-        }
+       
          
         this.conexao = new ConexaoMysql();
         initComponents();
@@ -307,7 +301,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         jLabelCompTotal.setText("* Total:");
 
         jLabelCompAnimal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabelCompAnimal.setText("* Id Animal:");
+        jLabelCompAnimal.setText("* ID Animal:");
 
         jLabelCompQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabelCompQuantidade.setText("* Quantidade:");

@@ -34,16 +34,9 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
     private final Conexao conexao;
     PreparedStatement pst = null;
     ResultSet rs = null;
-    
-     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    int screenWidth = (int) screenSize.getWidth();
-    int screenHeight = (int) screenSize.getHeight();
-    
+
     public TelaFornecedor() {
-        if (screenWidth <= 1369) {
-            this.setPreferredSize(new java.awt.Dimension(820, 620));
-        }
-        
+
         this.conexao = new ConexaoMysql();
         initComponents();
         
