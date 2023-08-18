@@ -36,13 +36,12 @@ CREATE TABLE compras_animais (
     valor_total decimal(10,2) NOT NULL,
     criador VARCHAR(100) NOT NULL,
     pagador ENUM("alemao","negocio","adiantamento"),
+    pagamento VARCHAR(100) NOT NULL,
     local_compra VARCHAR(100),
     operador VARCHAR(100) NOT NULL,
     
     FOREIGN KEY (id_animal) REFERENCES animais(id)
 );
-
-
 
 CREATE TABLE vendas_animais (
     id_venda INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -54,6 +53,7 @@ CREATE TABLE vendas_animais (
     valor_total decimal(10,2) NOT NULL,
     vendedor VARCHAR(100) NOT NULL,
     comprador VARCHAR(100) NOT NULL,
+    pagamento VARCHAR (100) NOT NULL,
     local_venda VARCHAR(100) NOT NULL,
     operador VARCHAR(100) NOT NULL,
     
@@ -108,7 +108,7 @@ SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada,
     operador
 FROM vendas_animais v
 JOIN animais a ON v.id_animal = a.id
-WHERE data_venda BETWEEN '2023-07-20' AND '2023-07-31'
+WHERE data_venda BETWEEN '2023-07-20' AND '2023-08-31'
 ORDER BY data_venda;
 
 -- lsita de animais mais vendidos

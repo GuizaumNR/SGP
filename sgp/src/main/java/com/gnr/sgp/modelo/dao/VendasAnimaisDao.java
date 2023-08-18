@@ -28,7 +28,7 @@ public class VendasAnimaisDao {
     }
 
     public String Adicionar(VendasAnimais venda) {
-        String sql = "INSERT INTO vendas_animais (id_animal, quantidade, media_kg, preco_kg, valor_total, comprador, vendedor, local_venda, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO vendas_animais (id_animal, quantidade, media_kg, preco_kg, valor_total, comprador, vendedor, pagamento, local_venda, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         if (verificarQuantidadeMenorZero(venda.getId_animal(), venda.getQuantidade()) && venda.getQuantidade() > 0) {
             try {
@@ -40,8 +40,9 @@ public class VendasAnimaisDao {
                 pst.setDouble(5, venda.getValor_total());
                 pst.setString(6, venda.getComprador());
                 pst.setString(7, venda.getVendedor());
-                pst.setString(8, venda.getLocal());
-                pst.setString(9, venda.getOperador());
+                 pst.setString(8, venda.getPagamento());
+                pst.setString(9, venda.getLocal());
+                pst.setString(10, venda.getOperador());
 
                 int resultado = pst.executeUpdate();
 

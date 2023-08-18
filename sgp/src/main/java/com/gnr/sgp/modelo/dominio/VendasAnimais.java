@@ -9,7 +9,7 @@ package com.gnr.sgp.modelo.dominio;
  * @author Guilherme
  */
 public class VendasAnimais {
- 
+
     private long id;
     private int id_animal;
     private int quantidade;
@@ -18,14 +18,15 @@ public class VendasAnimais {
     private double valor_total;
     private String comprador;
     private String vendedor;
+    private String pagamento;
     private String local;
     private String operador;
 
-     public VendasAnimais() {
-         
+    public VendasAnimais() {
+
     }
 
-    public VendasAnimais(long id, int id_animal, int quantidade, double media_kg, double preco_peso, double valor_total, String comprador, String vendedor, String local, String operador) {
+    public VendasAnimais(long id, int id_animal, int quantidade, double media_kg, double preco_peso, double valor_total, String comprador, String vendedor, String pagamento, String local, String operador) {
         this.id = id;
         this.id_animal = id_animal;
         this.quantidade = quantidade;
@@ -34,6 +35,7 @@ public class VendasAnimais {
         this.valor_total = valor_total;
         this.comprador = comprador;
         this.vendedor = vendedor;
+        this.pagamento = pagamento;
         this.local = local;
         this.operador = operador;
     }
@@ -102,6 +104,14 @@ public class VendasAnimais {
         this.vendedor = vendedor;
     }
 
+    public String getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(String pagamento) {
+        this.pagamento = pagamento;
+    }
+
     public String getLocal() {
         return local;
     }
@@ -118,6 +128,4 @@ public class VendasAnimais {
         this.operador = operador;
     }
 
-    
-    
 }
