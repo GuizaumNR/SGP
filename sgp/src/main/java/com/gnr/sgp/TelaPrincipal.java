@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,8 +78,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
     int screenHeight = (int) screenSize.getHeight();
 
     public TelaPrincipal() {
-
-        
 
 //        setSize(screenWidth, screenHeight); // Define o tamanho da janela com base no tamanho da tela
         this.conexao = new ConexaoMysql();
@@ -117,43 +116,52 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jDesktok.add(telaAnimal);
         jDesktok.add(telaVenda);
         jDesktok.add(telaCompra);
-        
+
         ajustarTamanhoTelasInternas();
-        
+
         try {
             criarDocumento();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    private void ajustarTamanhoTelasInternas() {
-   int internalFrameWidth = (int) (screenWidth * 0.8); // Por exemplo, 80% da largura da tela principal
-    int internalFrameHeight = (int) (screenHeight * 0.7); // Por exemplo, 80% da altura da tela principal
 
-    jDesktok.setSize(internalFrameWidth, internalFrameHeight);
+    private void ajustarTamanhoTelasInternas() {
+        int internalFrameWidth = (int) (screenWidth * 0.8); // Por exemplo, 80% da largura da tela principal
+        int internalFrameHeight = (int) (screenHeight * 0.7); // Por exemplo, 80% da altura da tela principal
+
+        jDesktok.setSize(internalFrameWidth, internalFrameHeight);
 //    telaUsuario.setSize(internalFrameWidth, internalFrameHeight);
 //    telaFornecedor.setSize(internalFrameWidth, internalFrameHeight);
 //    telaAnimal.setSize(internalFrameWidth, internalFrameHeight);
 //    telaVenda.setSize(internalFrameWidth, internalFrameHeight);
 //    telaCompra.setSize(internalFrameWidth, internalFrameHeight);
-    
-}
 
-    public void criarDocumento() throws SQLException {
-        String inicio = "2023-08-18";
-        String fim = "2023-08-31";
+    }
 
+    public void criarDocumento() throws SQLException, ParseException {
+        String inicio = "18/08/2023";
+        String fim = "31/08/2023";
+
+// Convertendo as strings para o formato de data padrão
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date dataInicio = dateFormat.parse(inicio);
+        Date dataFim = dateFormat.parse(fim);     
+
+// Convertendo as datas de volta para o formato do banco de dados
+        SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String inicioFormatado = dbDateFormat.format(dataInicio);
+        String fimFormatado = dbDateFormat.format(dataFim);
         String sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, vendedor, comprador, pagamento, local_venda, operador "
                 + "FROM vendas_animais v "
                 + "JOIN animais a ON v.id_animal = a.id "
-                + "WHERE data_venda BETWEEN '" + inicio + "' AND '" + fim + "' "
+                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
                 + "ORDER BY data_venda";
 
         try {
             String username = System.getProperty("user.name");
             String data = new SimpleDateFormat("dd_MM_yyyy").format(new Date());
-            String path = "C:\\Users\\" + username + "\\Documents\\Relatorio_" + data + ".pdf";
+            String path = "C:\\Users\\" + username + "\\Documents\\Relatorio_Vendas_" + data + ".pdf";
 
             PdfWriter pdfWriter = new PdfWriter(path);
             PdfDocument documentoPDF = new PdfDocument(pdfWriter);
@@ -189,7 +197,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     .setFont(fontBold)
                     .setFontSize(18)
                     .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
-            document.add(new Paragraph("Período: " + inicio + " a " + fim)
+            document.add(new Paragraph("Período: " + new SimpleDateFormat("dd/MM/yyyy").format(dataInicio) + " a " + new SimpleDateFormat("dd/MM/yyyy").format(dataFim))
                     .setFont(fontNormal)
                     .setFontSize(12)
                     .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));

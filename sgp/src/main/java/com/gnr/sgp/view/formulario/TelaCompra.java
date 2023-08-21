@@ -135,7 +135,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             precoKg = Double.parseDouble(jTextFieldCompPrecoKg.getText());
             valorTotal = quantidade * mediaKg * precoKg;
 
-            ComprasAnimais compra = new ComprasAnimais(null, Integer.parseInt(jTextFieldCompAnimal.getText()), quantidade, mediaKg, precoKg, valorTotal, jTextFieldCompCriador.getText(), jComboCompPagador.getSelectedItem().toString(), jTextFieldCompLocal.getText(), operador);
+            ComprasAnimais compra = new ComprasAnimais(null, Integer.parseInt(jTextFieldCompAnimal.getText()), quantidade, mediaKg, precoKg, valorTotal, jTextFieldCompCriador.getText(), jComboCompPagador.getSelectedItem().toString(), jComboCompPagamento.getSelectedItem().toString(), jTextFieldCompLocal.getText(), operador);
 
             ComprasAnimaisDao comprasDao = new ComprasAnimaisDao();
             comprasDao.Adicionar(compra);
@@ -255,8 +255,8 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         jComboCompPagador = new javax.swing.JComboBox<>();
         jLabelCompLocal = new javax.swing.JLabel();
         jTextFieldCompLocal = new javax.swing.JTextField();
-        jLabelVendaPagamento = new javax.swing.JLabel();
-        jComboVendaPagamento = new javax.swing.JComboBox<>();
+        jLabelCompPagamento = new javax.swing.JLabel();
+        jComboCompPagamento = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(227, 234, 227));
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -361,13 +361,13 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabelVendaPagamento.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabelVendaPagamento.setText("* Pagamento:");
+        jLabelCompPagamento.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelCompPagamento.setText("* Pagamento:");
 
-        jComboVendaPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dinheiro", "Cartão Débito", "Cartão Crédito", "Pix", "Permuta" }));
-        jComboVendaPagamento.addActionListener(new java.awt.event.ActionListener() {
+        jComboCompPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dinheiro", "Cartão Débito", "Cartão Crédito", "Pix", "Permuta" }));
+        jComboCompPagamento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboVendaPagamentoActionPerformed(evt);
+                jComboCompPagamentoActionPerformed(evt);
             }
         });
 
@@ -422,13 +422,13 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(65, 65, 65)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabelVendaPagamento)
+                                    .addComponent(jLabelCompPagamento)
                                     .addComponent(jLabelCompAnimal1)
                                     .addComponent(jLabelCompPagador))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jTextFieldCompCriador, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboCompPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jComboCompPagador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 50, Short.MAX_VALUE)))))
                 .addContainerGap())
@@ -456,12 +456,12 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelCompQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldCompQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelVendaPagamento)
-                            .addComponent(jComboVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabelCompPagamento)
+                            .addComponent(jComboCompPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(6, 6, 6)))
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelCompMediaKg)
                             .addComponent(jTextFieldCompMediaKg, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -473,9 +473,8 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelCompLocal)
                             .addComponent(jTextFieldCompLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelCompPagador)
                             .addComponent(jComboCompPagador, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -484,8 +483,8 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                             .addComponent(jTextFieldCompTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabelCompTotal))
                         .addGap(18, 18, 18)
-                        .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pack();
@@ -523,16 +522,16 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldCompLocalActionPerformed
 
-    private void jComboVendaPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboVendaPagamentoActionPerformed
+    private void jComboCompPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboCompPagamentoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboVendaPagamentoActionPerformed
+    }//GEN-LAST:event_jComboCompPagamentoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCompFinalizar;
     private javax.swing.JComboBox<String> jComboCompPagador;
+    private javax.swing.JComboBox<String> jComboCompPagamento;
     private javax.swing.JComboBox<String> jComboCompPesquisa;
-    private javax.swing.JComboBox<String> jComboVendaPagamento;
     private javax.swing.JLabel jLabelCompAnimal;
     private javax.swing.JLabel jLabelCompAnimal1;
     private javax.swing.JLabel jLabelCompBusca;
@@ -540,10 +539,10 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabelCompLocal;
     private javax.swing.JLabel jLabelCompMediaKg;
     private javax.swing.JLabel jLabelCompPagador;
+    private javax.swing.JLabel jLabelCompPagamento;
     private javax.swing.JLabel jLabelCompPrecoKg;
     private javax.swing.JLabel jLabelCompQuantidade;
     private javax.swing.JLabel jLabelCompTotal;
-    private javax.swing.JLabel jLabelVendaPagamento;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableComp;
     public javax.swing.JTextField jTextCompBusca;

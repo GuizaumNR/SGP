@@ -26,7 +26,7 @@ public class ComprasAnimaisDao {
     }
 
     public String Adicionar(ComprasAnimais compra) {
-        String sql = "INSERT INTO compras_animais (id_animal, quantidade, media_kg, preco_kg, valor_total, criador, pagador, local_compra, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO compras_animais (id_animal, quantidade, media_kg, preco_kg, valor_total, criador, pagador, pagamento, local_compra, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try {
             Animais animalTemp = buscarAnimaisId(compra.getId_animal());
@@ -42,8 +42,9 @@ public class ComprasAnimaisDao {
             pst.setDouble(5, compra.getValor_total());
             pst.setString(6, compra.getCriador());
             pst.setString(7, compra.getPagador());
-            pst.setString(8, compra.getLocal());
-            pst.setString(9, compra.getOperador());
+            pst.setString(8, compra.getPagamento());
+            pst.setString(9, compra.getLocal());
+            pst.setString(10, compra.getOperador());
 
             int resultado = pst.executeUpdate();
 

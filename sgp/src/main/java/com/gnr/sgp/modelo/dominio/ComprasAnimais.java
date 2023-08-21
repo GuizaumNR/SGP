@@ -18,13 +18,14 @@ public class ComprasAnimais {
     private double valor_total;
     private String criador;
     private String pagador;
+    private String pagamento;
     private String local;
     private String operador;
     
     public ComprasAnimais() {
     }
 
-    public ComprasAnimais(Long id_compra, int id_animal, int quantidade, double media_kg, double preco_kg, double valor_total, String criador, String pagador, String local, String operador) {
+    public ComprasAnimais(Long id_compra, int id_animal, int quantidade, double media_kg, double preco_kg, double valor_total, String criador, String pagador, String pagamento, String local, String operador) {
         this.id_compra = id_compra;
         this.id_animal = id_animal;
         this.quantidade = quantidade;
@@ -33,8 +34,17 @@ public class ComprasAnimais {
         this.valor_total = valor_total;
         this.criador = criador;
         this.pagador = pagador;
+        this.pagamento = pagamento;
         this.local = local;
         this.operador = operador;
+    }
+
+    public String getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(String pagamento) {
+        this.pagamento = pagamento;
     }
 
     public Long getId_compra() {
