@@ -6,8 +6,39 @@ package com.gnr.sgp.view.formulario;
 
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
+import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.kernel.color.DeviceGray;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfPage;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.LineSeparator;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.HorizontalAlignment;
+import com.itextpdf.layout.property.TextAlignment;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
+import javax.swing.text.MaskFormatter;
 
 /**
  *
@@ -22,11 +53,155 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
     PreparedStatement pst = null;
     ResultSet rs = null;
 
-    public TelaRelatorioVenda() {
+    MaskFormatter mfData;
+
+    Date dataSistema = new Date();
+    SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+//    Calendar now = Calendar.getInstance();
+    
+    public TelaRelatorioVenda()  {
 
         this.conexao = new ConexaoMysql();
+        
+        try {
+            
+            mfData = new MaskFormatter(" ##/##/####");
+        } catch (ParseException ex) {
+            System.out.println("Ocorreu um erro ao criar a mascara. " + ex);
+        }
+        
         initComponents();
+        
+        setLocation(-5, -5);
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                // Define a posição do componente para (0, 0)
+                setLocation(-5, -5);
+            }
+        });
 
+        
+    }
+
+    private static boolean validaData(String dateStr) {
+        
+        String[] parts = dateStr.split("/");
+        int dia = Integer.parseInt(parts[0]);
+        int mes = Integer.parseInt(parts[1]);
+        int ano = Integer.parseInt(parts[3]);
+        
+        int anoAtual = 0;
+
+        return (dia >= 1 && dia <= 31) && (mes >= 1 && mes <= 12);
+    }
+    
+    public void criarDocumento(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
+
+// Convertendo as strings para o formato de data padrão
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date dataInicio = dateFormat.parse(inicio);
+        Date dataFim = dateFormat.parse(fim);     
+
+// Convertendo as datas de volta para o formato do banco de dados
+        SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String inicioFormatado = dbDateFormat.format(dataInicio);
+        String fimFormatado = dbDateFormat.format(dataFim);
+         String sqlPDF = "";
+        if(pagamento != "*"){
+         sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, vendedor, comprador, pagamento, local_venda, operador "
+                + "FROM vendas_animais v "
+                + "JOIN animais a ON v.id_animal = a.id "
+                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                + "AND pagamento = '" + pagamento + "' "
+                + "ORDER BY " + ordem; 
+        }else{
+            sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, vendedor, comprador, pagamento, local_venda, operador "
+                + "FROM vendas_animais v "
+                + "JOIN animais a ON v.id_animal = a.id "
+                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                + "ORDER BY " + ordem;
+        }
+        
+        try {
+            String username = System.getProperty("user.name");
+            String data = new SimpleDateFormat("dd_MM_yyyy").format(new Date());
+            String path = "C:\\Users\\" + username + "\\Documents\\Relatorio_Vendas_" + data + ".pdf";
+
+            PdfWriter pdfWriter = new PdfWriter(path);
+            PdfDocument documentoPDF = new PdfDocument(pdfWriter);
+            Document document = new Document(documentoPDF, PageSize.A4);
+
+            float[] columnWidths = {1, 3, 4, 2, 2, 1, 2, 3, 3, 3, 3, 2};
+            Table table = new Table(columnWidths);
+            table.setWidthPercent(100);
+            table.setHorizontalAlignment(HorizontalAlignment.CENTER);
+            // Definindo fontes
+            PdfFont fontBold = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
+            PdfFont fontNormal = PdfFontFactory.createFont(FontConstants.HELVETICA);
+
+            PdfPage firstPage = documentoPDF.addNewPage();
+            PdfCanvas canvas = new PdfCanvas(firstPage);
+            canvas.beginText()
+                    .setFontAndSize(fontNormal, 8)
+                    .moveText(36, 806)
+                    .showText("Pecuária MML")
+                    .endText();
+
+            String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+            canvas.beginText()
+                    .setFontAndSize(fontNormal, 8)
+                    .moveText(484, 806)
+                    .showText("Emissão: " + currentDate)
+                    .endText();
+
+            SolidLine separatorLine = new SolidLine(1);
+            document.add(new Paragraph("")).add(new LineSeparator(separatorLine));
+
+            document.add(new Paragraph("Relatório de Vendas")
+                    .setFont(fontBold)
+                    .setFontSize(18)
+                    .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
+            document.add(new Paragraph("Período: " + new SimpleDateFormat("dd/MM/yyyy").format(dataInicio) + " a " + new SimpleDateFormat("dd/MM/yyyy").format(dataFim))
+                    .setFont(fontNormal)
+                    .setFontSize(12)
+                    .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
+            document.add(new Paragraph(""));
+
+            PdfFont headerFont = PdfFontFactory.createFont();
+            String[] headers = {"ID", "Data", "Animal", "Qtde", "Média Kg", "Preço Kg", "Total", "Vend", "Comp", "Pag", "Local", "Operador"};
+            for (String header : headers) {
+                Cell cell = new Cell().add(header).setFont(headerFont).setFontSize(10).setBackgroundColor(DeviceGray.BLACK).setTextAlignment(TextAlignment.CENTER).setFontColor(DeviceGray.WHITE);
+                table.addCell(cell);
+            }
+
+            // Linhas da tabela com os dados do ResultSet
+            PdfFont dataFont = PdfFontFactory.createFont();
+            PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
+            ResultSet resultPDF = pstPDF.executeQuery();
+            while (resultPDF.next()) {
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_venda")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_descricao")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("media_kg")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(14).add(resultPDF.getString("preco_kg")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(40).add(resultPDF.getString("valor_total")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("vendedor")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("comprador")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("pagamento")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_venda")));
+                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("operador")));
+            }
+
+            table.setAutoLayout();
+            document.add(table);
+            document.close();
+            
+            JOptionPane.showMessageDialog(null, "PDF criado em " + path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -38,7 +213,16 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jFormattedRelVendInicio = new javax.swing.JFormattedTextField(mfData);
+        jLabelRelVendaPeriodoA = new javax.swing.JLabel();
+        jFormattedRelVendaFim = new javax.swing.JFormattedTextField(mfData);
+        jButton1 = new javax.swing.JButton();
+        jLabelRelVendaPagamento = new javax.swing.JLabel();
+        jLabelRelVendaPeriodo = new javax.swing.JLabel();
+        jComboRelVendaOrdem = new javax.swing.JComboBox<>();
+        jLabelRelVendaOrdem = new javax.swing.JLabel();
+        jComboRelVendaPagamento = new javax.swing.JComboBox<>();
+        jLabelRelVendaPagamentoParenteses = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(227, 234, 227));
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -46,30 +230,136 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
         setMinimumSize(new java.awt.Dimension(680, 480));
         setPreferredSize(new java.awt.Dimension(730, 545));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        //jFormattedRelVendInicio.setText(formato.format(dataSistema));
+        jFormattedRelVendInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFormattedRelVendInicioActionPerformed(evt);
+            }
+        });
+
+        jLabelRelVendaPeriodoA.setText("a");
+
+        jFormattedRelVendaFim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFormattedRelVendaFimActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Gerar PDF");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabelRelVendaPagamento.setText("Pagamento:");
+
+        jLabelRelVendaPeriodo.setText("Período:");
+
+        jComboRelVendaOrdem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "data_venda", "quantidade", "valor_total", "vendedor", "comprador" }));
+
+        jLabelRelVendaOrdem.setText("Ordem:");
+
+        jComboRelVendaPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "*", "Dinheiro", "Cartão Débito", "Cartão Crédito", "Pix", "Permuta" }));
+        jComboRelVendaPagamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboRelVendaPagamentoActionPerformed(evt);
+            }
+        });
+
+        jLabelRelVendaPagamentoParenteses.setText("(\" * \" Todas formas )");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(619, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelRelVendaPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jFormattedRelVendInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabelRelVendaPeriodoA)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jFormattedRelVendaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelRelVendaPagamento)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jComboRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelRelVendaPagamentoParenteses))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(272, 272, 272)
+                        .addComponent(jButton1)))
+                .addContainerGap(372, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(61, 61, 61)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(423, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jFormattedRelVendInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelRelVendaPeriodoA)
+                    .addComponent(jFormattedRelVendaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelRelVendaPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelRelVendaOrdem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelRelVendaPagamentoParenteses, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(52, 52, 52)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(294, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jFormattedRelVendInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedRelVendInicioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFormattedRelVendInicioActionPerformed
+
+    private void jFormattedRelVendaFimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedRelVendaFimActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFormattedRelVendaFimActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            criarDocumento(jFormattedRelVendInicio.getText(), jFormattedRelVendaFim.getText(), jComboRelVendaOrdem.getSelectedItem().toString(), jComboRelVendaPagamento.getSelectedItem().toString());
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaRelatorioVenda.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(TelaRelatorioVenda.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboRelVendaPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboRelVendaPagamentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboRelVendaPagamentoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboRelVendaOrdem;
+    private javax.swing.JComboBox<String> jComboRelVendaPagamento;
+    public javax.swing.JFormattedTextField jFormattedRelVendInicio;
+    private javax.swing.JFormattedTextField jFormattedRelVendaFim;
+    private javax.swing.JLabel jLabelRelVendaOrdem;
+    private javax.swing.JLabel jLabelRelVendaPagamento;
+    private javax.swing.JLabel jLabelRelVendaPagamentoParenteses;
+    private javax.swing.JLabel jLabelRelVendaPeriodo;
+    private javax.swing.JLabel jLabelRelVendaPeriodoA;
     // End of variables declaration//GEN-END:variables
 }

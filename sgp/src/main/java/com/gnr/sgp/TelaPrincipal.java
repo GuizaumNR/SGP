@@ -9,6 +9,7 @@ import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.view.formulario.TelaAnimal;
 import com.gnr.sgp.view.formulario.TelaCompra;
 import com.gnr.sgp.view.formulario.TelaFornecedor;
+import com.gnr.sgp.view.formulario.TelaRelatorioVenda;
 import com.gnr.sgp.view.formulario.TelaSobre;
 import com.gnr.sgp.view.formulario.TelaUsuario;
 import com.gnr.sgp.view.formulario.TelaVenda;
@@ -70,6 +71,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     TelaAnimal telaAnimal = new TelaAnimal();
     TelaVenda telaVenda = new TelaVenda();
     TelaCompra telaCompra = new TelaCompra();
+    TelaRelatorioVenda telaRelVenda = new TelaRelatorioVenda();
 
     Conexao conexao;
 
@@ -116,21 +118,17 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jDesktok.add(telaAnimal);
         jDesktok.add(telaVenda);
         jDesktok.add(telaCompra);
+        jDesktok.add(telaRelVenda);
 
         ajustarTamanhoTelasInternas();
 
-        try {
-            criarDocumento();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void ajustarTamanhoTelasInternas() {
-        int internalFrameWidth = (int) (screenWidth * 0.8); // Por exemplo, 80% da largura da tela principal
-        int internalFrameHeight = (int) (screenHeight * 0.7); // Por exemplo, 80% da altura da tela principal
-
-        jDesktok.setSize(internalFrameWidth, internalFrameHeight);
+//        int internalFrameWidth = (int) (screenWidth * 0.8); // Por exemplo, 80% da largura da tela principal
+//        int internalFrameHeight = (int) (screenHeight * 0.7); // Por exemplo, 80% da altura da tela principal
+//
+//        jDesktok.setSize(internalFrameWidth, internalFrameHeight);
 //    telaUsuario.setSize(internalFrameWidth, internalFrameHeight);
 //    telaFornecedor.setSize(internalFrameWidth, internalFrameHeight);
 //    telaAnimal.setSize(internalFrameWidth, internalFrameHeight);
@@ -139,104 +137,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     }
 
-    public void criarDocumento() throws SQLException, ParseException {
-        String inicio = "18/08/2023";
-        String fim = "31/08/2023";
-
-// Convertendo as strings para o formato de data padrão
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date dataInicio = dateFormat.parse(inicio);
-        Date dataFim = dateFormat.parse(fim);     
-
-// Convertendo as datas de volta para o formato do banco de dados
-        SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String inicioFormatado = dbDateFormat.format(dataInicio);
-        String fimFormatado = dbDateFormat.format(dataFim);
-        String sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, vendedor, comprador, pagamento, local_venda, operador "
-                + "FROM vendas_animais v "
-                + "JOIN animais a ON v.id_animal = a.id "
-                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                + "ORDER BY data_venda";
-
-        try {
-            String username = System.getProperty("user.name");
-            String data = new SimpleDateFormat("dd_MM_yyyy").format(new Date());
-            String path = "C:\\Users\\" + username + "\\Documents\\Relatorio_Vendas_" + data + ".pdf";
-
-            PdfWriter pdfWriter = new PdfWriter(path);
-            PdfDocument documentoPDF = new PdfDocument(pdfWriter);
-            Document document = new Document(documentoPDF, PageSize.A4);
-
-            float[] columnWidths = {1, 3, 4, 2, 2, 1, 2, 3, 3, 3, 3, 2};
-            Table table = new Table(columnWidths);
-            table.setWidthPercent(100);
-            table.setHorizontalAlignment(HorizontalAlignment.CENTER);
-            // Definindo fontes
-            PdfFont fontBold = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
-            PdfFont fontNormal = PdfFontFactory.createFont(FontConstants.HELVETICA);
-
-            PdfPage firstPage = documentoPDF.addNewPage();
-            PdfCanvas canvas = new PdfCanvas(firstPage);
-            canvas.beginText()
-                    .setFontAndSize(fontNormal, 8)
-                    .moveText(36, 806)
-                    .showText("Pecuária MML")
-                    .endText();
-
-            String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-            canvas.beginText()
-                    .setFontAndSize(fontNormal, 8)
-                    .moveText(484, 806)
-                    .showText("Emissão: " + currentDate)
-                    .endText();
-
-            SolidLine separatorLine = new SolidLine(1);
-            document.add(new Paragraph("")).add(new LineSeparator(separatorLine));
-
-            document.add(new Paragraph("Relatório de Vendas")
-                    .setFont(fontBold)
-                    .setFontSize(18)
-                    .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
-            document.add(new Paragraph("Período: " + new SimpleDateFormat("dd/MM/yyyy").format(dataInicio) + " a " + new SimpleDateFormat("dd/MM/yyyy").format(dataFim))
-                    .setFont(fontNormal)
-                    .setFontSize(12)
-                    .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
-            document.add(new Paragraph(""));
-
-            PdfFont headerFont = PdfFontFactory.createFont();
-            String[] headers = {"ID", "Data", "Animal", "Qtde", "Média Kg", "Preço Kg", "Total", "Vend", "Comp", "Pag", "Local", "Operador"};
-            for (String header : headers) {
-                Cell cell = new Cell().add(header).setFont(headerFont).setFontSize(10).setBackgroundColor(DeviceGray.BLACK).setTextAlignment(TextAlignment.CENTER).setFontColor(DeviceGray.WHITE);
-                table.addCell(cell);
-            }
-
-            // Linhas da tabela com os dados do ResultSet
-            PdfFont dataFont = PdfFontFactory.createFont();
-            PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
-            ResultSet resultPDF = pstPDF.executeQuery();
-            while (resultPDF.next()) {
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_venda")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_descricao")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("media_kg")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(14).add(resultPDF.getString("preco_kg")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(40).add(resultPDF.getString("valor_total")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("vendedor")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("comprador")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("pagamento")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_venda")));
-                table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("operador")));
-            }
-
-            table.setAutoLayout();
-            document.add(table);
-            document.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    
 
     public void setOperador(String operador) {
         labelOperador.setText("Operador: " + operador);
@@ -663,20 +564,21 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuCadastroAnimalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroAnimalActionPerformed
-        if (!telaUsuario.isVisible() && !telaFornecedor.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible()) {
+        if (!telaUsuario.isVisible() && !telaFornecedor.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible() && !telaRelVenda.isVisible()) {
             telaAnimal.setVisible(true);
         } else {
             telaUsuario.setVisible(false);
             telaFornecedor.setVisible(false);
             telaVenda.setVisible(false);
             telaCompra.setVisible(false);
+            telaRelVenda.setVisible(false);
             telaAnimal.setVisible(true);
         }
     }//GEN-LAST:event_jMenuCadastroAnimalActionPerformed
 
     private void jMenuCadastroFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroFornecedorActionPerformed
 
-        if (!telaUsuario.isVisible() && !telaAnimal.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible()) {
+        if (!telaUsuario.isVisible() && !telaAnimal.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible() && !telaRelVenda.isVisible()) {
             telaFornecedor.setVisible(true);
 
         } else {
@@ -684,6 +586,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             telaAnimal.setVisible(false);
             telaVenda.setVisible(false);
             telaCompra.setVisible(false);
+            telaRelVenda.setVisible(false);
             telaFornecedor.setVisible(true);
 
         }
@@ -721,7 +624,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonMinimizarActionPerformed
 
     private void jMenuCadastroUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroUsuarioActionPerformed
-        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible()) {
+        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible() && !telaRelVenda.isVisible()) {
             telaUsuario.setVisible(true);
 
         } else {
@@ -729,6 +632,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             telaAnimal.setVisible(false);
             telaVenda.setVisible(false);
             telaCompra.setVisible(false);
+            telaRelVenda.setVisible(false);
             telaUsuario.setVisible(true);
 
         }
@@ -751,11 +655,22 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuRelatorioComprasActionPerformed
 
     private void jMenuRelatorioVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRelatorioVendasActionPerformed
-        // TODO add your handling code here:
+         if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaCompra.isVisible() && !telaVenda.isVisible()) {
+            telaRelVenda.setVisible(true);
+
+        } else {
+            telaFornecedor.setVisible(false);
+            telaAnimal.setVisible(false);
+            telaUsuario.setVisible(false);
+            telaCompra.setVisible(false);
+            telaVenda.setVisible(false);
+            telaRelVenda.setVisible(true);
+
+        }
     }//GEN-LAST:event_jMenuRelatorioVendasActionPerformed
 
     private void jMenuCaixaVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCaixaVendaActionPerformed
-        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaCompra.isVisible()) {
+        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaCompra.isVisible() && !telaRelVenda.isVisible()) {
             telaVenda.setVisible(true);
 
         } else {
@@ -763,13 +678,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
             telaAnimal.setVisible(false);
             telaUsuario.setVisible(false);
             telaCompra.setVisible(false);
+            telaRelVenda.setVisible(false);
             telaVenda.setVisible(true);
 
         }
     }//GEN-LAST:event_jMenuCaixaVendaActionPerformed
 
     private void jMenuCaixaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCaixaCompraActionPerformed
-        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaVenda.isVisible()) {
+        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaVenda.isVisible()&& !telaRelVenda.isVisible()) {
 
             telaCompra.setVisible(true);
 
@@ -778,6 +694,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             telaAnimal.setVisible(false);
             telaUsuario.setVisible(false);
             telaVenda.setVisible(false);
+            telaRelVenda.setVisible(false);
             telaCompra.setVisible(true);
         }
     }//GEN-LAST:event_jMenuCaixaCompraActionPerformed
