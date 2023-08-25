@@ -54,6 +54,8 @@
                               <Component id="jLabelRelVendaPeriodoA" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jFormattedRelVendaFim" min="-2" pref="75" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jRadioButtonRelVenda" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabelRelVendaPagamento" min="-2" max="-2" attributes="0"/>
@@ -69,7 +71,7 @@
                       <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="372" max="32767" attributes="0"/>
+              <EmptySpace pref="365" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -82,6 +84,7 @@
                   <Component id="jLabelRelVendaPeriodoA" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jFormattedRelVendaFim" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                   <Component id="jLabelRelVendaPeriodo" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="jRadioButtonRelVenda" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -187,6 +190,11 @@
     <Component class="javax.swing.JLabel" name="jLabelRelVendaPagamentoParenteses">
       <Properties>
         <Property name="text" type="java.lang.String" value="(&quot; * &quot; Todas formas )"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="jRadioButtonRelVenda">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Hoje"/>
       </Properties>
     </Component>
   </SubComponents>
