@@ -43,6 +43,9 @@ CREATE TABLE compras_animais (
     FOREIGN KEY (id_animal) REFERENCES animais(id)
 );
 
+ALTER TABLE compras_animais 
+    CHANGE pagamento pagador VARCHAR(100) NOT NULL;
+
 CREATE TABLE vendas_animais (
     id_venda INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     data_venda TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
@@ -95,6 +98,11 @@ select * from animais;
 select * from fornecedores;
 select * from vendas_animais;
 
+SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, criador, pagador, pagamento, local_compra, operador 
+                             FROM compras_animais v 
+                            JOIN animais a ON v.id_animal = a.id 
+                            WHERE data_compra BETWEEN  2023/02/01  AND  2023/08/31
+                            ORDER BY  quantidade  DESC;
 
 -- relatorio ja formatado de vendas em um intervalo de tempo
 SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao,
@@ -104,6 +112,7 @@ SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada,
     valor_total,
     vendedor,
     comprador,
+    pagamento,
     local_venda,
     operador
 FROM vendas_animais v
