@@ -103,149 +103,164 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 // Convertendo as strings para o formato de data padrão
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
+        if (!jRadioButtonRelVendaHoje.isSelected()) {
+
+            dataInicio = dateFormat.parse(inicio);
+            dataFim = dateFormat.parse(fim);
+
+        } else {
+            // Defina a data atual como base
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dataSistema);
+
+            // Obtenha o último dia do mês
+            int ultimoDia = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+            // Configure o dia para o último dia do mês
+            calendar.set(Calendar.DAY_OF_MONTH, ultimoDia);
+            // Obtenha a data do último dia do mês
+            Date ultimoDiaDoMes = calendar.getTime();
+            String ultimoDiaFormatado = formato.format(ultimoDiaDoMes);
+
+            dataInicio = dateFormat.parse(formato.format(dataSistema));
+            dataFim = dateFormat.parse(ultimoDiaFormatado);
+        }
         try {
-            if (!jRadioButtonRelVendaHoje.isSelected()) {
-                if (validaData(inicio) && validaData(fim)) {
-                    dataInicio = dateFormat.parse(inicio);
-                    dataFim = dateFormat.parse(fim);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Data inválida.");
+            if (validaData(dateFormat.format(dataInicio)) && validaData(dateFormat.format(dataFim))) {
+
+                if (dateFormat.format(dataInicio).equals(dateFormat.format(dataFim))) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dataFim);
+
+                    // Adicione um mês
+                    calendar.add(Calendar.MONTH, 1);
+
+                    // Acesse a nova data após adicionar um mês
+                    Date dataAposUmMes = calendar.getTime();
+                    
+                    dataFim = dataAposUmMes;
                 }
-            } else {
-                // Defina a data atual como base
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(dataSistema);
-
-                // Obtenha o último dia do mês
-                int ultimoDia = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-                // Configure o dia para o último dia do mês
-                calendar.set(Calendar.DAY_OF_MONTH, ultimoDia);
-                // Obtenha a data do último dia do mês
-                Date ultimoDiaDoMes = calendar.getTime();
-                String ultimoDiaFormatado = formato.format(ultimoDiaDoMes);
-
-                dataInicio = dateFormat.parse(formato.format(dataSistema));
-                dataFim = dateFormat.parse(ultimoDiaFormatado);
-            }
 
 // Convertendo as datas de volta para o formato do banco de dados
-            SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String inicioFormatado = dbDateFormat.format(dataInicio);
-            String fimFormatado = dbDateFormat.format(dataFim);
-            String sqlPDF = "";
+                SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String inicioFormatado = dbDateFormat.format(dataInicio);
+                String fimFormatado = dbDateFormat.format(dataFim);
+                String sqlPDF = "";
 
-            if (jRadioButtonRelVendaDesc.isSelected()) {
-                if (pagamento != "*") {
-                    sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, vendedor, comprador, pagamento, local_venda, operador "
-                            + "FROM vendas_animais v "
-                            + "JOIN animais a ON v.id_animal = a.id "
-                            + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                            + "AND pagamento = '" + pagamento + "' "
-                            + "ORDER BY " + ordem + " DESC";
+                if (jRadioButtonRelVendaDesc.isSelected()) {
+                    if (pagamento != "*") {
+                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, vendedor, comprador, pagamento, local_venda, operador "
+                                + "FROM vendas_animais v "
+                                + "JOIN animais a ON v.id_animal = a.id "
+                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "AND pagamento = '" + pagamento + "' "
+                                + "ORDER BY " + ordem + " DESC";
+                    } else {
+                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, vendedor, comprador, pagamento, local_venda, operador "
+                                + "FROM vendas_animais v "
+                                + "JOIN animais a ON v.id_animal = a.id "
+                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "ORDER BY " + ordem + " DESC";
+                    }
+
                 } else {
-                    sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, vendedor, comprador, pagamento, local_venda, operador "
-                            + "FROM vendas_animais v "
-                            + "JOIN animais a ON v.id_animal = a.id "
-                            + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                            + "ORDER BY " + ordem + " DESC";
+                    if (pagamento != "*") {
+                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, vendedor, comprador, pagamento, local_venda, operador "
+                                + "FROM vendas_animais v "
+                                + "JOIN animais a ON v.id_animal = a.id "
+                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "AND pagamento = '" + pagamento + "' "
+                                + "ORDER BY " + ordem;
+                    } else {
+                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, vendedor, comprador, pagamento, local_venda, operador "
+                                + "FROM vendas_animais v "
+                                + "JOIN animais a ON v.id_animal = a.id "
+                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "ORDER BY " + ordem;
+                    }
                 }
+                try {
+                    String username = System.getProperty("user.name");
+                    String data = new SimpleDateFormat("dd_MM_yyyy").format(new Date());
+                    String path = "C:\\Users\\" + username + "\\Documents\\Relatorio_Vendas_" + data + ".pdf";
 
+                    PdfWriter pdfWriter = new PdfWriter(path);
+                    PdfDocument documentoPDF = new PdfDocument(pdfWriter);
+                    Document document = new Document(documentoPDF, PageSize.A4);
+
+                    float[] columnWidths = {1, 3, 4, 2, 2, 1, 2, 3, 3, 3, 3, 2};
+                    Table table = new Table(columnWidths);
+                    table.setWidthPercent(100);
+                    table.setHorizontalAlignment(HorizontalAlignment.CENTER);
+                    // Definindo fontes
+                    PdfFont fontBold = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
+                    PdfFont fontNormal = PdfFontFactory.createFont(FontConstants.HELVETICA);
+
+                    PdfPage firstPage = documentoPDF.addNewPage();
+                    PdfCanvas canvas = new PdfCanvas(firstPage);
+                    canvas.beginText()
+                            .setFontAndSize(fontNormal, 8)
+                            .moveText(36, 806)
+                            .showText("Pecuária MML")
+                            .endText();
+
+                    String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+                    canvas.beginText()
+                            .setFontAndSize(fontNormal, 8)
+                            .moveText(484, 806)
+                            .showText("Emissão: " + currentDate)
+                            .endText();
+
+                    SolidLine separatorLine = new SolidLine(1);
+                    document.add(new Paragraph("")).add(new LineSeparator(separatorLine));
+
+                    document.add(new Paragraph("Relatório de Vendas")
+                            .setFont(fontBold)
+                            .setFontSize(18)
+                            .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
+                    document.add(new Paragraph("Período: " + new SimpleDateFormat("dd/MM/yyyy").format(dataInicio) + " a " + new SimpleDateFormat("dd/MM/yyyy").format(dataFim))
+                            .setFont(fontNormal)
+                            .setFontSize(12)
+                            .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
+                    document.add(new Paragraph(""));
+
+                    PdfFont headerFont = PdfFontFactory.createFont();
+                    String[] headers = {"ID", "Data", "Animal", "Qtde", "Média Kg", "Preço Kg", "Total", "Vend", "Comp", "Pag", "Local", "Operador"};
+                    for (String header : headers) {
+                        Cell cell = new Cell().add(header).setFont(headerFont).setFontSize(10).setBackgroundColor(DeviceGray.BLACK).setTextAlignment(TextAlignment.CENTER).setFontColor(DeviceGray.WHITE);
+                        table.addCell(cell);
+                    }
+
+                    // Linhas da tabela com os dados do ResultSet
+                    PdfFont dataFont = PdfFontFactory.createFont();
+                    PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
+                    ResultSet resultPDF = pstPDF.executeQuery();
+                    while (resultPDF.next()) {
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_venda")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_descricao")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("media_kg")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(14).add(resultPDF.getString("preco_kg")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(40).add(resultPDF.getString("valor_total")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("vendedor")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("comprador")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("pagamento")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_venda")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("operador")));
+                    }
+
+                    table.setAutoLayout();
+                    document.add(table);
+                    document.close();
+
+                    JOptionPane.showMessageDialog(null, "PDF criado em " + path);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else {
-                   if (pagamento != "*") {
-                    sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, vendedor, comprador, pagamento, local_venda, operador "
-                            + "FROM vendas_animais v "
-                            + "JOIN animais a ON v.id_animal = a.id "
-                            + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                            + "AND pagamento = '" + pagamento + "' "
-                            + "ORDER BY " + ordem;
-                } else {
-                    sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, vendedor, comprador, pagamento, local_venda, operador "
-                            + "FROM vendas_animais v "
-                            + "JOIN animais a ON v.id_animal = a.id "
-                            + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                            + "ORDER BY " + ordem;
-                }
+                JOptionPane.showMessageDialog(null, "Data inválida.");
             }
-            try {
-                String username = System.getProperty("user.name");
-                String data = new SimpleDateFormat("dd_MM_yyyy").format(new Date());
-                String path = "C:\\Users\\" + username + "\\Documents\\Relatorio_Vendas_" + data + ".pdf";
-
-                PdfWriter pdfWriter = new PdfWriter(path);
-                PdfDocument documentoPDF = new PdfDocument(pdfWriter);
-                Document document = new Document(documentoPDF, PageSize.A4);
-
-                float[] columnWidths = {1, 3, 4, 2, 2, 1, 2, 3, 3, 3, 3, 2};
-                Table table = new Table(columnWidths);
-                table.setWidthPercent(100);
-                table.setHorizontalAlignment(HorizontalAlignment.CENTER);
-                // Definindo fontes
-                PdfFont fontBold = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
-                PdfFont fontNormal = PdfFontFactory.createFont(FontConstants.HELVETICA);
-
-                PdfPage firstPage = documentoPDF.addNewPage();
-                PdfCanvas canvas = new PdfCanvas(firstPage);
-                canvas.beginText()
-                        .setFontAndSize(fontNormal, 8)
-                        .moveText(36, 806)
-                        .showText("Pecuária MML")
-                        .endText();
-
-                String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-                canvas.beginText()
-                        .setFontAndSize(fontNormal, 8)
-                        .moveText(484, 806)
-                        .showText("Emissão: " + currentDate)
-                        .endText();
-
-                SolidLine separatorLine = new SolidLine(1);
-                document.add(new Paragraph("")).add(new LineSeparator(separatorLine));
-
-                document.add(new Paragraph("Relatório de Vendas")
-                        .setFont(fontBold)
-                        .setFontSize(18)
-                        .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
-                document.add(new Paragraph("Período: " + new SimpleDateFormat("dd/MM/yyyy").format(dataInicio) + " a " + new SimpleDateFormat("dd/MM/yyyy").format(dataFim))
-                        .setFont(fontNormal)
-                        .setFontSize(12)
-                        .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
-                document.add(new Paragraph(""));
-
-                PdfFont headerFont = PdfFontFactory.createFont();
-                String[] headers = {"ID", "Data", "Animal", "Qtde", "Média Kg", "Preço Kg", "Total", "Vend", "Comp", "Pag", "Local", "Operador"};
-                for (String header : headers) {
-                    Cell cell = new Cell().add(header).setFont(headerFont).setFontSize(10).setBackgroundColor(DeviceGray.BLACK).setTextAlignment(TextAlignment.CENTER).setFontColor(DeviceGray.WHITE);
-                    table.addCell(cell);
-                }
-
-                // Linhas da tabela com os dados do ResultSet
-                PdfFont dataFont = PdfFontFactory.createFont();
-                PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
-                ResultSet resultPDF = pstPDF.executeQuery();
-                while (resultPDF.next()) {
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_venda")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_descricao")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("media_kg")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(14).add(resultPDF.getString("preco_kg")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(40).add(resultPDF.getString("valor_total")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("vendedor")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("comprador")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("pagamento")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_venda")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("operador")));
-                }
-
-                table.setAutoLayout();
-                document.add(table);
-                document.close();
-
-                JOptionPane.showMessageDialog(null, "PDF criado em " + path);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Data inválida.");
         }
