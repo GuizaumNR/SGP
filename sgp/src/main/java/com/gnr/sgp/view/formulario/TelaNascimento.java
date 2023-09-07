@@ -1,0 +1,377 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
+ */
+package com.gnr.sgp.view.formulario;
+
+import com.gnr.sgp.modelo.conexao.Conexao;
+import com.gnr.sgp.modelo.conexao.ConexaoMysql;
+import com.gnr.sgp.modelo.dao.ComprasAnimaisDao;
+import com.gnr.sgp.modelo.dao.NascimentosDao;
+import com.gnr.sgp.modelo.dominio.ComprasAnimais;
+import com.gnr.sgp.modelo.dominio.Nascimentos;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
+
+/**
+ *
+ * @author Guilherme
+ */
+public class TelaNascimento extends javax.swing.JInternalFrame {
+
+    /**
+     * Creates new form TelaCompra
+     */
+    private final Conexao conexao;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+
+    String operador;
+    
+    public TelaNascimento() {
+       
+         
+        this.conexao = new ConexaoMysql();
+        initComponents();
+//        componentMoved(e);
+        
+
+        setLocation(-5, -5);
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                // Define a posição do componente para (0, 0)
+                setLocation(-5, -5);
+            }
+        });
+
+    }
+
+    public void adicionar() {
+        if ((jTextFieldNascAnimal.getText().isEmpty() || jTextFieldNascQuantidade.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
+        } else {
+            Nascimentos nascimento = new Nascimentos(01, Integer.parseInt(jTextFieldNascAnimal.getText()), Integer.parseInt(jTextFieldNascQuantidade.getText()), jTextFieldNascObservacao.getText(), jTextFieldNascLocal.getText(), operador);
+            NascimentosDao nascDao = new NascimentosDao();
+            nascDao.Adicionar(nascimento);
+
+            limpaCampos();
+        }
+    }
+
+    public void setOperador(String operador) {
+        this.operador = operador;
+    }
+
+    public void limpaCampos() {
+        jTextFieldNascAnimal.setText(null);
+        jTextFieldNascObservacao.setText(null);
+        jTextFieldNascLocal.setText(null);
+        jTextFieldNascQuantidade.setText(null);
+        ((DefaultTableModel) jTableNasc.getModel()).setRowCount(0);
+    }
+
+    public void pesquisarAnimalId() {
+        String sql = String.format("SELECT * FROM animais WHERE id like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextNascBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableNasc.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void pesquisarAnimalDescricao() {
+        String sql = String.format("SELECT * FROM animais WHERE descricao like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextNascBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableNasc.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisarAnimalIdade() {
+        String sql = String.format("SELECT * FROM animais WHERE idade like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextNascBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableNasc.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void pesquisarAnimalSexo() {
+        String sql = String.format("SELECT * FROM animais WHERE sexo like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextNascBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableNasc.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void setarCampo() {
+        int setar = jTableNasc.getSelectedRow();
+        String valor = jTableNasc.getModel().getValueAt(setar, 0).toString();
+        if(valor != null){
+        jTextFieldNascAnimal.setText(valor);
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableNasc = new javax.swing.JTable();
+        jTextFieldNascAnimal = new javax.swing.JTextField();
+        jTextFieldNascObservacao = new javax.swing.JTextField();
+        jTextFieldNascLocal = new javax.swing.JTextField();
+        jLabelNascQuantidade = new javax.swing.JLabel();
+        jTextFieldNascQuantidade = new javax.swing.JTextField();
+        jLabelNascAnimal = new javax.swing.JLabel();
+        jLabelNascObservacao = new javax.swing.JLabel();
+        jLabelNascLocal = new javax.swing.JLabel();
+        jTextNascBusca = new javax.swing.JTextField();
+        jLabelNascBusca = new javax.swing.JLabel();
+        jLabelNascCampos = new javax.swing.JLabel();
+        jButtonCompFinalizar = new javax.swing.JButton();
+        jComboNascPesquisa = new javax.swing.JComboBox<>();
+
+        setBackground(new java.awt.Color(227, 234, 227));
+        setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        setTitle("Nascimento");
+        setMinimumSize(new java.awt.Dimension(680, 480));
+        setPreferredSize(new java.awt.Dimension(730, 545));
+
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(75, 80));
+
+        jTableNasc = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        jTableNasc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTableNasc.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Id", "Descrição", "Quant", "Idade", "Sexo"
+            }
+        ));
+        jTableNasc.setFocusable(false);
+        jTableNasc.setMinimumSize(new java.awt.Dimension(680, 480));
+        jTableNasc.setPreferredSize(new java.awt.Dimension(820, 420));
+        jTableNasc.getTableHeader().setReorderingAllowed(false);
+        jTableNasc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableNascMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableNasc);
+
+        jTextFieldNascAnimal.setEditable(false);
+
+        jLabelNascQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelNascQuantidade.setText("* Quantidade:");
+
+        jLabelNascAnimal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelNascAnimal.setText("* ID Animal:");
+
+        jLabelNascObservacao.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelNascObservacao.setText("Observação");
+
+        jLabelNascLocal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelNascLocal.setText("Local:");
+
+        jTextNascBusca.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextNascBusca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextNascBuscaActionPerformed(evt);
+            }
+        });
+        jTextNascBusca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextNascBuscaKeyReleased(evt);
+            }
+        });
+
+        jLabelNascBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
+        jLabelNascBusca.setText(" ");
+
+        jLabelNascCampos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabelNascCampos.setText("* Campos obrigatórios");
+
+        jButtonCompFinalizar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButtonCompFinalizar.setText("Finalizar");
+        jButtonCompFinalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCompFinalizarActionPerformed(evt);
+            }
+        });
+
+        jComboNascPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "descricao", "idade", "sexo" }));
+        jComboNascPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboNascPesquisaActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jComboNascPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextNascBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelNascBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                        .addComponent(jLabelNascCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabelNascQuantidade)
+                                    .addComponent(jLabelNascAnimal))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextFieldNascAnimal, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldNascQuantidade)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabelNascObservacao)
+                                    .addComponent(jLabelNascLocal))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldNascObservacao, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldNascLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelNascCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextNascBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboNascPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabelNascBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNascAnimal)
+                    .addComponent(jTextFieldNascAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldNascQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelNascQuantidade))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNascObservacao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldNascObservacao, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNascLocal)
+                    .addComponent(jTextFieldNascLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(78, 78, 78)
+                .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jTableNascMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableNascMouseClicked
+        setarCampo();
+    }//GEN-LAST:event_jTableNascMouseClicked
+
+    private void jTextNascBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextNascBuscaKeyReleased
+        if (jComboNascPesquisa.getSelectedItem().toString() == "id") {
+            pesquisarAnimalId();
+        } else if (jComboNascPesquisa.getSelectedItem().toString() == "descricao") {
+            pesquisarAnimalDescricao();
+        } else if (jComboNascPesquisa.getSelectedItem().toString() == "idade") {
+            pesquisarAnimalIdade();
+        } else if (jComboNascPesquisa.getSelectedItem().toString() == "sexo") {
+            pesquisarAnimalSexo();
+        }
+    }//GEN-LAST:event_jTextNascBuscaKeyReleased
+
+    private void jButtonCompFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCompFinalizarActionPerformed
+        adicionar();
+    }//GEN-LAST:event_jButtonCompFinalizarActionPerformed
+
+    private void jComboNascPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboNascPesquisaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboNascPesquisaActionPerformed
+
+    private void jTextNascBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextNascBuscaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextNascBuscaActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonCompFinalizar;
+    private javax.swing.JComboBox<String> jComboNascPesquisa;
+    private javax.swing.JLabel jLabelNascAnimal;
+    private javax.swing.JLabel jLabelNascBusca;
+    private javax.swing.JLabel jLabelNascCampos;
+    private javax.swing.JLabel jLabelNascLocal;
+    private javax.swing.JLabel jLabelNascObservacao;
+    private javax.swing.JLabel jLabelNascQuantidade;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTableNasc;
+    private javax.swing.JTextField jTextFieldNascAnimal;
+    private javax.swing.JTextField jTextFieldNascLocal;
+    private javax.swing.JTextField jTextFieldNascObservacao;
+    private javax.swing.JTextField jTextFieldNascQuantidade;
+    public javax.swing.JTextField jTextNascBusca;
+    // End of variables declaration//GEN-END:variables
+}

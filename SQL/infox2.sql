@@ -20,11 +20,12 @@ CREATE TABLE animais (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	descricao VARCHAR(100) UNIQUE NOT NULL,
     quantidade INT NOT NULL,
-    idade ENUM('terneiro', 'novilho', 'vaca_velha') NOT NULL,
-    sexo ENUM('boi', 'touro_reprodutor', 'femea') NOT NULL
+    idade VARCHAR(100) NOT NULL,
+    sexo VARCHAR(100) NOT NULL
 );
 
-
+ALTER TABLE animais 
+    CHANGE sexo sexo VARCHAR(100) NOT NULL;
 
 CREATE TABLE compras_animais (
     id_compra INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -35,7 +36,7 @@ CREATE TABLE compras_animais (
     preco_kg DECIMAL(10, 2) NOT NULL,
     valor_total decimal(10,2) NOT NULL,
     criador VARCHAR(100) NOT NULL,
-    pagador ENUM("alemao","negocio","adiantamento"),
+    pagador VARCHAR(100) NOT NULL,
     pagamento VARCHAR(100) NOT NULL,
     local_compra VARCHAR(100),
     operador VARCHAR(100) NOT NULL,
@@ -44,7 +45,7 @@ CREATE TABLE compras_animais (
 );
 
 ALTER TABLE compras_animais 
-    CHANGE pagamento pagador VARCHAR(100) NOT NULL;
+    CHANGE pagador pagador VARCHAR(100) NOT NULL;
 
 CREATE TABLE vendas_animais (
     id_venda INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -63,15 +64,26 @@ CREATE TABLE vendas_animais (
     FOREIGN KEY (id_animal) REFERENCES animais(id)
 );
 
-CREATE TABLE movimentacoes (
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    tipo ENUM('nascimento', 'morte') NOT NULL,
-    data_movimentacao TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    animal_id INT NOT NULL,
+CREATE TABLE nascimentos (
+	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	data_nascimento TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	id_animal INT NOT NULL,
     quantidade INT NOT NULL,
     observacao VARCHAR(200),
+    local_nasc VARCHAR(100) NOT NULL,
     operador VARCHAR(100) NOT NULL,
-    FOREIGN KEY (animal_id) REFERENCES animais (id)
+    FOREIGN KEY (id_animal) REFERENCES animais (id)
+);
+
+CREATE TABLE mortes (
+	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	data_morte TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	id_animal INT NOT NULL,
+    quantidade INT NOT NULL,
+    observacao VARCHAR(200),
+    local_morte VARCHAR(100) NOT NULL,
+    operador VARCHAR(100) NOT NULL,
+    FOREIGN KEY (id_animal) REFERENCES animais (id)
 );
 
 CREATE TABLE lucros (
@@ -101,8 +113,8 @@ select * from vendas_animais;
 SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, criador, pagador, pagamento, local_compra, operador 
                              FROM compras_animais v 
                             JOIN animais a ON v.id_animal = a.id 
-                            WHERE data_compra BETWEEN  2023/02/01  AND  2023/08/31
-                            ORDER BY  quantidade  DESC;
+                            WHERE data_compra BETWEEN  '2023/02/01'  AND  '2023/08/31'
+                            ORDER BY quantidade DESC;
 
 -- relatorio ja formatado de vendas em um intervalo de tempo
 SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao,

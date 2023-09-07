@@ -9,6 +9,7 @@ import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.view.formulario.TelaAnimal;
 import com.gnr.sgp.view.formulario.TelaCompra;
 import com.gnr.sgp.view.formulario.TelaFornecedor;
+import com.gnr.sgp.view.formulario.TelaNascimento;
 import com.gnr.sgp.view.formulario.TelaRelatorioCompra;
 import com.gnr.sgp.view.formulario.TelaRelatorioVenda;
 import com.gnr.sgp.view.formulario.TelaSobre;
@@ -49,7 +50,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     TelaCompra telaCompra = new TelaCompra();
     TelaRelatorioVenda telaRelVenda = new TelaRelatorioVenda();
     TelaRelatorioCompra telaRelCompra = new TelaRelatorioCompra();
-
+    TelaNascimento telaNasc = new TelaNascimento();
+    
     Conexao conexao;
 
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -97,6 +99,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jDesktok.add(telaCompra);
         jDesktok.add(telaRelVenda);
         jDesktok.add(telaRelCompra);
+        jDesktok.add(telaNasc);
 
     }
 
@@ -104,6 +107,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         labelOperador.setText("Operador: " + operador);
         telaCompra.setOperador(operador);
         telaVenda.setOperador(operador);
+        telaNasc.setOperador(operador);
     }
 
     public void setPermissao(Boolean permissao) {
@@ -154,9 +158,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenuConsultaFornecedores = new javax.swing.JMenuItem();
         jMenuConsultaUsuarios = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuMovEstoque = new javax.swing.JMenu();
+        jMenuMovEstoqueNasc = new javax.swing.JMenuItem();
+        jMenuMovEstoqueMorte = new javax.swing.JMenuItem();
         jMenuRelatorio = new javax.swing.JMenu();
         jMenuRelatorioVendas = new javax.swing.JMenuItem();
         jMenuRelatorioCompras = new javax.swing.JMenuItem();
@@ -293,16 +297,23 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jMenuBar.add(jMenuConsulta);
 
-        jMenu1.setText("Mov. Estoque");
-        jMenu1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jMenuMovEstoque.setText("Mov. Estoque");
+        jMenuMovEstoque.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
 
-        jMenuItem2.setText("Nascimento");
-        jMenu1.add(jMenuItem2);
+        jMenuMovEstoqueNasc.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jMenuMovEstoqueNasc.setText("Nascimento");
+        jMenuMovEstoqueNasc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuMovEstoqueNascActionPerformed(evt);
+            }
+        });
+        jMenuMovEstoque.add(jMenuMovEstoqueNasc);
 
-        jMenuItem3.setText("Falecimento");
-        jMenu1.add(jMenuItem3);
+        jMenuMovEstoqueMorte.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jMenuMovEstoqueMorte.setText("Morte");
+        jMenuMovEstoque.add(jMenuMovEstoqueMorte);
 
-        jMenuBar.add(jMenu1);
+        jMenuBar.add(jMenuMovEstoque);
 
         jMenuRelatorio.setText("Relatório");
         jMenuRelatorio.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -525,7 +536,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuCadastroAnimalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroAnimalActionPerformed
-        if (!telaUsuario.isVisible() && !telaFornecedor.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible()) {
+        if (!telaUsuario.isVisible() && !telaFornecedor.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible() && !telaNasc.isVisible()) {
             telaAnimal.setVisible(true);
         } else {
             telaUsuario.setVisible(false);
@@ -534,13 +545,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
             telaCompra.setVisible(false);
             telaRelVenda.setVisible(false);
             telaRelCompra.setVisible(false);
+            telaNasc.setVisible(false);
             telaAnimal.setVisible(true);
         }
     }//GEN-LAST:event_jMenuCadastroAnimalActionPerformed
 
     private void jMenuCadastroFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroFornecedorActionPerformed
 
-        if (!telaUsuario.isVisible() && !telaAnimal.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible()) {
+        if (!telaUsuario.isVisible() && !telaAnimal.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible() && !telaNasc.isVisible()) {
             telaFornecedor.setVisible(true);
 
         } else {
@@ -550,6 +562,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             telaCompra.setVisible(false);
             telaRelVenda.setVisible(false);
             telaRelCompra.setVisible(false);
+            telaNasc.setVisible(false);
             telaFornecedor.setVisible(true);
 
         }
@@ -587,7 +600,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonMinimizarActionPerformed
 
     private void jMenuCadastroUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCadastroUsuarioActionPerformed
-        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible()) {
+        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaVenda.isVisible() && !telaCompra.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible() && !telaNasc.isVisible()) {
             telaUsuario.setVisible(true);
 
         } else {
@@ -597,6 +610,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             telaCompra.setVisible(false);
             telaRelVenda.setVisible(false);
             telaRelCompra.setVisible(false);
+            telaNasc.setVisible(false);
             telaUsuario.setVisible(true);
 
         }
@@ -616,7 +630,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void jMenuRelatorioComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRelatorioComprasActionPerformed
         
-        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaVenda.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible() && !telaCompra.isVisible()) {
+        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaVenda.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible() && !telaCompra.isVisible() && !telaNasc.isVisible()) {
 
             telaRelCompra.setVisible(true);
 
@@ -627,13 +641,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
             telaVenda.setVisible(false);
             telaRelVenda.setVisible(false);
             telaCompra.setVisible(false);
+            telaNasc.setVisible(false);
             telaRelCompra.setVisible(true);
         }
         
     }//GEN-LAST:event_jMenuRelatorioComprasActionPerformed
 
     private void jMenuRelatorioVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRelatorioVendasActionPerformed
-        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaCompra.isVisible() && !telaVenda.isVisible() && !telaRelCompra.isVisible()) {
+        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaCompra.isVisible() && !telaVenda.isVisible() && !telaRelCompra.isVisible() && !telaNasc.isVisible()) {
             telaRelVenda.setVisible(true);
 
         } else {
@@ -643,13 +658,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
             telaCompra.setVisible(false);
             telaVenda.setVisible(false);
             telaRelCompra.setVisible(false);
+            telaNasc.setVisible(false);
             telaRelVenda.setVisible(true);
 
         }
     }//GEN-LAST:event_jMenuRelatorioVendasActionPerformed
 
     private void jMenuCaixaVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCaixaVendaActionPerformed
-        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaCompra.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible()) {
+        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaCompra.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible() && !telaNasc.isVisible()) {
             telaVenda.setVisible(true);
 
         } else {
@@ -659,13 +675,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
             telaCompra.setVisible(false);
             telaRelVenda.setVisible(false);
             telaRelCompra.setVisible(false);
+            telaNasc.setVisible(false);
             telaVenda.setVisible(true);
 
         }
     }//GEN-LAST:event_jMenuCaixaVendaActionPerformed
 
     private void jMenuCaixaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCaixaCompraActionPerformed
-        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaVenda.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible()) {
+        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaVenda.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible() && !telaNasc.isVisible()) {
 
             telaCompra.setVisible(true);
 
@@ -676,9 +693,29 @@ public class TelaPrincipal extends javax.swing.JFrame {
             telaVenda.setVisible(false);
             telaRelVenda.setVisible(false);
             telaRelCompra.setVisible(false);
+            telaNasc.setVisible(false);
             telaCompra.setVisible(true);
         }
     }//GEN-LAST:event_jMenuCaixaCompraActionPerformed
+
+    private void jMenuMovEstoqueNascActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMovEstoqueNascActionPerformed
+        
+        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaVenda.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible() && !telaCompra.isVisible()) {
+
+            telaNasc.setVisible(true);
+
+        } else {
+            telaFornecedor.setVisible(false);
+            telaAnimal.setVisible(false);
+            telaUsuario.setVisible(false);
+            telaVenda.setVisible(false);
+            telaRelVenda.setVisible(false);
+            telaRelCompra.setVisible(false);
+            telaCompra.setVisible(false);
+            telaNasc.setVisible(true);  
+        }
+        
+    }//GEN-LAST:event_jMenuMovEstoqueNascActionPerformed
 
     /**
      * @param args the command line arguments
@@ -721,7 +758,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButtonMinimizar;
     private javax.swing.JButton jButtonSair;
     private javax.swing.JDesktopPane jDesktok;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenuAjuda;
     private javax.swing.JMenuItem jMenuAjudaSobre;
     private javax.swing.JMenuBar jMenuBar;
@@ -738,8 +774,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuConsultaFornecedores;
     private javax.swing.JMenuItem jMenuConsultaUsuarios;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenu jMenuMovEstoque;
+    private javax.swing.JMenuItem jMenuMovEstoqueMorte;
+    private javax.swing.JMenuItem jMenuMovEstoqueNasc;
     private javax.swing.JMenu jMenuOpcoes;
     private javax.swing.JMenu jMenuRelatorio;
     private javax.swing.JMenuItem jMenuRelatorioCompras;

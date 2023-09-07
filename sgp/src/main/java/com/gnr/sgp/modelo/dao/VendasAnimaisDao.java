@@ -21,7 +21,6 @@ import javax.swing.JOptionPane;
 public class VendasAnimaisDao {
 
     private final Conexao conexao;
-    String operador = "Guilherme";
 
     public VendasAnimaisDao() {
         this.conexao = new ConexaoMysql();
@@ -82,9 +81,6 @@ public class VendasAnimaisDao {
         return null;
     }
 
-    public void setOperador(String operador) {
-        this.operador = operador;
-    }
 
     public boolean verificarQuantidadeMenorZero(int id_animal, int quantidadeVenda) {
         String sql = "SELECT quantidade FROM animais WHERE id = ?";
