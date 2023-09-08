@@ -8,6 +8,7 @@ import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.ComprasAnimaisDao;
 import com.gnr.sgp.modelo.dominio.ComprasAnimais;
+import com.gnr.sgp.view.modelo.ValidadorNumerico;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
@@ -40,6 +41,8 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     double valorTotal = 0;
 
     String operador;
+    
+    ValidadorNumerico validaNumeros = new ValidadorNumerico();
     
     public TelaCompra() {
        
@@ -295,6 +298,12 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(jTableComp);
 
         jTextFieldCompAnimal.setEditable(false);
+
+        jTextFieldCompQuantidade.setDocument(new ValidadorNumerico());
+
+        jTextFieldCompMediaKg.setDocument(new ValidadorNumerico());
+
+        jTextFieldCompPrecoKg.setDocument(new ValidadorNumerico());
 
         jLabelCompAnimal1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabelCompAnimal1.setText("* Criador:");

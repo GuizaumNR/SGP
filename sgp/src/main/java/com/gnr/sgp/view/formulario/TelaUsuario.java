@@ -13,7 +13,7 @@ import java.sql.*;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.UsuariosDao;
 import com.gnr.sgp.modelo.dominio.Usuarios;
-import com.gnr.sgp.view.modelo.Validador;
+import com.gnr.sgp.view.modelo.ValidadorQuantCaract;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
@@ -34,9 +34,9 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
        
       initComponents();
         conexao = new ConexaoMysql();
-        jPassUsuSenha.setDocument(new Validador(4));
-        jTextUsuLogin.setDocument(new Validador(10));
-        jTextUsuNome.setDocument(new Validador(10));
+        jPassUsuSenha.setDocument(new ValidadorQuantCaract(4));
+        jTextUsuLogin.setDocument(new ValidadorQuantCaract(10));
+        jTextUsuNome.setDocument(new ValidadorQuantCaract(10));
         
         setLocation(-5, -5);
         this.addComponentListener(new ComponentAdapter() {

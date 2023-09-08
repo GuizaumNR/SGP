@@ -10,6 +10,7 @@ import com.gnr.sgp.modelo.dao.FornecedoresDao;
 import com.gnr.sgp.modelo.dao.VendasAnimaisDao;
 import com.gnr.sgp.modelo.dominio.Fornecedores;
 import com.gnr.sgp.modelo.dominio.VendasAnimais;
+import com.gnr.sgp.view.modelo.ValidadorNumerico;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
@@ -42,6 +43,8 @@ public class TelaVenda extends javax.swing.JInternalFrame {
     double valorTotal = 0;
     
     String operador;
+    
+    ValidadorNumerico validaNumeros = new ValidadorNumerico();
      
     public TelaVenda() {
         
@@ -323,6 +326,12 @@ public class TelaVenda extends javax.swing.JInternalFrame {
 
         jTextFieldVendaAnimal.setEditable(false);
 
+        jTextFieldVendaQuantidade.setDocument(new ValidadorNumerico());
+
+        jTextFieldVendaMediaKg.setDocument(new ValidadorNumerico());
+
+        jTextFieldVendaPrecoKg.setDocument(new ValidadorNumerico());
+
         jLabelVendaComprador.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabelVendaComprador.setText("* Comprador:");
 
@@ -388,14 +397,13 @@ public class TelaVenda extends javax.swing.JInternalFrame {
                             .addComponent(jTextFieldVendaPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldVendaLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextFieldVendaAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabelVendaTotal)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jTextFieldVendaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)

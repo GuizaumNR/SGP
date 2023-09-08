@@ -188,6 +188,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="passLoginSenhaActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="passLoginSenha.setDocument(validaQuant);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="jButtonLoginLogin">
           <Properties>

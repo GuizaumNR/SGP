@@ -4,12 +4,8 @@
  */
 package com.gnr.sgp.view.formulario;
 
-import com.gnr.sgp.TelaPrincipal;
 import com.gnr.sgp.controller.LoginController;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+import com.gnr.sgp.view.modelo.ValidadorQuantCaract;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
@@ -23,7 +19,8 @@ public class Login extends javax.swing.JFrame {
 
     private final LoginController loginController;
     private final String copy = "Copyright ©2023 Guilherme Rodrigues - Todos os direitos reservados.";
-
+    
+    ValidadorQuantCaract validaQuant = new ValidadorQuantCaract(4);
     /**
      * Creates new form Login
      */
@@ -114,6 +111,7 @@ public class Login extends javax.swing.JFrame {
 
         passLoginSenha.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         passLoginSenha.setBorder(null);
+        passLoginSenha.setDocument(validaQuant);
         passLoginSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 passLoginSenhaActionPerformed(evt);

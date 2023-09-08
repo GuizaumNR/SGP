@@ -12,7 +12,6 @@ import com.gnr.sgp.view.formulario.TelaFornecedor;
 import com.gnr.sgp.view.formulario.TelaNascimento;
 import com.gnr.sgp.view.formulario.TelaRelatorioCompra;
 import com.gnr.sgp.view.formulario.TelaRelatorioVenda;
-import com.gnr.sgp.view.formulario.TelaSobre;
 import com.gnr.sgp.view.formulario.TelaUsuario;
 import com.gnr.sgp.view.formulario.TelaVenda;
 import java.awt.BorderLayout;
@@ -581,10 +580,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuConsultaUsuariosActionPerformed
 
     private void jMenuAjudaSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAjudaSobreActionPerformed
-        TelaSobre sobre = new TelaSobre();
-        sobre.setVisible(true);
-        sobre.setResizable(false);
-        sobre.setLocationRelativeTo(null);
+       
     }//GEN-LAST:event_jMenuAjudaSobreActionPerformed
 
     private void jButtonSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSairActionPerformed

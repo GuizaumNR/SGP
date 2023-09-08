@@ -6,20 +6,15 @@ package com.gnr.sgp.view.formulario;
 
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
-import com.gnr.sgp.modelo.dao.ComprasAnimaisDao;
 import com.gnr.sgp.modelo.dao.NascimentosDao;
-import com.gnr.sgp.modelo.dominio.ComprasAnimais;
 import com.gnr.sgp.modelo.dominio.Nascimentos;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import com.gnr.sgp.view.modelo.ValidadorNumerico;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
@@ -35,6 +30,8 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
     private final Conexao conexao;
     PreparedStatement pst = null;
     ResultSet rs = null;
+    
+    ValidadorNumerico validaNumeros = new ValidadorNumerico();
 
     String operador;
     
@@ -209,6 +206,8 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
 
         jLabelNascQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabelNascQuantidade.setText("* Quantidade:");
+
+        jTextFieldNascQuantidade.setDocument(new ValidadorNumerico());
 
         jLabelNascAnimal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabelNascAnimal.setText("* ID Animal:");

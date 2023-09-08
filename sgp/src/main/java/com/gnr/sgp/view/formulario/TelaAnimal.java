@@ -8,6 +8,7 @@ import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.AnimaisDao;
 import com.gnr.sgp.modelo.dominio.Animais;
+import com.gnr.sgp.view.modelo.ValidadorNumerico;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
@@ -31,6 +32,8 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
     private final Conexao conexao;
     PreparedStatement pst = null;
     ResultSet rs = null;
+    
+    ValidadorNumerico validaNumeros = new ValidadorNumerico();
     
     public TelaAnimal() {
         
@@ -290,6 +293,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         jLabelAnimQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabelAnimQuantidade.setText("* Quantidade:");
 
+        jTextAnimQuantidade.setDocument(new ValidadorNumerico());
         jTextAnimQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jComboAnimIdade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "terneiro", "novilho", "vaca_velha" }));

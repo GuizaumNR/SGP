@@ -117,11 +117,13 @@ SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y %H:%i:%s') as data_formatad
                             ORDER BY quantidade DESC;
 
 -- relatorio ja formatado de vendas em um intervalo de tempo
-SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao,
+SELECT 
+    id_venda, 
+    DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, 
+    a.descricao as animal_descricao,
     v.quantidade,
     media_kg,
-    preco_kg,
-    valor_total,
+    CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado,
     vendedor,
     comprador,
     pagamento,
@@ -131,6 +133,7 @@ FROM vendas_animais v
 JOIN animais a ON v.id_animal = a.id
 WHERE data_venda BETWEEN '2023-07-20' AND '2023-08-31'
 ORDER BY data_venda;
+
 
 -- lsita de animais mais vendidos
 SELECT a.descricao AS nome_animal, SUM(va.quantidade) AS total_vendido
@@ -147,6 +150,8 @@ WHERE data_venda >= '2023-01-01' AND data_venda <= '2023-12-31';
 SELECT *
 FROM compras_animais
 WHERE data_compra >= '2023-08-03' AND data_compra <= '2023-08-31';
+
+SELECT * FROM nascimentos;
 
 describe usuarios;
 describe animais;

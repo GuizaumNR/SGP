@@ -12,11 +12,11 @@ import javax.swing.text.AttributeSet;
  *
  * @author Guilherme
  */
-public class Validador extends PlainDocument {
+public class ValidadorQuantCaract extends PlainDocument {
 
     private int limite;
 
-    public Validador(int limite) {
+    public ValidadorQuantCaract(int limite) {
         super();
         this.limite = limite;
     }
