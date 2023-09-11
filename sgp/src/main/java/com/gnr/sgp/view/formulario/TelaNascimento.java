@@ -163,7 +163,7 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
         jTextNascBusca = new javax.swing.JTextField();
         jLabelNascBusca = new javax.swing.JLabel();
         jLabelNascCampos = new javax.swing.JLabel();
-        jButtonCompFinalizar = new javax.swing.JButton();
+        jButtonNascFinalizar = new javax.swing.JButton();
         jComboNascPesquisa = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(227, 234, 227));
@@ -236,11 +236,11 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
         jLabelNascCampos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabelNascCampos.setText("* Campos obrigatórios");
 
-        jButtonCompFinalizar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButtonCompFinalizar.setText("Finalizar");
-        jButtonCompFinalizar.addActionListener(new java.awt.event.ActionListener() {
+        jButtonNascFinalizar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButtonNascFinalizar.setText("Finalizar");
+        jButtonNascFinalizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCompFinalizarActionPerformed(evt);
+                jButtonNascFinalizarActionPerformed(evt);
             }
         });
 
@@ -289,7 +289,7 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButtonNascFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -320,7 +320,7 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
                     .addComponent(jLabelNascLocal)
                     .addComponent(jTextFieldNascLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(78, 78, 78)
-                .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonNascFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -343,9 +343,9 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jTextNascBuscaKeyReleased
 
-    private void jButtonCompFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCompFinalizarActionPerformed
+    private void jButtonNascFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNascFinalizarActionPerformed
         adicionar();
-    }//GEN-LAST:event_jButtonCompFinalizarActionPerformed
+    }//GEN-LAST:event_jButtonNascFinalizarActionPerformed
 
     private void jComboNascPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboNascPesquisaActionPerformed
         // TODO add your handling code here:
@@ -357,7 +357,7 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonCompFinalizar;
+    private javax.swing.JButton jButtonNascFinalizar;
     private javax.swing.JComboBox<String> jComboNascPesquisa;
     private javax.swing.JLabel jLabelNascAnimal;
     private javax.swing.JLabel jLabelNascBusca;

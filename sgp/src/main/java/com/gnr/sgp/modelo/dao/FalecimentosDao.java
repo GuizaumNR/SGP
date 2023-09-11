@@ -6,9 +6,8 @@ package com.gnr.sgp.modelo.dao;
 
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
+import com.gnr.sgp.modelo.dominio.Falecimentos;
 import com.gnr.sgp.modelo.dominio.VendasAnimais;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,42 +17,37 @@ import javax.swing.JOptionPane;
  *
  * @author Guilherme
  */
-public class VendasAnimaisDao {
+public class FalecimentosDao {
 
     private final Conexao conexao;
 
-    public VendasAnimaisDao() {
+    public FalecimentosDao() {
         this.conexao = new ConexaoMysql();
     }
 
-    public String Adicionar(VendasAnimais venda) {
-        String sql = "INSERT INTO vendas_animais (id_animal, quantidade, media_kg, preco_kg, valor_total, comprador, vendedor, pagamento, local_venda, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public String Adicionar(Falecimentos fale) {
+        String sql = "INSERT INTO falecimentos (id_animal, quantidade, observacao, local_falecimento, operador) VALUES( ?, ?, ?, ?, ?)";
 
-        if (verificarQuantidadeMenorZero(venda.getId_animal(), venda.getQuantidade()) && venda.getQuantidade() > 0) {
+        if (verificarQuantidadeMenorZero(fale.getId_animal(), fale.getQuantidade()) && fale.getQuantidade() > 0) {
             try {
                 PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
-                pst.setInt(1, venda.getId_animal());
-                pst.setInt(2, venda.getQuantidade());
-                pst.setDouble(3, venda.getMedia_kg());
-                pst.setDouble(4, venda.getPreco_peso());
-                pst.setDouble(5, venda.getValor_total());
-                pst.setString(6, venda.getComprador());
-                pst.setString(7, venda.getVendedor());
-                 pst.setString(8, venda.getPagamento());
-                pst.setString(9, venda.getLocal());
-                pst.setString(10, venda.getOperador());
+                pst.setInt(1, fale.getId_animal());
+                pst.setInt(2, fale.getQuantidade());
+                pst.setString(3, fale.getObservacao());
+                pst.setString(4, fale.getLocal());
+                pst.setString(5, fale.getOperador());
 
                 int resultado = pst.executeUpdate();
 
                 if (resultado > 0) {
-                    JOptionPane.showMessageDialog(null, "Venda finalizada com sucesso!");
+                    JOptionPane.showMessageDialog(null, "Falecimento registrado com sucesso!");
                     
                                     
                     String sqlUpdate = "UPDATE animais SET quantidade = quantidade - ? WHERE id = ?";
                     try {
                         PreparedStatement pstmt = conexao.obterConexao().prepareStatement(sqlUpdate);
-                        pstmt.setInt(1, venda.getQuantidade());
-                        pstmt.setInt(2, venda.getId_animal());
+                        pstmt.setInt(1, fale.getQuantidade());
+                        pstmt.setInt(2, fale.getId_animal());
 
                         int resultado2 = pstmt.executeUpdate();
                         
@@ -72,7 +66,7 @@ public class VendasAnimaisDao {
                 }
 
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Ocorreu um erro ao finalizar o venda.");
+                JOptionPane.showMessageDialog(null, "Ocorreu um erro ao finalizar o falecimento.");
                 e.printStackTrace();
             }
         } else {
@@ -82,7 +76,7 @@ public class VendasAnimaisDao {
     }
 
 
-    public boolean verificarQuantidadeMenorZero(int id_animal, int quantidadeVenda) {
+    public boolean verificarQuantidadeMenorZero(int id_animal, int quantidadeFalecimento) {
         String sql = "SELECT quantidade FROM animais WHERE id = ?";
         try {
             PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
@@ -90,7 +84,7 @@ public class VendasAnimaisDao {
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-                int quantidade = rs.getInt("quantidade") - quantidadeVenda;
+                int quantidade = rs.getInt("quantidade") - quantidadeFalecimento;
                 return quantidade >= 0;
             } else {
                 return true;

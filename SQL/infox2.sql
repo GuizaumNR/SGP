@@ -44,8 +44,8 @@ CREATE TABLE compras_animais (
     FOREIGN KEY (id_animal) REFERENCES animais(id)
 );
 
-ALTER TABLE compras_animais 
-    CHANGE pagador pagador VARCHAR(100) NOT NULL;
+ALTER TABLE falecimentos 
+    CHANGE local_morte  local_falecimento VARCHAR(100);
 
 CREATE TABLE vendas_animais (
     id_venda INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -75,13 +75,13 @@ CREATE TABLE nascimentos (
     FOREIGN KEY (id_animal) REFERENCES animais (id)
 );
 
-CREATE TABLE mortes (
+CREATE TABLE falecimentos (
 	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	data_morte TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
 	id_animal INT NOT NULL,
     quantidade INT NOT NULL,
     observacao VARCHAR(200),
-    local_morte VARCHAR(100) NOT NULL,
+    local_falecimento VARCHAR(100),
     operador VARCHAR(100) NOT NULL,
     FOREIGN KEY (id_animal) REFERENCES animais (id)
 );
@@ -157,6 +157,8 @@ describe usuarios;
 describe animais;
 describe compras_animais;
 describe vendas_animais;
+describe nascimentos;
+describe falecimentos;
 
 ALTER TABLE vendas_animais
 CHANGE COLUMN local_compra  local_venda VARCHAR(100);

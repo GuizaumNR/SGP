@@ -1,0 +1,378 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
+ */
+package com.gnr.sgp.view.formulario;
+
+import com.gnr.sgp.modelo.conexao.Conexao;
+import com.gnr.sgp.modelo.conexao.ConexaoMysql;
+import com.gnr.sgp.modelo.dao.FalecimentosDao;
+import com.gnr.sgp.modelo.dao.NascimentosDao;
+import com.gnr.sgp.modelo.dominio.Falecimentos;
+import com.gnr.sgp.modelo.dominio.Nascimentos;
+import com.gnr.sgp.view.modelo.ValidadorNumerico;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
+
+/**
+ *
+ * @author Guilherme
+ */
+public class TelaFalecimento extends javax.swing.JInternalFrame {
+
+    /**
+     * Creates new form TelaCompra
+     */
+    private final Conexao conexao;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    
+    ValidadorNumerico validaNumeros = new ValidadorNumerico();
+
+    String operador;
+    
+    public TelaFalecimento() {
+       
+         
+        this.conexao = new ConexaoMysql();
+        initComponents();
+//        componentMoved(e);
+        
+
+        setLocation(-5, -5);
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                // Define a posição do componente para (0, 0)
+                setLocation(-5, -5);
+            }
+        });
+
+    }
+
+    public void adicionar() {
+        if ((jTextFieldFaleAnimal.getText().isEmpty() || jTextFieldFaleQuantidade.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
+        } else {
+            Falecimentos falecimento = new Falecimentos(01, Integer.parseInt(jTextFieldFaleAnimal.getText()), Integer.parseInt(jTextFieldFaleQuantidade.getText()), jTextFieldFaleObservacao.getText(), jTextFieldFaleLocal.getText(), operador);
+            FalecimentosDao faleDao = new FalecimentosDao();
+            faleDao.Adicionar(falecimento);
+
+            limpaCampos();
+        }
+    }
+
+    public void setOperador(String operador) {
+        this.operador = operador;
+    }
+
+    public void limpaCampos() {
+        jTextFieldFaleAnimal.setText(null);
+        jTextFieldFaleObservacao.setText(null);
+        jTextFieldFaleLocal.setText(null);
+        jTextFieldFaleQuantidade.setText(null);
+        ((DefaultTableModel) jTableFale.getModel()).setRowCount(0);
+    }
+
+    public void pesquisarAnimalId() {
+        String sql = String.format("SELECT * FROM animais WHERE id like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextFaleBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableFale.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void pesquisarAnimalDescricao() {
+        String sql = String.format("SELECT * FROM animais WHERE descricao like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextFaleBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableFale.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisarAnimalIdade() {
+        String sql = String.format("SELECT * FROM animais WHERE idade like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextFaleBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableFale.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void pesquisarAnimalSexo() {
+        String sql = String.format("SELECT * FROM animais WHERE sexo like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextFaleBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableFale.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void setarCampo() {
+        int setar = jTableFale.getSelectedRow();
+        String valor = jTableFale.getModel().getValueAt(setar, 0).toString();
+        if(valor != null){
+        jTextFieldFaleAnimal.setText(valor);
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableFale = new javax.swing.JTable();
+        jTextFieldFaleAnimal = new javax.swing.JTextField();
+        jTextFieldFaleObservacao = new javax.swing.JTextField();
+        jTextFieldFaleLocal = new javax.swing.JTextField();
+        jLabelFaleQuantidade = new javax.swing.JLabel();
+        jTextFieldFaleQuantidade = new javax.swing.JTextField();
+        jLabelFaleAnimal = new javax.swing.JLabel();
+        jLabelFaleObservacao = new javax.swing.JLabel();
+        jLabelFaleLocal = new javax.swing.JLabel();
+        jTextFaleBusca = new javax.swing.JTextField();
+        jLabelFaleBusca = new javax.swing.JLabel();
+        jLabelFaleCampos = new javax.swing.JLabel();
+        jButtonFaleFinalizar = new javax.swing.JButton();
+        jComboFalePesquisa = new javax.swing.JComboBox<>();
+
+        setBackground(new java.awt.Color(227, 234, 227));
+        setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        setTitle("Falecimento");
+        setMinimumSize(new java.awt.Dimension(680, 480));
+        setPreferredSize(new java.awt.Dimension(730, 545));
+
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(75, 80));
+
+        jTableFale = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        jTableFale.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTableFale.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Id", "Descrição", "Quant", "Idade", "Sexo"
+            }
+        ));
+        jTableFale.setFocusable(false);
+        jTableFale.setMinimumSize(new java.awt.Dimension(680, 480));
+        jTableFale.setPreferredSize(new java.awt.Dimension(820, 420));
+        jTableFale.getTableHeader().setReorderingAllowed(false);
+        jTableFale.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableFaleMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableFale);
+
+        jTextFieldFaleAnimal.setEditable(false);
+
+        jLabelFaleQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelFaleQuantidade.setText("* Quantidade:");
+
+        jTextFieldFaleQuantidade.setDocument(new ValidadorNumerico());
+
+        jLabelFaleAnimal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelFaleAnimal.setText("* ID Animal:");
+
+        jLabelFaleObservacao.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelFaleObservacao.setText("Observação");
+
+        jLabelFaleLocal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelFaleLocal.setText("Local:");
+
+        jTextFaleBusca.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextFaleBusca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFaleBuscaActionPerformed(evt);
+            }
+        });
+        jTextFaleBusca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFaleBuscaKeyReleased(evt);
+            }
+        });
+
+        jLabelFaleBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
+        jLabelFaleBusca.setText(" ");
+
+        jLabelFaleCampos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabelFaleCampos.setText("* Campos obrigatórios");
+
+        jButtonFaleFinalizar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButtonFaleFinalizar.setText("Finalizar");
+        jButtonFaleFinalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFaleFinalizarActionPerformed(evt);
+            }
+        });
+
+        jComboFalePesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "descricao", "idade", "sexo" }));
+        jComboFalePesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboFalePesquisaActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jComboFalePesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFaleBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelFaleBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                        .addComponent(jLabelFaleCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabelFaleQuantidade)
+                                    .addComponent(jLabelFaleAnimal))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextFieldFaleAnimal, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldFaleQuantidade)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabelFaleObservacao)
+                                    .addComponent(jLabelFaleLocal))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldFaleObservacao, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldFaleLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonFaleFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelFaleCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextFaleBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboFalePesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabelFaleBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelFaleAnimal)
+                    .addComponent(jTextFieldFaleAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldFaleQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelFaleQuantidade))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelFaleObservacao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldFaleObservacao, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelFaleLocal)
+                    .addComponent(jTextFieldFaleLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(78, 78, 78)
+                .addComponent(jButtonFaleFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jTableFaleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFaleMouseClicked
+        setarCampo();
+    }//GEN-LAST:event_jTableFaleMouseClicked
+
+    private void jTextFaleBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFaleBuscaKeyReleased
+        if (jComboFalePesquisa.getSelectedItem().toString() == "id") {
+            pesquisarAnimalId();
+        } else if (jComboFalePesquisa.getSelectedItem().toString() == "descricao") {
+            pesquisarAnimalDescricao();
+        } else if (jComboFalePesquisa.getSelectedItem().toString() == "idade") {
+            pesquisarAnimalIdade();
+        } else if (jComboFalePesquisa.getSelectedItem().toString() == "sexo") {
+            pesquisarAnimalSexo();
+        }
+    }//GEN-LAST:event_jTextFaleBuscaKeyReleased
+
+    private void jButtonFaleFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFaleFinalizarActionPerformed
+        adicionar();
+    }//GEN-LAST:event_jButtonFaleFinalizarActionPerformed
+
+    private void jComboFalePesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboFalePesquisaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboFalePesquisaActionPerformed
+
+    private void jTextFaleBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFaleBuscaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFaleBuscaActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonFaleFinalizar;
+    private javax.swing.JComboBox<String> jComboFalePesquisa;
+    private javax.swing.JLabel jLabelFaleAnimal;
+    private javax.swing.JLabel jLabelFaleBusca;
+    private javax.swing.JLabel jLabelFaleCampos;
+    private javax.swing.JLabel jLabelFaleLocal;
+    private javax.swing.JLabel jLabelFaleObservacao;
+    private javax.swing.JLabel jLabelFaleQuantidade;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTableFale;
+    public javax.swing.JTextField jTextFaleBusca;
+    private javax.swing.JTextField jTextFieldFaleAnimal;
+    private javax.swing.JTextField jTextFieldFaleLocal;
+    private javax.swing.JTextField jTextFieldFaleObservacao;
+    private javax.swing.JTextField jTextFieldFaleQuantidade;
+    // End of variables declaration//GEN-END:variables
+}

@@ -10,7 +10,7 @@
         <EtchetBorder/>
       </Border>
     </Property>
-    <Property name="title" type="java.lang.String" value="Nascimento"/>
+    <Property name="title" type="java.lang.String" value="Falecimento"/>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[680, 480]"/>
     </Property>
@@ -41,37 +41,37 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jScrollPane1" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="jComboNascPesquisa" min="-2" max="-2" attributes="0"/>
+                      <Component id="jComboFalePesquisa" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTextNascBusca" min="-2" pref="350" max="-2" attributes="0"/>
+                      <Component id="jTextFaleBusca" min="-2" pref="350" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabelNascBusca" min="-2" pref="32" max="-2" attributes="0"/>
+                      <Component id="jLabelFaleBusca" min="-2" pref="32" max="-2" attributes="0"/>
                       <EmptySpace pref="75" max="32767" attributes="0"/>
-                      <Component id="jLabelNascCampos" min="-2" pref="161" max="-2" attributes="0"/>
+                      <Component id="jLabelFaleCampos" min="-2" pref="161" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="15" pref="15" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jLabelNascQuantidade" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabelNascAnimal" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelFaleQuantidade" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelFaleAnimal" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jTextFieldNascAnimal" pref="124" max="32767" attributes="0"/>
-                                  <Component id="jTextFieldNascQuantidade" max="32767" attributes="0"/>
+                                  <Component id="jTextFieldFaleAnimal" pref="124" max="32767" attributes="0"/>
+                                  <Component id="jTextFieldFaleQuantidade" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jLabelNascObservacao" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabelNascLocal" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelFaleObservacao" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelFaleLocal" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jTextFieldNascObservacao" min="-2" pref="124" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldNascLocal" min="-2" pref="124" max="-2" attributes="0"/>
+                                  <Component id="jTextFieldFaleObservacao" min="-2" pref="124" max="-2" attributes="0"/>
+                                  <Component id="jTextFieldFaleLocal" min="-2" pref="124" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -79,7 +79,7 @@
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="jButtonNascFinalizar" min="-2" pref="170" max="-2" attributes="0"/>
+                      <Component id="jButtonFaleFinalizar" min="-2" pref="170" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -90,37 +90,37 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabelNascCampos" alignment="0" min="-2" pref="39" max="-2" attributes="0"/>
+                  <Component id="jLabelFaleCampos" alignment="0" min="-2" pref="39" max="-2" attributes="0"/>
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                      <Component id="jTextNascBusca" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                      <Component id="jComboNascPesquisa" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
-                      <Component id="jLabelNascBusca" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
+                      <Component id="jTextFaleBusca" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                      <Component id="jComboFalePesquisa" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                      <Component id="jLabelFaleBusca" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="165" max="-2" attributes="0"/>
               <EmptySpace pref="23" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabelNascAnimal" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTextFieldNascAnimal" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="jLabelFaleAnimal" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jTextFieldFaleAnimal" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jTextFieldNascQuantidade" alignment="0" min="-2" pref="32" max="-2" attributes="0"/>
-                  <Component id="jLabelNascQuantidade" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jTextFieldFaleQuantidade" alignment="0" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="jLabelFaleQuantidade" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabelNascObservacao" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                  <Component id="jTextFieldNascObservacao" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="jLabelFaleObservacao" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                  <Component id="jTextFieldFaleObservacao" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabelNascLocal" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTextFieldNascLocal" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="jLabelFaleLocal" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jTextFieldFaleLocal" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
-              <Component id="jButtonNascFinalizar" min="-2" pref="44" max="-2" attributes="0"/>
+              <Component id="jButtonFaleFinalizar" min="-2" pref="44" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -139,7 +139,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="jTableNasc">
+        <Component class="javax.swing.JTable" name="jTableFale">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="0"/>
@@ -165,24 +165,24 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTableNascMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTableFaleMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTableNasc = new javax.swing.JTable(){&#xa;    public boolean isCellEditable(int rowIndex, int colIndex){&#xa;        return false;&#xa;}&#xa;};"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTableFale = new javax.swing.JTable(){&#xa;    public boolean isCellEditable(int rowIndex, int colIndex){&#xa;        return false;&#xa;}&#xa;};"/>
           </AuxValues>
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JTextField" name="jTextFieldNascAnimal">
+    <Component class="javax.swing.JTextField" name="jTextFieldFaleAnimal">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldNascObservacao">
+    <Component class="javax.swing.JTextField" name="jTextFieldFaleObservacao">
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldNascLocal">
+    <Component class="javax.swing.JTextField" name="jTextFieldFaleLocal">
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabelNascQuantidade">
+    <Component class="javax.swing.JLabel" name="jLabelFaleQuantidade">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="18" style="0"/>
@@ -190,12 +190,12 @@
         <Property name="text" type="java.lang.String" value="* Quantidade:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldNascQuantidade">
+    <Component class="javax.swing.JTextField" name="jTextFieldFaleQuantidade">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextFieldNascQuantidade.setDocument(new ValidadorNumerico());"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextFieldFaleQuantidade.setDocument(new ValidadorNumerico());"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabelNascAnimal">
+    <Component class="javax.swing.JLabel" name="jLabelFaleAnimal">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="18" style="0"/>
@@ -203,7 +203,7 @@
         <Property name="text" type="java.lang.String" value="* ID Animal:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabelNascObservacao">
+    <Component class="javax.swing.JLabel" name="jLabelFaleObservacao">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="18" style="0"/>
@@ -211,7 +211,7 @@
         <Property name="text" type="java.lang.String" value="Observa&#xe7;&#xe3;o"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabelNascLocal">
+    <Component class="javax.swing.JLabel" name="jLabelFaleLocal">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="18" style="0"/>
@@ -219,21 +219,21 @@
         <Property name="text" type="java.lang.String" value="Local:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextNascBusca">
+    <Component class="javax.swing.JTextField" name="jTextFaleBusca">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextNascBuscaActionPerformed"/>
-        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextNascBuscaKeyReleased"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFaleBuscaActionPerformed"/>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFaleBuscaKeyReleased"/>
       </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabelNascBusca">
+    <Component class="javax.swing.JLabel" name="jLabelFaleBusca">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="new javax.swing.ImageIcon(System.getProperty(&quot;user.dir&quot;) + &quot;\\src\\main\\java\\resources\\busca.png&quot;)" type="code"/>
@@ -241,7 +241,7 @@
         <Property name="text" type="java.lang.String" value=" "/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabelNascCampos">
+    <Component class="javax.swing.JLabel" name="jLabelFaleCampos">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="1"/>
@@ -249,7 +249,7 @@
         <Property name="text" type="java.lang.String" value="* Campos obrigat&#xf3;rios"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonNascFinalizar">
+    <Component class="javax.swing.JButton" name="jButtonFaleFinalizar">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="18" style="0"/>
@@ -257,10 +257,10 @@
         <Property name="text" type="java.lang.String" value="Finalizar"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonNascFinalizarActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonFaleFinalizarActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JComboBox" name="jComboNascPesquisa">
+    <Component class="javax.swing.JComboBox" name="jComboFalePesquisa">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="4">
@@ -272,7 +272,7 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboNascPesquisaActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboFalePesquisaActionPerformed"/>
       </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>

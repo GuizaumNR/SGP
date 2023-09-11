@@ -182,13 +182,16 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuMovEstoqueNascActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuMovEstoqueMorte">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuMovEstoqueFale">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Ctrl+M"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Morte"/>
+                <Property name="text" type="java.lang.String" value="Falecimento"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuMovEstoqueFaleActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
