@@ -6,13 +6,9 @@ package com.gnr.sgp.view.formulario;
 
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
-import com.gnr.sgp.modelo.dao.FornecedoresDao;
 import com.gnr.sgp.modelo.dao.VendasAnimaisDao;
-import com.gnr.sgp.modelo.dominio.Fornecedores;
 import com.gnr.sgp.modelo.dominio.VendasAnimais;
 import com.gnr.sgp.view.modelo.ValidadorNumerico;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.sql.PreparedStatement;

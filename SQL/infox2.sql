@@ -109,6 +109,7 @@ select * from usuarios;
 select * from animais;
 select * from fornecedores;
 select * from vendas_animais;
+select * from falecimentos;
 
 SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, valor_total, criador, pagador, pagamento, local_compra, operador 
                              FROM compras_animais v 
@@ -123,6 +124,7 @@ SELECT
     a.descricao as animal_descricao,
     v.quantidade,
     media_kg,
+     CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado,
     CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado,
     vendedor,
     comprador,
@@ -133,6 +135,24 @@ FROM vendas_animais v
 JOIN animais a ON v.id_animal = a.id
 WHERE data_venda BETWEEN '2023-07-20' AND '2023-08-31'
 ORDER BY data_venda;
+
+SELECT 
+    id_compra, 
+    DATE_FORMAT(data_compra, '%d/%m/%Y %H:%i:%s') as data_formatada, 
+    a.descricao as animal_descricao,
+    c.quantidade,
+    media_kg,
+	CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado,
+    CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado,
+    criador,
+    pagador,
+    pagamento,
+    local_compra,
+    operador
+FROM compras_animais c
+JOIN animais a ON c.id_animal = a.id
+WHERE data_compra BETWEEN '2023-07-20' AND '2023-08-31'
+ORDER BY data_compra;
 
 
 -- lsita de animais mais vendidos

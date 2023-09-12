@@ -7,7 +7,6 @@ package com.gnr.sgp.modelo.dao;
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dominio.Falecimentos;
-import com.gnr.sgp.modelo.dominio.VendasAnimais;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
