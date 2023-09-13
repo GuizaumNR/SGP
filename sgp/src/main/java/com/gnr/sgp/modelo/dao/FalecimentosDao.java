@@ -53,23 +53,23 @@ public class FalecimentosDao {
                   if (resultado2 > 0) {
                             JOptionPane.showMessageDialog(null, "Quantidade de animais atualizada com sucesso!");
                         } else {
-                            JOptionPane.showMessageDialog(null, "Não foi possível atualizar a quantidade de animais.");
+                            JOptionPane.showMessageDialog(null, "Não foi possível atualizar a quantidade de animais.", "Erro", JOptionPane.ERROR_MESSAGE);
                         }
                                 
                     } catch (SQLException e) {
-                        JOptionPane.showMessageDialog(null, "Erro ao atualizar a quantidade de animais: " + e.getMessage());
+                        JOptionPane.showMessageDialog(null, "Erro ao atualizar a quantidade de animais: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
 
                 } else {
-                    JOptionPane.showMessageDialog(null, "Não foi possível finalizar o falecimento.");
+                    JOptionPane.showMessageDialog(null, "Não foi possível finalizar o falecimento.", "Erro", JOptionPane.ERROR_MESSAGE);
                 }
 
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Ocorreu um erro ao finalizar o falecimento.");
+                JOptionPane.showMessageDialog(null, "Ocorreu um erro ao finalizar o falecimento.", "Erro", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Quantidade de animais insuficiente para esta operação.");
+            JOptionPane.showMessageDialog(null, "Quantidade de animais insuficiente para esta operação.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
         return null;
     }

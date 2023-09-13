@@ -32,7 +32,7 @@ public class ComprasAnimaisDao {
             Animais animalTemp = buscarAnimaisId(compra.getId_animal());
 
             if (animalTemp == null) {
-                JOptionPane.showMessageDialog(null, "Erro: Este ID de animal não existe no banco de dados.");
+                JOptionPane.showMessageDialog(null, "Erro: Este ID de animal não existe no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
                 PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
                 pst.setInt(1, compra.getId_animal());
@@ -62,18 +62,18 @@ public class ComprasAnimaisDao {
                         if (resultado2 > 0) {
                              JOptionPane.showMessageDialog(null, "Quantidade de animais atualizada com sucesso!");
                         } else {
-                            JOptionPane.showMessageDialog(null, "Não foi possível atualizar a quantidade de animais.");
+                            JOptionPane.showMessageDialog(null, "Não foi possível atualizar a quantidade de animais.", "Erro", JOptionPane.ERROR_MESSAGE);
                         }
                     } catch (SQLException e) {
-                         JOptionPane.showMessageDialog(null, "Erro ao atualizar a quantidade de animais: " + e.getMessage());
+                         JOptionPane.showMessageDialog(null, "Erro ao atualizar a quantidade de animais: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
 //                TelaFornecedor.limpaCampos(null);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Não foi possível finalizar a compra.");
+                    JOptionPane.showMessageDialog(null, "Não foi possível finalizar a compra.", "Erro", JOptionPane.ERROR_MESSAGE);
                 }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao finalizar a compra.");
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao finalizar a compra.", "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
 

@@ -24,9 +24,6 @@ CREATE TABLE animais (
     sexo VARCHAR(100) NOT NULL
 );
 
-ALTER TABLE animais 
-    CHANGE sexo sexo VARCHAR(100) NOT NULL;
-
 CREATE TABLE compras_animais (
     id_compra INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     data_compra TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
@@ -41,11 +38,8 @@ CREATE TABLE compras_animais (
     local_compra VARCHAR(100),
     operador VARCHAR(100) NOT NULL,
     
-    FOREIGN KEY (id_animal) REFERENCES animais(id)
+    FOREIGN KEY (id_animal) REFERENCES animais(id) ON DELETE CASCADE
 );
-
-ALTER TABLE falecimentos 
-    CHANGE local_morte  local_falecimento VARCHAR(100);
 
 CREATE TABLE vendas_animais (
     id_venda INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -61,7 +55,7 @@ CREATE TABLE vendas_animais (
     local_venda VARCHAR(100) NOT NULL,
     operador VARCHAR(100) NOT NULL,
     
-    FOREIGN KEY (id_animal) REFERENCES animais(id)
+    FOREIGN KEY (id_animal) REFERENCES animais(id) ON DELETE CASCADE
 );
 
 CREATE TABLE nascimentos (
@@ -72,7 +66,7 @@ CREATE TABLE nascimentos (
     observacao VARCHAR(200),
     local_nasc VARCHAR(100) NOT NULL,
     operador VARCHAR(100) NOT NULL,
-    FOREIGN KEY (id_animal) REFERENCES animais (id)
+    FOREIGN KEY (id_animal) REFERENCES animais (id) ON DELETE CASCADE
 );
 
 CREATE TABLE falecimentos (
@@ -83,7 +77,7 @@ CREATE TABLE falecimentos (
     observacao VARCHAR(200),
     local_falecimento VARCHAR(100),
     operador VARCHAR(100) NOT NULL,
-    FOREIGN KEY (id_animal) REFERENCES animais (id)
+    FOREIGN KEY (id_animal) REFERENCES animais (id) ON DELETE CASCADE
 );
 
 CREATE TABLE lucros (
@@ -182,6 +176,8 @@ describe falecimentos;
 
 ALTER TABLE vendas_animais
 CHANGE COLUMN local_compra  local_venda VARCHAR(100);
+
+
 -- }
 
 

@@ -36,7 +36,7 @@ public class UsuariosDao {
         Usuarios usuarioTemp = buscarUsuariosLogin(usuario.getLogin());
 
         if (usuarioTemp != null) {
-            JOptionPane.showMessageDialog(null, "Erro: Este login já existe no banco de dados.");
+            JOptionPane.showMessageDialog(null, "Erro: Este login já existe no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
         }else {
 
         try {
@@ -49,11 +49,11 @@ public class UsuariosDao {
             if (resultado > 0) {
                 JOptionPane.showMessageDialog(null, "Usuário adicionado com sucesso!");
             } else {
-                JOptionPane.showMessageDialog(null, "Não foi possível adicionar o usuário.");
+                JOptionPane.showMessageDialog(null, "Não foi possível adicionar o usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar o usuário.");
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar o usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         }
@@ -77,7 +77,7 @@ public class UsuariosDao {
                 JOptionPane.showMessageDialog(null, "Dados do usuário alterados com sucesso!");
 
             } else {
-                JOptionPane.showMessageDialog(null, "Não foi possível alterar os dados do usuário.");
+                JOptionPane.showMessageDialog(null, "Não foi possível alterar os dados do usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -93,7 +93,7 @@ public class UsuariosDao {
          Usuarios usuarioTemp = buscarUsuariosLogin(usuario.getLogin());
 
         if (usuarioTemp == null) {
-            JOptionPane.showMessageDialog(null, "Erro: Este login não existe no banco de dados.");
+            JOptionPane.showMessageDialog(null, "Erro: Este login não existe no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
             try {
@@ -105,7 +105,7 @@ public class UsuariosDao {
                 JOptionPane.showMessageDialog(null, "Dados do usuário deletados com sucesso!");;
 
             } else {
-                JOptionPane.showMessageDialog(null, "Não foi possível deletar os dados do usuário.");
+                JOptionPane.showMessageDialog(null, "Não foi possível deletar os dados do usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
             } catch (Exception e) {
                 e.printStackTrace();

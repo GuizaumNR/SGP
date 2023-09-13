@@ -50,19 +50,19 @@ public class NascimentosDao {
                   if (resultado2 > 0) {
                             JOptionPane.showMessageDialog(null, "Quantidade de animais atualizada com sucesso!");
                         } else {
-                            JOptionPane.showMessageDialog(null, "Não foi possível atualizar a quantidade de animais.");
+                            JOptionPane.showMessageDialog(null, "Não foi possível atualizar a quantidade de animais.", "Erro", JOptionPane.ERROR_MESSAGE);
                         }
                                 
                     } catch (SQLException e) {
-                        JOptionPane.showMessageDialog(null, "Erro ao atualizar a quantidade de animais: " + e.getMessage());
+                        JOptionPane.showMessageDialog(null, "Erro ao atualizar a quantidade de animais: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
 
                 } else {
-                    JOptionPane.showMessageDialog(null, "Não foi possível registrar o nascimento.");
+                    JOptionPane.showMessageDialog(null, "Não foi possível registrar o nascimento.", "Erro", JOptionPane.ERROR_MESSAGE);
                 }
 
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Ocorreu um erro ao registrar o nascimento.");
+                JOptionPane.showMessageDialog(null, "Ocorreu um erro ao registrar o nascimento.", "Erro", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
       

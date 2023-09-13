@@ -33,7 +33,7 @@ public class FornecedoresDao {
 
         Fornecedores fornecedorTemp = buscarFornedoresNome(fornecedor.getNome());
         if (fornecedorTemp != null) {
-            JOptionPane.showMessageDialog(null, "Erro: Este nome já existe no banco de dados.");
+            JOptionPane.showMessageDialog(null, "Erro: Este nome já existe no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
         }else{
         
         try {
@@ -49,11 +49,11 @@ public class FornecedoresDao {
                 JOptionPane.showMessageDialog(null, "Fornecedor adicionado com sucesso!");
 //                TelaFornecedor.limpaCampos(null);
             } else {
-                JOptionPane.showMessageDialog(null, "Não foi possível adicionar o fornecedor.");
+                JOptionPane.showMessageDialog(null, "Não foi possível adicionar o fornecedor.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar o fornecedor.");
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar o fornecedor.", "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         }
@@ -78,7 +78,7 @@ public class FornecedoresDao {
                 JOptionPane.showMessageDialog(null, "Dados do fornecedor deletados com sucesso!");
 
             } else {
-                JOptionPane.showMessageDialog(null, "Não foi possível deletar os dados do fornecedor.");
+                JOptionPane.showMessageDialog(null, "Não foi possível deletar os dados do fornecedor.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -102,7 +102,7 @@ public class FornecedoresDao {
                 JOptionPane.showMessageDialog(null, "Dados do fornecedor alterados com sucesso!");
 
             } else {
-                JOptionPane.showMessageDialog(null, "Não foi possível alterar os dados do fornecedor.");
+                JOptionPane.showMessageDialog(null, "Não foi possível alterar os dados do fornecedor.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {
             e.printStackTrace();
