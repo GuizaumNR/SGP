@@ -84,6 +84,11 @@ public class AnimaisDao {
         
         PreparedStatement pstFalecimentosAnimais = conexao.obterConexao().prepareStatement(deleteFalecimentosAnimaisSQL);
         pstFalecimentosAnimais.setInt(1, (int) animalTemp.getId());
+        
+        pstComprasAnimais.executeUpdate();
+        pstVendasAnimais.executeUpdate();
+        pstNascimentosAnimais.executeUpdate();
+        pstFalecimentosAnimais.executeUpdate();
 
         // Execute as exclusões nas tabelas relacionadas
         
