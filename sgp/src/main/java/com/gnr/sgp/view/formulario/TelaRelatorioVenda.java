@@ -149,7 +149,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
                 if (jRadioButtonRelVendaDesc.isSelected()) {
                     if (pagamento != "*") {
-                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, "
+                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
                                 + "vendedor, comprador, pagamento, local_venda, operador "
@@ -160,7 +160,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                                 + "ORDER BY " + ordem + " DESC";
 
                     } else {
-                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, "
+                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
                                 + "vendedor, comprador, pagamento, local_venda, operador "
@@ -172,7 +172,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
                 } else {
                     if (pagamento != "*") {
-                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, "
+                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
                                 + "vendedor, comprador, pagamento, local_venda, operador "
@@ -182,7 +182,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                                 + "AND pagamento = '" + pagamento + "' "
                                 + "ORDER BY " + ordem;
                     } else {
-                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, "
+                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
                                 + "vendedor, comprador, pagamento, local_venda, operador "

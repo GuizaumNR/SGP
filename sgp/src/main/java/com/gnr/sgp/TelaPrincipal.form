@@ -185,7 +185,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuMovEstoqueFale">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+M"/>
+                  <KeyStroke key="Ctrl+F"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Falecimento"/>
               </Properties>
@@ -228,12 +228,23 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuRelatorioManejo">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+M"/>
+                  <KeyStroke key="Alt+N"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Relat&#xf3;rio de Manejos"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuRelatorioManejoActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
+              <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Alt+N"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Relat&#xf3;rio de Nasc"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem2ActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>

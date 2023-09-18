@@ -157,7 +157,8 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         jTextFieldCompMediaKg.setText(null);
         jTextFieldCompPrecoKg.setText(null);
         jTextFieldCompCriador.setText(null);
-        jComboCompPagador.setSelectedItem("alemao");
+        jComboCompPagamento.setSelectedIndex(0);
+        jComboCompPagador.setSelectedIndex(0);
         jTextFieldCompLocal.setText(null);
         jTextFieldCompTotal.setText(null);
         ((DefaultTableModel) jTableComp.getModel()).setRowCount(0);

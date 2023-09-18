@@ -149,7 +149,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
 
                 if (jRadioButtonRelCompraDesc.isSelected()) {
                     if (!pagamento.equals("*")) {
-                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, c.quantidade, media_kg, "
+                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, c.quantidade, media_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
                                 + "criador, pagador, pagamento, local_compra, operador "
@@ -159,7 +159,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                                 + "AND pagamento = '" + pagamento + "' "
                                 + "ORDER BY " + ordem + " DESC";
                     } else {
-                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, c.quantidade, media_kg, "
+                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, c.quantidade, media_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
                                 + "criador, pagador, pagamento, local_compra, operador "
@@ -171,7 +171,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
 
                 } else {
                     if (!pagamento.equals("*")) {
-                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, c.quantidade, media_kg, "
+                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, c.quantidade, media_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
                                 + "criador, pagador, pagamento, local_compra, operador "
@@ -181,7 +181,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                                 + "AND pagamento = '" + pagamento + "' "
                                 + "ORDER BY " + ordem;
                     } else {
-                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y %H:%i:%s') as data_formatada, a.descricao as animal_descricao, c.quantidade, media_kg, "
+                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, c.quantidade, media_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
                                 + "criador, pagador, pagamento, local_compra, operador "
@@ -273,7 +273,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                     JOptionPane.showMessageDialog(null, "Erro ao criar o PDF. " + e);
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Data inválida. 1");
+                JOptionPane.showMessageDialog(null, "Data inválida.");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Data inválida.");
