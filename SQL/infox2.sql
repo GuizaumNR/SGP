@@ -131,16 +131,16 @@ WHERE data_venda BETWEEN '2023-07-20' AND '2023-08-31'
 ORDER BY data_venda;
 
 SELECT 
-	n.id,
-	DATE_FORMAT(data_nascimento, '%d/%m/%Y') as data_formatada, 
+	f.id,
+	DATE_FORMAT(data_morte, '%d/%m/%Y') as data_formatada, 
 	a.descricao as animal_descricao,
-    n.quantidade,
+    f.quantidade,
     observacao,
-    local_nasc,
+    local_fale,
     operador
-    FROM nascimentos n
-JOIN animais a ON n.id_animal = a.id
-WHERE n.data_nascimento BETWEEN '2023-07-20' AND '2023-10-31';
+    FROM falecimentos f
+JOIN animais a ON f.id_animal = a.id
+WHERE n.data_morte BETWEEN '2023-07-20' AND '2023-10-31';
 
 SELECT 
     id_compra, 

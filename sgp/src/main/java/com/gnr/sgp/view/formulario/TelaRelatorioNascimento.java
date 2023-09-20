@@ -178,7 +178,7 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
             try {
                 String username = System.getProperty("user.name");
                 String data = new SimpleDateFormat("dd_MM_yyyy").format(new Date());
-                String path = "C:\\Users\\" + username + "\\Documents\\Relatorio_Nasc_" + data + ".pdf";
+                String path = "C:\\Users\\" + username + "\\Documents\\Relatorio_Nascimentos_" + data + ".pdf";
 
                 PdfWriter pdfWriter = new PdfWriter(path);
                 PdfDocument documentoPDF = new PdfDocument(pdfWriter);
