@@ -62,8 +62,7 @@ public class LoginController implements ActionListener {
         if(this.login.getTxtLoginUsuario().getText() == "admin"){
             System.out.println("admin");
         }
-        
-        if (usuarioTemp != null) {
+        if (usuarioTemp != null ) {
             login.dispose();
             
             TelaPrincipal tela = new TelaPrincipal();

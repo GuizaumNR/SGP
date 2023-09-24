@@ -5,15 +5,11 @@ import java.sql.SQLException;
 import javax.swing.ImageIcon;
 
 public class main {
-    
-    
-    
+
     public static void main(String[] args) throws SQLException {
-         Login login = new Login();
-         login.setVisible(true);
-         
-         
-        
-}
-    
+        Login login = new Login();
+        login.setVisible(true);
+
+    }
+
 }

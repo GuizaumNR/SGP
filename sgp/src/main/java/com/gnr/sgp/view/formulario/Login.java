@@ -5,7 +5,13 @@
 package com.gnr.sgp.view.formulario;
 
 import com.gnr.sgp.controller.LoginController;
+import com.gnr.sgp.modelo.conexao.Conexao;
+import com.gnr.sgp.modelo.conexao.ConexaoMysql;
+import com.gnr.sgp.modelo.dao.UsuariosDao;
+import com.gnr.sgp.modelo.dominio.Usuarios;
 import com.gnr.sgp.view.modelo.ValidadorQuantCaract;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
@@ -19,28 +25,41 @@ public class Login extends javax.swing.JFrame {
 
     private final LoginController loginController;
     private final String copy = "Copyright ©2023 Guilherme Rodrigues - Todos os direitos reservados.";
-    
+
+    Conexao conexao;
+
     ValidadorQuantCaract validaQuant = new ValidadorQuantCaract(4);
+
     /**
      * Creates new form Login
      */
     public Login() {
+        this.conexao = new ConexaoMysql();
         initComponents();
         setLocationRelativeTo(null);
         requestFocus();
+        
+        Usuarios usuarioExemplo = new Usuarios(0l, "admin", "1234", "admin", "admin");
+        Usuarios usuarioTemp = buscarUsuariosLogin(usuarioExemplo.getLogin());;
+        if (usuarioTemp != null) {
+        } else {
+            UsuariosDao usuariosDao = new UsuariosDao();
+            usuariosDao.adicionar(usuarioExemplo);
+        }
+
         this.loginController = new LoginController(this);
         eventos();
         LabelLoginCopy.setText(copy);
 
         jButtonLoginLogin.setFocusable(false);
         jButtonLoginCancelar.setFocusable(false);
-        
-        if(txtLoginUsuario != null){
-        txtLoginUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                passLoginSenha.requestFocus();
-            }
-        });
+
+        if (txtLoginUsuario != null) {
+            txtLoginUsuario.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    passLoginSenha.requestFocus();
+                }
+            });
         }
         passLoginSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -49,14 +68,26 @@ public class Login extends javax.swing.JFrame {
                 // Chame a ação de login aqui, se desejar.
             }
         });
-        
+
     }
 
     private void eventos() {
         jButtonLoginLogin.addActionListener(loginController);
         jButtonLoginCancelar.addActionListener(loginController);
     }
-    
+
+    public Usuarios buscarUsuariosLogin(String login) {
+        String sql = String.format("SELECT * FROM usuarios WHERE login = '%s'", login);
+        try {
+            ResultSet result = conexao.obterConexao().prepareStatement(sql).executeQuery();
+            if (result.next()) {
+                return new Usuarios();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
