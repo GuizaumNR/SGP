@@ -303,7 +303,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_descricao")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("media_kg")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(formatarPeso(Double.parseDouble(resultPDF.getString("media_kg")))));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(14).add(resultPDF.getString("preco_kg_formatado")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(40).add(resultPDF.getString("valor_total_formatado")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("vendedor")));
@@ -316,7 +316,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                         totalQuantidade += quantidade;
 
                         String media = resultPDF.getString("media_kg");
-                        Double mediaFormatada = reverterValorFormatado(media);
+                        Double mediaFormatada = Double.parseDouble(media);
                         totalKilo += mediaFormatada;
 
                         String total = resultPDF.getString("valor_total_formatado");
