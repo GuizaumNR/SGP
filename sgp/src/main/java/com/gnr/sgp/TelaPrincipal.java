@@ -75,7 +75,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setVisible(true);
         requestFocus();
         labelVersao.setText(" Versão: " + VERSION);
-        LabelAviso.setText("Espaço para avisos do manejo.");
+        LabelAviso.setText("Espaço para avisos.");
         labelSuporte.setText("Suporte: Guilherme - (53) 99912-8134");
         menu();
         atualizarDataHora();

@@ -30,10 +30,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFormattedTextField;
@@ -93,6 +96,48 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
             return (dia >= 1 && dia <= 31) && (mes >= 1 && mes <= 12);
         } catch (NumberFormatException e) {
             return false; // Não é possível converter para números inteiros
+        }
+    }
+
+    public static String formatarPeso(double valor) {
+        // Crie um objeto DecimalFormat com o formato desejado
+        DecimalFormat df = new DecimalFormat("#,##0.00 kg");
+
+        // Formate o valor como uma string
+        String valorFormatado = df.format(valor);
+
+        return valorFormatado;
+    }
+    
+    public static String formatarValor(double valor) {
+        // Crie um objeto DecimalFormat com o formato desejado
+        DecimalFormat df = new DecimalFormat("R$ #,##0.00");
+
+        // Formate o valor como uma string
+        String valorFormatado = df.format(valor);
+
+        return valorFormatado;
+    }
+
+    public static double reverterValorFormatado(String valorFormatado) {
+        // Remova o prefixo "R$"
+        valorFormatado = valorFormatado.replace("R$", "").trim();
+
+        // Substitua o ponto pelo ponto como separador decimal
+        valorFormatado = valorFormatado.replace(".", "");
+
+        // Substitua a vírgula por ponto como separador decimal
+        valorFormatado = valorFormatado.replace(",", ".");
+
+        try {
+            // Converta a string para um tipo double
+            double valor = Double.parseDouble(valorFormatado);
+
+            return valor;
+        } catch (NumberFormatException e) {
+            // Lida com valores que não podem ser convertidos para double
+            System.out.println("Erro ao reverter o valor formatado em double: " + e.getMessage());
+            return 0.0; // ou outro valor padrão de sua escolha
         }
     }
 
@@ -248,6 +293,11 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                     PdfFont dataFont = PdfFontFactory.createFont();
                     PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
                     ResultSet resultPDF = pstPDF.executeQuery();
+
+                    int totalQuantidade = 0;
+                    double totalKilo = 0;
+                    double totalValor = 0;
+
                     while (resultPDF.next()) {
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_venda")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
@@ -261,7 +311,32 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("pagamento")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_venda")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("operador")));
+
+                        int quantidade = resultPDF.getInt("quantidade"); // Substitua o nome da coluna conforme necessário
+                        totalQuantidade += quantidade;
+
+                        String media = resultPDF.getString("media_kg");
+                        Double mediaFormatada = reverterValorFormatado(media);
+                        totalKilo += mediaFormatada;
+
+                        String total = resultPDF.getString("valor_total_formatado");
+                        double totalFormatado = reverterValorFormatado(total);
+                        totalValor += totalFormatado;
+
                     }
+
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add("Totais"));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(String.valueOf(totalQuantidade)));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(formatarPeso(totalKilo)));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(formatarValor(totalValor)));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
 
                     table.setAutoLayout();
                     document.add(table);
@@ -275,6 +350,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Data inválida.");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Data inválida.");
         }
 
@@ -427,10 +503,14 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
         try {
             criarDocumento(jFormattedRelVendInicio.getText(), jFormattedRelVendaFim.getText(), jComboRelVendaOrdem.getSelectedItem().toString(), jComboRelVendaPagamento.getSelectedItem().toString());
+
         } catch (SQLException ex) {
-            Logger.getLogger(TelaRelatorioVenda.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TelaRelatorioVenda.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (ParseException ex) {
-            Logger.getLogger(TelaRelatorioVenda.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TelaRelatorioVenda.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_jButtonRelVendaActionPerformed

@@ -6,6 +6,8 @@ package com.gnr.sgp.view.formulario;
 
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
+import static com.gnr.sgp.view.formulario.TelaRelatorioVenda.formatarValor;
+import static com.gnr.sgp.view.formulario.TelaRelatorioVenda.reverterValorFormatado;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.kernel.color.DeviceGray;
 import com.itextpdf.kernel.font.PdfFont;
@@ -30,6 +32,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -95,6 +98,49 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
             return false; // Não é possível converter para números inteiros
         }
     }
+    
+    public static String formatarPeso(double valor) {
+        // Crie um objeto DecimalFormat com o formato desejado
+        DecimalFormat df = new DecimalFormat("#,##0.00 kg");
+
+        // Formate o valor como uma string
+        String valorFormatado = df.format(valor);
+
+        return valorFormatado;
+    }
+    
+    public static String formatarValor(double valor) {
+        // Crie um objeto DecimalFormat com o formato desejado
+        DecimalFormat df = new DecimalFormat("R$ #,##0.00");
+
+        // Formate o valor como uma string
+        String valorFormatado = df.format(valor);
+
+        return valorFormatado;
+    }
+    
+    public static double reverterValorFormatado(String valorFormatado) {
+    // Remova o prefixo "R$"
+    valorFormatado = valorFormatado.replace("R$", "").trim();
+
+    // Substitua o ponto pelo ponto como separador decimal
+    valorFormatado = valorFormatado.replace(".", "");
+
+    // Substitua a vírgula por ponto como separador decimal
+    valorFormatado = valorFormatado.replace(",", ".");
+
+    try {
+        // Converta a string para um tipo double
+        double valor = Double.parseDouble(valorFormatado);
+
+        return valor;
+    } catch (NumberFormatException e) {
+        // Lida com valores que não podem ser convertidos para double
+        System.out.println("Erro ao reverter o valor formatado em double: " + e.getMessage());
+        return 0.0; // ou outro valor padrão de sua escolha
+    }
+}
+
 
     public void criarDocumento(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
 
@@ -137,9 +183,9 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
 
                     // Acesse a nova data após adicionar um mês
                     Date dataAposUmMes = calendar.getTime();
-                    
+
                     dataFim = dataAposUmMes;
-                } 
+                }
 
 // Convertendo as datas de volta para o formato do banco de dados
                 SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -248,6 +294,11 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                     PdfFont dataFont = PdfFontFactory.createFont();
                     PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
                     ResultSet resultPDF = pstPDF.executeQuery();
+
+                    int totalQuantidade = 0;
+                    double totalKilo = 0;
+                    double totalValor = 0;
+
                     while (resultPDF.next()) {
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_compra")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
@@ -261,8 +312,33 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("pagamento")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_compra")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("operador")));
+
+                        int quantidade = resultPDF.getInt("quantidade"); // Substitua o nome da coluna conforme necessário
+                        totalQuantidade += quantidade;
+                        
+                        String media = resultPDF.getString("media_kg");
+                        Double mediaFormatada = reverterValorFormatado(media);
+                        totalKilo += mediaFormatada;
+
+                        String total = resultPDF.getString("valor_total_formatado");
+                        double totalFormatado = reverterValorFormatado(total);
+                        totalValor += totalFormatado;
+
                     }
 
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add("Totais"));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(String.valueOf(totalQuantidade)));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(formatarPeso(totalKilo)));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(formatarValor(totalValor)));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    
                     table.setAutoLayout();
                     document.add(table);
                     document.close();
@@ -276,6 +352,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Data inválida.");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Data inválida.");
         }
 

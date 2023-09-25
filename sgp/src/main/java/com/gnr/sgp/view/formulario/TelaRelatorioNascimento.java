@@ -172,101 +172,115 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
                             + "FROM nascimentos n "
                             + "JOIN animais a ON n.id_animal = a.id "
                             + "WHERE n.data_nascimento BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                            + "ORDER BY " + ordem;      
-            }
-
-            try {
-                String username = System.getProperty("user.name");
-                String data = new SimpleDateFormat("dd_MM_yyyy").format(new Date());
-                String path = "C:\\Users\\" + username + "\\Documents\\Relatorio_Nascimentos_" + data + ".pdf";
-
-                PdfWriter pdfWriter = new PdfWriter(path);
-                PdfDocument documentoPDF = new PdfDocument(pdfWriter);
-                Document document = new Document(documentoPDF, PageSize.A4);
-
-                float[] columnWidths = {1, 3, 4, 2, 4, 2, 2};
-                Table table = new Table(columnWidths);
-                table.setWidthPercent(100);
-                table.setHorizontalAlignment(HorizontalAlignment.CENTER);
-                // Definindo fontes
-                PdfFont fontBold = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
-                PdfFont fontNormal = PdfFontFactory.createFont(FontConstants.HELVETICA);
-
-                PdfPage firstPage = documentoPDF.addNewPage();
-                PdfCanvas canvas = new PdfCanvas(firstPage);
-                canvas.beginText()
-                        .setFontAndSize(fontNormal, 8)
-                        .moveText(36, 806)
-                        .showText("Pecuária MML")
-                        .endText();
-
-                String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-                canvas.beginText()
-                        .setFontAndSize(fontNormal, 8)
-                        .moveText(484, 806)
-                        .showText("Emissão: " + currentDate)
-                        .endText();
-
-                SolidLine separatorLine = new SolidLine(1);
-                document.add(new Paragraph("")).add(new LineSeparator(separatorLine));
-
-                document.add(new Paragraph("Relatório de Nascimentos")
-                        .setFont(fontBold)
-                        .setFontSize(18)
-                        .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
-                document.add(new Paragraph("Período: " + new SimpleDateFormat("dd/MM/yyyy").format(dataInicio) + " a " + new SimpleDateFormat("dd/MM/yyyy").format(dataFim))
-                        .setFont(fontNormal)
-                        .setFontSize(12)
-                        .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
-                document.add(new Paragraph(""));
-
-                PdfFont headerFont = PdfFontFactory.createFont();
-                String[] headers = {"ID", "Data", "Animal", "Qtde", "Observação", "Local", "Operador"};
-                for (String header : headers) {
-                    Cell cell = new Cell().add(header).setFont(headerFont).setFontSize(10).setBackgroundColor(DeviceGray.BLACK).setTextAlignment(TextAlignment.CENTER).setFontColor(DeviceGray.WHITE);
-                    table.addCell(cell);
+                            + "ORDER BY " + ordem;
                 }
 
-                // Linhas da tabela com os dados do ResultSet
-                PdfFont dataFont = PdfFontFactory.createFont();
-                PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
-                ResultSet resultPDF = pstPDF.executeQuery();
-                while (resultPDF.next()) {
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_descricao")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("observacao")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_nasc")));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("operador")));
+                try {
+                    String username = System.getProperty("user.name");
+                    String data = new SimpleDateFormat("dd_MM_yyyy").format(new Date());
+                    String path = "C:\\Users\\" + username + "\\Documents\\Relatorio_Nascimentos_" + data + ".pdf";
+
+                    PdfWriter pdfWriter = new PdfWriter(path);
+                    PdfDocument documentoPDF = new PdfDocument(pdfWriter);
+                    Document document = new Document(documentoPDF, PageSize.A4);
+
+                    float[] columnWidths = {1, 3, 4, 2, 4, 2, 2};
+                    Table table = new Table(columnWidths);
+                    table.setWidthPercent(100);
+                    table.setHorizontalAlignment(HorizontalAlignment.CENTER);
+                    // Definindo fontes
+                    PdfFont fontBold = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
+                    PdfFont fontNormal = PdfFontFactory.createFont(FontConstants.HELVETICA);
+
+                    PdfPage firstPage = documentoPDF.addNewPage();
+                    PdfCanvas canvas = new PdfCanvas(firstPage);
+                    canvas.beginText()
+                            .setFontAndSize(fontNormal, 8)
+                            .moveText(36, 806)
+                            .showText("Pecuária MML")
+                            .endText();
+
+                    String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+                    canvas.beginText()
+                            .setFontAndSize(fontNormal, 8)
+                            .moveText(484, 806)
+                            .showText("Emissão: " + currentDate)
+                            .endText();
+
+                    SolidLine separatorLine = new SolidLine(1);
+                    document.add(new Paragraph("")).add(new LineSeparator(separatorLine));
+
+                    document.add(new Paragraph("Relatório de Nascimentos")
+                            .setFont(fontBold)
+                            .setFontSize(18)
+                            .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
+                    document.add(new Paragraph("Período: " + new SimpleDateFormat("dd/MM/yyyy").format(dataInicio) + " a " + new SimpleDateFormat("dd/MM/yyyy").format(dataFim))
+                            .setFont(fontNormal)
+                            .setFontSize(12)
+                            .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
+                    document.add(new Paragraph(""));
+
+                    PdfFont headerFont = PdfFontFactory.createFont();
+                    String[] headers = {"ID", "Data", "Animal", "Qtde", "Observação", "Local", "Operador"};
+                    for (String header : headers) {
+                        Cell cell = new Cell().add(header).setFont(headerFont).setFontSize(10).setBackgroundColor(DeviceGray.BLACK).setTextAlignment(TextAlignment.CENTER).setFontColor(DeviceGray.WHITE);
+                        table.addCell(cell);
+                    }
+
+                    // Linhas da tabela com os dados do ResultSet
+                    PdfFont dataFont = PdfFontFactory.createFont();
+                    PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
+                    ResultSet resultPDF = pstPDF.executeQuery();
+                    
+                    int totalQuantidade = 0;
+                    
+                    while (resultPDF.next()) {
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_descricao")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("observacao")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_nasc")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("operador")));
+
+                        int quantidade = resultPDF.getInt("quantidade"); // Substitua o nome da coluna conforme necessário
+                        totalQuantidade += quantidade;
+
+                    }
+
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add("Totais"));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(String.valueOf(totalQuantidade)));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+
+                    table.setAutoLayout();
+                    document.add(table);
+                    document.close();
+
+                    JOptionPane.showMessageDialog(null, "PDF criado em " + path);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Erro ao criar o PDF. " + e);
                 }
-
-                table.setAutoLayout();
-                document.add(table);
-                document.close();
-
-                JOptionPane.showMessageDialog(null, "PDF criado em " + path);
-            } catch (IOException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Erro ao criar o PDF. " + e);
-            }
-        }else {
+            } else {
                 JOptionPane.showMessageDialog(null, "Data inválida.");
             }
-    }
-    catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Data inválida.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Data inválida.");
+        }
+
     }
 
-}
-
-/**
- * This method is called from within the constructor to initialize the form.
- * WARNING: Do NOT modify this code. The content of this method is always
- * regenerated by the Form Editor.
- */
-@SuppressWarnings("unchecked")
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -389,15 +403,13 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
         try {
             criarDocumento(jFormattedRelNascInicio.getText(), jFormattedRelNascFim.getText(), jComboRelNascOrdem.getSelectedItem().toString());
 
-} catch (SQLException ex) {
-            Logger.getLogger(TelaRelatorioNascimento.class  
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaRelatorioNascimento.class
+                    .getName()).log(Level.SEVERE, null, ex);
 
-.getName()).log(Level.SEVERE, null, ex);
-
-} catch (ParseException ex) {
-            Logger.getLogger(TelaRelatorioNascimento.class  
-
-.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(TelaRelatorioNascimento.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_jButtonRelNascActionPerformed

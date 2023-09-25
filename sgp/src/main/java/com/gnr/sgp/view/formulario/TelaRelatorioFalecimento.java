@@ -231,6 +231,9 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                     PdfFont dataFont = PdfFontFactory.createFont();
                     PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
                     ResultSet resultPDF = pstPDF.executeQuery();
+                    
+                    int totalQuantidade = 0;
+                    
                     while (resultPDF.next()) {
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
@@ -239,8 +242,19 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("observacao")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_falecimento")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("operador")));
+
+                        int quantidade = resultPDF.getInt("quantidade"); // Substitua o nome da coluna conforme necessário
+                        totalQuantidade += quantidade;
+
                     }
 
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add("Totais"));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(String.valueOf(totalQuantidade)));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
                     table.setAutoLayout();
                     document.add(table);
                     document.close();
