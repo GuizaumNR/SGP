@@ -14,30 +14,25 @@ import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.UsuariosDao;
 import com.gnr.sgp.modelo.dominio.Usuarios;
 import com.gnr.sgp.view.modelo.ValidadorQuantCaract;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import net.proteanit.sql.DbUtils;
 
 public class TelaUsuario extends javax.swing.JInternalFrame {
 
     Conexao conexao = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
-    
 
     public TelaUsuario() {
-       
-      initComponents();
+
+        initComponents();
         conexao = new ConexaoMysql();
         jPassUsuSenha.setDocument(new ValidadorQuantCaract(4));
         jTextUsuLogin.setDocument(new ValidadorQuantCaract(10));
         jTextUsuNome.setDocument(new ValidadorQuantCaract(10));
-        
+
         setLocation(-5, -5);
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -107,6 +102,74 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
 
     }
 
+    public void pesquisarUsuarioId() {
+        String sql = String.format("SELECT * FROM usuarios WHERE id like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextFornBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableForn.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisarUsuarioLogin() {
+        String sql = String.format("SELECT * FROM usuarios WHERE login like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextFornBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableForn.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisarUsuarioNome() {
+        String sql = String.format("SELECT * FROM usuarios WHERE nome like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextFornBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableForn.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void pesquisarUsuarioTipo() {
+        String sql = String.format("SELECT * FROM usuarios WHERE tipo like ?");
+        try {
+            pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, jTextFornBusca.getText() + "%");
+            rs = pst.executeQuery();
+
+            jTableForn.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void setarCampos() {
+        int setar = jTableForn.getSelectedRow();
+        String valorId = jTableForn.getModel().getValueAt(setar, 0).toString();
+        String valorLogin = jTableForn.getModel().getValueAt(setar, 2).toString();
+        String valorNome = jTableForn.getModel().getValueAt(setar, 1).toString();
+        String valorTipo = jTableForn.getModel().getValueAt(setar, 4).toString();
+        if (valorId != null && valorLogin != null && valorNome != null) {
+            jTextUsuId.setText(valorId);
+            jTextUsuLogin.setText(valorLogin);
+            jTextUsuNome.setText(valorNome);
+            jComboUsuPerfil.setSelectedItem(valorTipo);
+        }
+    }
+
     public void limpaCampos() {
         jTextUsuNome.setText(null);
         jTextUsuLogin.setText(null);
@@ -123,11 +186,9 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabelUsuNome = new javax.swing.JLabel();
         jLabelUsuLogin = new javax.swing.JLabel();
         jLabelUsuPerfil = new javax.swing.JLabel();
         jTextUsuLogin = new javax.swing.JTextField();
-        jTextUsuNome = new javax.swing.JTextField();
         jLabelUsuSenha = new javax.swing.JLabel();
         jPassUsuSenha = new javax.swing.JPasswordField();
         jComboUsuPerfil = new javax.swing.JComboBox<>();
@@ -135,6 +196,16 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         jButtonUsuConsultar = new javax.swing.JButton();
         jButtonUsuEditar = new javax.swing.JButton();
         jButtonUsuDeletar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableForn = new javax.swing.JTable();
+        jComboFornPesquisa = new javax.swing.JComboBox<>();
+        jTextFornBusca = new javax.swing.JTextField();
+        jLabelFornBusca = new javax.swing.JLabel();
+        jLabelFornCampos = new javax.swing.JLabel();
+        jTextUsuId = new javax.swing.JTextField();
+        jLabelUsuId = new javax.swing.JLabel();
+        jLabelUsuNome = new javax.swing.JLabel();
+        jTextUsuNome = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(227, 234, 227));
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -142,14 +213,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         setMinimumSize(new java.awt.Dimension(680, 480));
         setPreferredSize(new java.awt.Dimension(730, 545));
 
-        jLabelUsuNome.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabelUsuNome.setText("Nome:");
-
         jLabelUsuLogin.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabelUsuLogin.setText("Login:");
+        jLabelUsuLogin.setText("* Login:");
 
         jLabelUsuPerfil.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabelUsuPerfil.setText("Perfil:");
+        jLabelUsuPerfil.setText("Tipo:");
 
         jTextUsuLogin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTextUsuLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -158,15 +226,8 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             }
         });
 
-        jTextUsuNome.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jTextUsuNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextUsuNomeActionPerformed(evt);
-            }
-        });
-
         jLabelUsuSenha.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabelUsuSenha.setText("Senha:");
+        jLabelUsuSenha.setText("* Senha:");
 
         jPassUsuSenha.setMaximumSize(new java.awt.Dimension(64, 22));
         jPassUsuSenha.addActionListener(new java.awt.event.ActionListener() {
@@ -223,70 +284,172 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             }
         });
 
+        jTableForn = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        jTableForn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTableForn.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Id", "Login", "Nome", "Tipo"
+            }
+        ));
+        jTableForn.getTableHeader().setReorderingAllowed(false);
+        jTableForn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableFornMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableForn);
+
+        jComboFornPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Id", "Login", "Nome", "Tipo" }));
+        jComboFornPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboFornPesquisaActionPerformed(evt);
+            }
+        });
+
+        jTextFornBusca.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextFornBusca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFornBuscaKeyReleased(evt);
+            }
+        });
+
+        jLabelFornBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
+        jLabelFornBusca.setText(" ");
+
+        jLabelFornCampos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabelFornCampos.setText("* Campos obrigatórios");
+
+        jTextUsuId.setEditable(false);
+        jTextUsuId.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jTextUsuId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextUsuIdActionPerformed(evt);
+            }
+        });
+
+        jLabelUsuId.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabelUsuId.setText("* Id:");
+
+        jLabelUsuNome.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabelUsuNome.setText("* Nome:");
+
+        jTextUsuNome.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(83, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonUsuAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(65, 65, 65)
-                        .addComponent(jButtonUsuConsultar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelUsuLogin)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextUsuLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jComboFornPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFornBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabelFornBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                                .addComponent(jLabelFornCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabelUsuNome)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextUsuNome, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(53, 53, 53)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextUsuNome))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabelUsuId)
+                                            .addComponent(jLabelUsuLogin))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jTextUsuId, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jTextUsuLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jButtonUsuAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(65, 65, 65)
+                                        .addComponent(jButtonUsuConsultar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelUsuSenha)
-                            .addComponent(jLabelUsuPerfil))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPassUsuSenha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboUsuPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonUsuEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(65, 65, 65)
-                        .addComponent(jButtonUsuDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(90, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(53, 53, 53)
+                                .addComponent(jButtonUsuEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(65, 65, 65)
+                                .addComponent(jButtonUsuDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(74, 74, 74)
+                                .addComponent(jLabelUsuSenha)
+                                .addGap(18, 18, 18)
+                                .addComponent(jPassUsuSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelUsuPerfil)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboUsuPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(8, 8, 8)))
+                        .addGap(0, 73, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(60, 60, 60)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelFornCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFornBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboFornPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabelFornBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(8, 8, 8)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelUsuSenha)
+                            .addComponent(jPassUsuSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelUsuPerfil)
+                            .addComponent(jComboUsuPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextUsuId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelUsuId))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextUsuNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelUsuNome))))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelUsuSenha)
-                    .addComponent(jPassUsuSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelUsuLogin)
                     .addComponent(jTextUsuLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(80, 80, 80)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelUsuPerfil)
-                    .addComponent(jComboUsuPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelUsuNome)
-                    .addComponent(jTextUsuNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonUsuAdicionar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonUsuConsultar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButtonUsuEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButtonUsuDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addGap(16, 16, 16))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jPassUsuSenha, jTextUsuLogin, jTextUsuNome});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jPassUsuSenha, jTextUsuLogin});
 
         setBounds(0, 0, 730, 545);
     }// </editor-fold>//GEN-END:initComponents
@@ -294,10 +457,6 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     private void jTextUsuLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextUsuLoginActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextUsuLoginActionPerformed
-
-    private void jTextUsuNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextUsuNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextUsuNomeActionPerformed
 
     private void jPassUsuSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPassUsuSenhaActionPerformed
 
@@ -324,18 +483,53 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         deletar();
     }//GEN-LAST:event_jButtonUsuDeletarActionPerformed
 
+    private void jTableFornMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFornMouseClicked
+        //evento para setar os campos clicando com o botao esquerdo do mouse
+        setarCampos();
+    }//GEN-LAST:event_jTableFornMouseClicked
+
+    private void jComboFornPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboFornPesquisaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboFornPesquisaActionPerformed
+
+    private void jTextFornBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFornBuscaKeyReleased
+        //enquanto for digitando fazer isto
+        if (jComboFornPesquisa.getSelectedItem().toString() == "Id") {
+            pesquisarUsuarioId();
+        } else if (jComboFornPesquisa.getSelectedItem().toString() == "Login") {
+            pesquisarUsuarioLogin();
+        } else if (jComboFornPesquisa.getSelectedItem().toString() == "Nome") {
+            pesquisarUsuarioNome();
+        } else if (jComboFornPesquisa.getSelectedItem().toString() == "Tipo") {
+            pesquisarUsuarioTipo();
+        }
+
+    }//GEN-LAST:event_jTextFornBuscaKeyReleased
+
+    private void jTextUsuIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextUsuIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextUsuIdActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonUsuAdicionar;
     private javax.swing.JButton jButtonUsuConsultar;
     private javax.swing.JButton jButtonUsuDeletar;
     private javax.swing.JButton jButtonUsuEditar;
+    private javax.swing.JComboBox<String> jComboFornPesquisa;
     public javax.swing.JComboBox<String> jComboUsuPerfil;
+    private javax.swing.JLabel jLabelFornBusca;
+    private javax.swing.JLabel jLabelFornCampos;
+    private javax.swing.JLabel jLabelUsuId;
     private javax.swing.JLabel jLabelUsuLogin;
     private javax.swing.JLabel jLabelUsuNome;
     private javax.swing.JLabel jLabelUsuPerfil;
     private javax.swing.JLabel jLabelUsuSenha;
     public javax.swing.JPasswordField jPassUsuSenha;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTableForn;
+    public javax.swing.JTextField jTextFornBusca;
+    public javax.swing.JTextField jTextUsuId;
     public javax.swing.JTextField jTextUsuLogin;
     public javax.swing.JTextField jTextUsuNome;
     // End of variables declaration//GEN-END:variables
