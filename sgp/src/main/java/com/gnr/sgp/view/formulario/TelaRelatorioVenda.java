@@ -52,6 +52,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
     /**
      * Creates new form TelaVenda
      */
+    //adicionar porcentagem
     private final Conexao conexao;
     PreparedStatement pst = null;
     ResultSet rs = null;

@@ -48,6 +48,7 @@ import javax.swing.text.MaskFormatter;
  *
  * @author Guilherme
  */
+//adicionar porcentagem
 public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
 
     /**

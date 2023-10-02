@@ -49,6 +49,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
     /**
      * Creates new form TelaVenda
      */
+    
     private final Conexao conexao;
     PreparedStatement pst = null;
     ResultSet rs = null;
@@ -151,7 +152,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                     sqlPDF = "SELECT "
                             + "f.id, "
                             + "	DATE_FORMAT(data_morte, '%d/%m/%Y') as data_formatada, "
-                            + "	a.descricao as animal_descricao, "
+                            + "a.sexo as animal_sexo, "
                             + "f.quantidade, "
                             + "observacao, "
                             + "local_falecimento, "
@@ -163,8 +164,8 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                 } else {
                     sqlPDF = "SELECT "
                             + "f.id, "
-                            + "	DATE_FORMAT(data_morte, '%d/%m/%Y') as data_formatada, "
-                            + "	a.descricao as animal_descricao, "
+                            + "DATE_FORMAT(data_morte, '%d/%m/%Y') as data_formatada, "
+                            + "a.sexo as animal_sexo, "
                             + "f.quantidade, "
                             + "observacao, "
                             + "local_falecimento, "
@@ -221,7 +222,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                     document.add(new Paragraph(""));
 
                     PdfFont headerFont = PdfFontFactory.createFont();
-                    String[] headers = {"ID", "Data", "Animal", "Qtde", "Observação", "Local", "Operador"};
+                    String[] headers = {"ID", "Data", "Sexo", "Qtde", "Observação", "Local", "Operador"};
                     for (String header : headers) {
                         Cell cell = new Cell().add(header).setFont(headerFont).setFontSize(10).setBackgroundColor(DeviceGray.BLACK).setTextAlignment(TextAlignment.CENTER).setFontColor(DeviceGray.WHITE);
                         table.addCell(cell);
@@ -237,7 +238,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                     while (resultPDF.next()) {
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_descricao")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_sexo")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("observacao")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_falecimento")));
