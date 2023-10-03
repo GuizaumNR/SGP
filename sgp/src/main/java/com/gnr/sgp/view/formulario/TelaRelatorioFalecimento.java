@@ -153,6 +153,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                             + "f.id, "
                             + "	DATE_FORMAT(data_morte, '%d/%m/%Y') as data_formatada, "
                             + "a.sexo as animal_sexo, "
+                            + "a.idade as animal_idade, "
                             + "f.quantidade, "
                             + "observacao, "
                             + "local_falecimento, "
@@ -166,6 +167,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                             + "f.id, "
                             + "DATE_FORMAT(data_morte, '%d/%m/%Y') as data_formatada, "
                             + "a.sexo as animal_sexo, "
+                            + "a.idade as animal_idade, "
                             + "f.quantidade, "
                             + "observacao, "
                             + "local_falecimento, "
@@ -185,7 +187,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                     PdfDocument documentoPDF = new PdfDocument(pdfWriter);
                     Document document = new Document(documentoPDF, PageSize.A4);
 
-                    float[] columnWidths = {1, 3, 4, 2, 4, 2, 2};
+                    float[] columnWidths = {1, 3, 4, 2, 4, 2, 2, 2};
                     Table table = new Table(columnWidths);
                     table.setWidthPercent(100);
                     table.setHorizontalAlignment(HorizontalAlignment.CENTER);
@@ -222,7 +224,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                     document.add(new Paragraph(""));
 
                     PdfFont headerFont = PdfFontFactory.createFont();
-                    String[] headers = {"ID", "Data", "Sexo", "Qtde", "Observação", "Local", "Operador"};
+                    String[] headers = {"ID", "Data", "Sexo", "Idade", "Qtde", "Observação", "Local", "Operador"};
                     for (String header : headers) {
                         Cell cell = new Cell().add(header).setFont(headerFont).setFontSize(10).setBackgroundColor(DeviceGray.BLACK).setTextAlignment(TextAlignment.CENTER).setFontColor(DeviceGray.WHITE);
                         table.addCell(cell);
@@ -239,6 +241,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_sexo")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_idade")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("observacao")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_falecimento")));
@@ -251,6 +254,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
 
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add("Totais"));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(String.valueOf(totalQuantidade)));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));

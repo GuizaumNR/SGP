@@ -27,9 +27,9 @@ public class AnimaisDao {
     public String adicionar(Animais animal) {
         String sql = "INSERT INTO animais(descricao, quantidade, idade, sexo) VALUES( ?, ?, ?, ?)";
 
-        Animais animalTemp = buscarAnimaisDescricao(animal.getDescricao());
+        Animais animalTemp = buscarAnimaisId(animal.getId());
         if (animalTemp != null) {
-            JOptionPane.showMessageDialog(null, "Erro: Esta descrição já existe no banco de dados.");
+            JOptionPane.showMessageDialog(null, "Erro: Este id já existe no banco de dados.");
         } else {
 
             try {
@@ -57,11 +57,11 @@ public class AnimaisDao {
     }
 
     public String deletar(Animais animal) {
-    String sql = "DELETE FROM animais WHERE descricao = ?";
-    Animais animalTemp = buscarAnimaisDescricao(animal.getDescricao());
+    String sql = "DELETE FROM animais WHERE id = ?";
+    Animais animalTemp = buscarAnimaisId(animal.getId());
 
     if (animalTemp == null) {
-        JOptionPane.showMessageDialog(null, "Erro: Esta descrição não existe no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Erro: Este id não existe no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
         return null;
     }
 
@@ -93,7 +93,7 @@ public class AnimaisDao {
         // Execute as exclusões nas tabelas relacionadas
         
         PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
-            pst.setString(1, animal.getDescricao());
+            pst.setLong(1, animal.getId());
 
             int deletado = pst.executeUpdate();
             if (deletado > 0) {
@@ -110,14 +110,14 @@ public class AnimaisDao {
 }
 
     public String editar(Animais animal) {
-        String sql = "UPDATE animais SET quantidade = ?, idade = ?, sexo = ? WHERE descricao = ?";
+        String sql = "UPDATE animais SET quantidade = ?, idade = ?, sexo = ? WHERE id = ?";
 
         try {
             PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, animal.getQuantidade());
             pst.setString(2, animal.getIdade());
             pst.setString(3, animal.getSexo());
-            pst.setString(4, animal.getDescricao());
+            pst.setLong(4, animal.getId());
 
             int editado = pst.executeUpdate();
             if (editado > 0) {
@@ -136,15 +136,15 @@ public class AnimaisDao {
     private Animais getAnimais(ResultSet result) throws SQLException {
         Animais animal = new Animais();
         animal.setId(result.getLong("id"));
-        animal.setDescricao(result.getString("descricao"));
+       animal.setDescricao(result.getString("descricao"));
         animal.setQuantidade(result.getString("quantidade"));
         animal.setIdade(result.getString("idade"));
         animal.setSexo(result.getString("sexo"));
         return animal;
     }
 
-    public Animais buscarAnimaisDescricao(String descricao) {
-        String sql = String.format("SELECT * FROM animais WHERE descricao = '%s'", descricao);
+    public Animais buscarAnimaisId(Long id) {
+        String sql = String.format("SELECT * FROM animais WHERE id = '%s'", id);
         try {
             ResultSet result = conexao.obterConexao().prepareStatement(sql).executeQuery();
             if (result.next()) {
