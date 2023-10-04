@@ -37,20 +37,9 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" max="32767" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="jComboVendaPesquisa" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTextVendaBusca" min="-2" pref="350" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabelAnimBusca" min="-2" pref="32" max="-2" attributes="0"/>
-                      <EmptySpace pref="75" max="32767" attributes="0"/>
-                      <Component id="jLabelAnimCampos" min="-2" pref="161" max="-2" attributes="0"/>
-                  </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="jLabelVendaAnimal" min="-2" max="-2" attributes="0"/>
                           <Group type="103" alignment="1" groupAlignment="0" attributes="0">
@@ -58,7 +47,7 @@
                               <Component id="jLabelVendaMediaKg" alignment="1" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabelVendaPrecoKg" alignment="1" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jLabelVendaPrecoKg1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelVendaValorMedio" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -68,16 +57,11 @@
                               <Component id="jTextFieldVendaPrecoKg" min="-2" pref="125" max="-2" attributes="0"/>
                               <Component id="jTextFieldVendaAnimal" min="-2" pref="125" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jTextFieldVendaPrecoKg1" alignment="1" min="-2" pref="125" max="-2" attributes="0"/>
+                          <Component id="jTextFieldVendaValorMedio" alignment="1" min="-2" pref="125" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="jLabelVendaTotal" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jTextFieldVendaTotal" min="-2" pref="200" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="1" attributes="0">
@@ -96,17 +80,48 @@
                                       <Component id="jComboVendaPagamento" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="jLabelVendaComissao" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jTextFieldVendaComissao" min="-2" pref="125" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <Component id="jLabelVendaPorcentagem" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jTextFieldVendaPorcentagem" min="-2" pref="125" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
+                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
-                      <Component id="jLabelVendaLocal" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jTextFieldVendaLocal" min="-2" pref="125" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
+                      <Component id="jLabelVendaTotal" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jTextFieldVendaTotal" min="-2" pref="200" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jButtonVendaFinalizar" min="-2" pref="170" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jScrollPane1" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="jComboVendaPesquisa" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jTextVendaBusca" min="-2" pref="350" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabelAnimBusca" min="-2" pref="32" max="-2" attributes="0"/>
+                              <EmptySpace pref="75" max="32767" attributes="0"/>
+                              <Component id="jLabelAnimCampos" min="-2" pref="161" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -143,18 +158,18 @@
                           <Component id="jLabelVendaPagamento" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jComboVendaPagamento" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextFieldVendaTotal" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                          <Component id="jLabelVendaTotal" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" alignment="1" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="175" pref="175" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jTextFieldVendaPrecoKg1" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                              <Component id="jLabelVendaPrecoKg1" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                              <Component id="jTextFieldVendaValorMedio" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                              <Component id="jLabelVendaValorMedio" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                              <Group type="103" alignment="3" groupAlignment="3" attributes="0">
+                                  <Component id="jLabelVendaComissao" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                                  <Component id="jTextFieldVendaComissao" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -176,17 +191,17 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jTextFieldVendaPrecoKg" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                               <Component id="jLabelVendaPrecoKg" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                              <Component id="jLabelVendaPorcentagem" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                              <Component id="jTextFieldVendaPorcentagem" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jButtonVendaFinalizar" min="-2" pref="44" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabelVendaLocal" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jTextFieldVendaLocal" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                  </Group>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jButtonVendaFinalizar" alignment="3" min="-2" pref="44" max="-2" attributes="0"/>
+                  <Component id="jTextFieldVendaTotal" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="jLabelVendaTotal" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -401,16 +416,6 @@
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldVendaVendedor">
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabelVendaLocal">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="18" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value=" Local:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldVendaLocal">
-    </Component>
     <Component class="javax.swing.JLabel" name="jLabelVendaPagamento">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -438,7 +443,7 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabelVendaPrecoKg1">
+    <Component class="javax.swing.JLabel" name="jLabelVendaValorMedio">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="18" style="0"/>
@@ -446,7 +451,33 @@
         <Property name="text" type="java.lang.String" value="* Valor M&#xe9;dio:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldVendaPrecoKg1">
+    <Component class="javax.swing.JTextField" name="jTextFieldVendaValorMedio">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextFieldVendaPrecoKg.setDocument(new ValidadorNumerico());"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelVendaPorcentagem">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="18" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="* % Comiss&#xe3;o:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="jTextFieldVendaPorcentagem">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextFieldVendaPrecoKg.setDocument(new ValidadorNumerico());"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelVendaComissao">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="18" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="* Comiss&#xe3;o:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="jTextFieldVendaComissao">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextFieldVendaPrecoKg.setDocument(new ValidadorNumerico());"/>
       </AuxValues>

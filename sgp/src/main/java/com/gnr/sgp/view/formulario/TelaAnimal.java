@@ -310,7 +310,6 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         });
 
         jTextAnimQuantidade.setDocument(new ValidadorNumerico());
-        jTextAnimId.setEditable(false);
         jTextAnimId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabelAnimId.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
