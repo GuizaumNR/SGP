@@ -138,7 +138,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             precoKg = Double.parseDouble(jTextFieldCompPrecoKg.getText());
             valorTotal = quantidade * mediaKg * precoKg;
 
-            ComprasAnimais compra = new ComprasAnimais(null, Integer.parseInt(jTextFieldCompAnimal.getText()), quantidade, mediaKg, precoKg, valorTotal, jTextFieldCompCriador.getText(), jComboCompPagador.getSelectedItem().toString(), jComboCompPagamento.getSelectedItem().toString(), jTextFieldCompLocal.getText(), operador);
+            ComprasAnimais compra = new ComprasAnimais(null, Integer.parseInt(jTextFieldCompAnimal.getText()), quantidade, mediaKg, precoKg, valorTotal, jTextFieldCompCriador.getText(), jComboCompPagador.getSelectedItem().toString(), jComboCompPagamento.getSelectedItem().toString(), "local", operador);
 
             ComprasAnimaisDao comprasDao = new ComprasAnimaisDao();
             comprasDao.Adicionar(compra);
@@ -159,13 +159,13 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         jTextFieldCompCriador.setText(null);
         jComboCompPagamento.setSelectedIndex(0);
         jComboCompPagador.setSelectedIndex(0);
-        jTextFieldCompLocal.setText(null);
+        //jTextFieldCompLocal.setText(null);
         jTextFieldCompTotal.setText(null);
         ((DefaultTableModel) jTableComp.getModel()).setRowCount(0);
     }
 
     public void pesquisarAnimalId() {
-        String sql = String.format("SELECT * FROM animais WHERE id like ?");
+        String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE id like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextCompBusca.getText() + "%");
@@ -178,21 +178,9 @@ public class TelaCompra extends javax.swing.JInternalFrame {
 
     }
 
-    public void pesquisarAnimalDescricao() {
-        String sql = String.format("SELECT * FROM animais WHERE descricao like ?");
-        try {
-            pst = conexao.obterConexao().prepareStatement(sql);
-            pst.setString(1, jTextCompBusca.getText() + "%");
-            rs = pst.executeQuery();
-
-            jTableComp.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+   
     public void pesquisarAnimalIdade() {
-        String sql = String.format("SELECT * FROM animais WHERE idade like ?");
+        String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE idade like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextCompBusca.getText() + "%");
@@ -206,7 +194,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalSexo() {
-        String sql = String.format("SELECT * FROM animais WHERE sexo like ?");
+        String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE sexo like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextCompBusca.getText() + "%");
@@ -219,11 +207,13 @@ public class TelaCompra extends javax.swing.JInternalFrame {
 
     }
 
-    public void setarCampo() {
+    public void setarCampos() {
         int setar = jTableComp.getSelectedRow();
-        String valor = jTableComp.getModel().getValueAt(setar, 0).toString();
-        if(valor != null){
-        jTextFieldCompAnimal.setText(valor);
+        String valorId = jTableComp.getModel().getValueAt(setar, 0).toString();
+
+        if (valorId != null) {
+            jTextFieldCompAnimal.setText(valorId);
+
         }
     }
 
@@ -236,8 +226,6 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTableComp = new javax.swing.JTable();
         jTextFieldCompAnimal = new javax.swing.JTextField();
         jTextFieldCompQuantidade = new javax.swing.JTextField();
         jTextFieldCompMediaKg = new javax.swing.JTextField();
@@ -257,46 +245,22 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         jComboCompPesquisa = new javax.swing.JComboBox<>();
         jLabelCompPagador = new javax.swing.JLabel();
         jComboCompPagador = new javax.swing.JComboBox<>();
-        jLabelCompLocal = new javax.swing.JLabel();
-        jTextFieldCompLocal = new javax.swing.JTextField();
         jLabelCompPagamento = new javax.swing.JLabel();
         jComboCompPagamento = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableComp = new javax.swing.JTable();
+        jTextFieldVendaPorcentagem = new javax.swing.JTextField();
+        jLabelVendaPorcentagem = new javax.swing.JLabel();
+        jLabelVendaComissao = new javax.swing.JLabel();
+        jTextFieldVendaComissao = new javax.swing.JTextField();
+        jLabelCompMediaKg1 = new javax.swing.JLabel();
+        jTextFieldCompMediaKg1 = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(227, 234, 227));
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
         setTitle("Compra");
         setMinimumSize(new java.awt.Dimension(680, 480));
         setPreferredSize(new java.awt.Dimension(730, 545));
-
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(75, 80));
-
-        jTableComp = new javax.swing.JTable(){
-            public boolean isCellEditable(int rowIndex, int colIndex){
-                return false;
-            }
-        };
-        jTableComp.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTableComp.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Id", "Descrição", "Quant", "Idade", "Sexo"
-            }
-        ));
-        jTableComp.setFocusable(false);
-        jTableComp.setMinimumSize(new java.awt.Dimension(680, 480));
-        jTableComp.setPreferredSize(new java.awt.Dimension(820, 420));
-        jTableComp.getTableHeader().setReorderingAllowed(false);
-        jTableComp.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTableCompMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jTableComp);
 
         jTextFieldCompAnimal.setEditable(false);
 
@@ -306,22 +270,22 @@ public class TelaCompra extends javax.swing.JInternalFrame {
 
         jTextFieldCompPrecoKg.setDocument(new ValidadorNumerico());
 
-        jLabelCompAnimal1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelCompAnimal1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelCompAnimal1.setText("* Criador:");
 
         jLabelCompTotal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabelCompTotal.setText("* Total:");
 
-        jLabelCompAnimal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelCompAnimal.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelCompAnimal.setText("* ID Animal:");
 
-        jLabelCompQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelCompQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelCompQuantidade.setText("* Quantidade:");
 
-        jLabelCompMediaKg.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelCompMediaKg.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelCompMediaKg.setText("* Média Kg:");
 
-        jLabelCompPrecoKg.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelCompPrecoKg.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelCompPrecoKg.setText("* Preço Kg:");
 
         jTextCompBusca.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -345,33 +309,24 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             }
         });
 
-        jComboCompPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "descricao", "idade", "sexo" }));
+        jComboCompPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "idade", "sexo" }));
         jComboCompPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboCompPesquisaActionPerformed(evt);
             }
         });
 
-        jLabelCompPagador.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelCompPagador.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelCompPagador.setText("* Pagador:");
 
-        jComboCompPagador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "alemao", "negocio", "adiantamento" }));
+        jComboCompPagador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Marcos", "Negocio", "Adiantamento" }));
         jComboCompPagador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboCompPagadorActionPerformed(evt);
             }
         });
 
-        jLabelCompLocal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabelCompLocal.setText("* Local:");
-
-        jTextFieldCompLocal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldCompLocalActionPerformed(evt);
-            }
-        });
-
-        jLabelCompPagamento.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelCompPagamento.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelCompPagamento.setText("* Pagamento:");
 
         jComboCompPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dinheiro", "Cartão Débito", "Cartão Crédito", "Pix", "Permuta" }));
@@ -381,6 +336,43 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             }
         });
 
+        jTableComp = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        jTableComp.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTableComp.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Id", "Sexo", "Quant", "Idade"
+            }
+        ));
+        jTableComp.setFocusable(false);
+        jTableComp.getTableHeader().setReorderingAllowed(false);
+        jTableComp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableCompMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableComp);
+
+        jLabelVendaPorcentagem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabelVendaPorcentagem.setText("* % Comissão:");
+
+        jLabelVendaComissao.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabelVendaComissao.setText("* Comissão:");
+
+        jLabelCompMediaKg1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabelCompMediaKg1.setText("* Kg Totais:");
+
+        jTextFieldCompMediaKg.setDocument(new ValidadorNumerico());
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -388,59 +380,70 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jComboCompPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextCompBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabelCompBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                         .addComponent(jLabelCompCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabelCompAnimal)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextFieldCompAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelCompQuantidade)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextFieldCompQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabelCompMediaKg)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jTextFieldCompMediaKg, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabelCompLocal)
-                                        .addComponent(jLabelCompPrecoKg))
-                                    .addGap(18, 18, 18)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jTextFieldCompPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jTextFieldCompLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(29, 29, 29)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabelCompAnimal)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextFieldCompAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabelCompTotal)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jTextFieldCompTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(jLabelCompQuantidade)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextFieldCompQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabelCompPrecoKg)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextFieldCompPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabelCompMediaKg1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextFieldCompMediaKg1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabelCompMediaKg)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextFieldCompMediaKg, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabelCompTotal)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(65, 65, 65)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabelCompPagamento)
-                                    .addComponent(jLabelCompAnimal1)
-                                    .addComponent(jLabelCompPagador))
+                                .addComponent(jLabelCompPagamento)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextFieldCompCriador, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboCompPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboCompPagador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 50, Short.MAX_VALUE)))))
+                                .addComponent(jComboCompPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelCompAnimal1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldCompCriador, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelCompPagador)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboCompPagador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelVendaPorcentagem)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldVendaPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelVendaComissao)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldVendaComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextFieldCompTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -454,62 +457,63 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                         .addComponent(jLabelCompBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelCompAnimal1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldCompCriador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelCompAnimal1))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelCompPagamento)
+                            .addComponent(jComboCompPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelCompPagador)
+                            .addComponent(jComboCompPagador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelVendaPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldVendaPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldVendaComissao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelVendaComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelCompAnimal)
-                            .addComponent(jTextFieldCompAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldCompCriador, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextFieldCompAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelCompQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldCompQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelCompPagamento)
-                            .addComponent(jComboCompPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(6, 6, 6)))
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                            .addComponent(jTextFieldCompQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelCompMediaKg1)
+                            .addComponent(jTextFieldCompMediaKg1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldCompPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelCompPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelCompMediaKg)
-                            .addComponent(jTextFieldCompMediaKg, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelCompPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldCompPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelCompLocal)
-                            .addComponent(jTextFieldCompLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelCompPagador)
-                            .addComponent(jComboCompPagador, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextFieldCompTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelCompTotal))
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTextFieldCompMediaKg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldCompTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelCompTotal))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTableCompMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableCompMouseClicked
-        setarCampo();
-    }//GEN-LAST:event_jTableCompMouseClicked
-
     private void jTextCompBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextCompBuscaKeyReleased
         if (jComboCompPesquisa.getSelectedItem().toString() == "id") {
             pesquisarAnimalId();
-        } else if (jComboCompPesquisa.getSelectedItem().toString() == "descricao") {
-            pesquisarAnimalDescricao();
-        } else if (jComboCompPesquisa.getSelectedItem().toString() == "idade") {
+        }  else if (jComboCompPesquisa.getSelectedItem().toString() == "idade") {
             pesquisarAnimalIdade();
         } else if (jComboCompPesquisa.getSelectedItem().toString() == "sexo") {
             pesquisarAnimalSexo();
@@ -528,13 +532,13 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboCompPagadorActionPerformed
 
-    private void jTextFieldCompLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCompLocalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldCompLocalActionPerformed
-
     private void jComboCompPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboCompPagamentoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboCompPagamentoActionPerformed
+
+    private void jTableCompMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableCompMouseClicked
+        setarCampos();
+    }//GEN-LAST:event_jTableCompMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -546,22 +550,26 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabelCompAnimal1;
     private javax.swing.JLabel jLabelCompBusca;
     private javax.swing.JLabel jLabelCompCampos;
-    private javax.swing.JLabel jLabelCompLocal;
     private javax.swing.JLabel jLabelCompMediaKg;
+    private javax.swing.JLabel jLabelCompMediaKg1;
     private javax.swing.JLabel jLabelCompPagador;
     private javax.swing.JLabel jLabelCompPagamento;
     private javax.swing.JLabel jLabelCompPrecoKg;
     private javax.swing.JLabel jLabelCompQuantidade;
     private javax.swing.JLabel jLabelCompTotal;
+    private javax.swing.JLabel jLabelVendaComissao;
+    private javax.swing.JLabel jLabelVendaPorcentagem;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableComp;
     public javax.swing.JTextField jTextCompBusca;
     private javax.swing.JTextField jTextFieldCompAnimal;
     private javax.swing.JTextField jTextFieldCompCriador;
-    private javax.swing.JTextField jTextFieldCompLocal;
     private javax.swing.JTextField jTextFieldCompMediaKg;
+    private javax.swing.JTextField jTextFieldCompMediaKg1;
     private javax.swing.JTextField jTextFieldCompPrecoKg;
     private javax.swing.JTextField jTextFieldCompQuantidade;
     private javax.swing.JTextField jTextFieldCompTotal;
+    private javax.swing.JTextField jTextFieldVendaComissao;
+    private javax.swing.JTextField jTextFieldVendaPorcentagem;
     // End of variables declaration//GEN-END:variables
 }

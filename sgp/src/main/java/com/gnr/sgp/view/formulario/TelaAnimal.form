@@ -89,8 +89,8 @@
               <EmptySpace max="32767" attributes="0"/>
               <Component id="jLabelAnimIdade" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jComboAnimIdade" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="128" max="-2" attributes="0"/>
+              <Component id="jComboAnimIdade" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="187" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -185,9 +185,9 @@
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="4" rowCount="4">
                 <Column editable="true" title="Id" type="java.lang.Object"/>
+                <Column editable="true" title="Sexo" type="java.lang.Object"/>
                 <Column editable="true" title="Quant" type="java.lang.Object"/>
                 <Column editable="true" title="Idade" type="java.lang.Object"/>
-                <Column editable="true" title="Sexo" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -318,13 +318,17 @@
     <Component class="javax.swing.JComboBox" name="jComboAnimIdade">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="3">
-            <StringItem index="0" value="terneiro"/>
-            <StringItem index="1" value="novilho"/>
-            <StringItem index="2" value="vaca_velha"/>
+          <StringArray count="4">
+            <StringItem index="0" value="0-12"/>
+            <StringItem index="1" value="12-24"/>
+            <StringItem index="2" value="24-36"/>
+            <StringItem index="3" value="36+"/>
           </StringArray>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboAnimIdadeActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
@@ -367,7 +371,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextAnimQuantidade.setDocument(new ValidadorNumerico());"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextAnimId.setDocument(new ValidadorNumerico());"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>
     </Component>

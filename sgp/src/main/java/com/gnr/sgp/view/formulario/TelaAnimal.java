@@ -55,10 +55,10 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
     }
 
     public void adicionar() {
-        if ((jTextAnimQuantidade.getText().isEmpty())) {
+        if ((jTextAnimQuantidade.getText().isEmpty()) || jTextAnimId.getText().isEmpty() ) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
         } else {
-            Animais animal = new Animais(Integer.parseInt(jTextAnimId.getText().toString()), jTextAnimDescricao.getText(), jTextAnimQuantidade.getText(), jComboAnimIdade.getSelectedItem().toString(), jComboAnimSexo.getSelectedItem().toString());
+            Animais animal = new Animais(Integer.parseInt(jTextAnimId.getText().toString()), null, jTextAnimQuantidade.getText(), jComboAnimIdade.getSelectedItem().toString(), jComboAnimSexo.getSelectedItem().toString());
 
             AnimaisDao animaisDao = new AnimaisDao();
             animaisDao.adicionar(animal);
@@ -114,19 +114,6 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
 
     }
 
-//    public void pesquisarAnimalDescricao() {
-//        String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE descricao like ?");
-//        try {
-//            pst = conexao.obterConexao().prepareStatement(sql);
-//            pst.setString(1, jTextAnimBusca.getText() + "%");
-//            rs = pst.executeQuery();
-//
-//            jTableAnim.setModel(DbUtils.resultSetToTableModel(rs));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
 
     public void pesquisarAnimalIdade() {
         String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE idade like ?");
@@ -158,8 +145,8 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
     public void setarCampos() {
         int setar = jTableAnim.getSelectedRow();
         String valorId = jTableAnim.getModel().getValueAt(setar, 0).toString();
-        String valorQuant = jTableAnim.getModel().getValueAt(setar, 1).toString();
-        String valorSexo = jTableAnim.getModel().getValueAt(setar, 2).toString();
+        String valorQuant = jTableAnim.getModel().getValueAt(setar, 2).toString();
+        String valorSexo = jTableAnim.getModel().getValueAt(setar, 1).toString();
         String valorIdade = jTableAnim.getModel().getValueAt(setar, 3).toString();
         if (valorQuant != null && valorIdade != null && valorSexo != null) {
             jTextAnimId.setText(valorId);
@@ -174,7 +161,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         jTextAnimBusca.setText(null);
         jTextAnimDescricao.setText(null);
         jTextAnimQuantidade.setText(null);
-        jComboAnimIdade.setSelectedItem("terneiro");
+        jComboAnimIdade.setSelectedItem("0-12");
         jComboAnimSexo.setSelectedItem("boi");
         ((DefaultTableModel) jTableAnim.getModel()).setRowCount(0);
     }
@@ -239,7 +226,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Id", "Quant", "Idade", "Sexo"
+                "Id", "Sexo", "Quant", "Idade"
             }
         ));
         jTableAnim.setFocusable(false);
@@ -295,7 +282,12 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         jTextAnimQuantidade.setDocument(new ValidadorNumerico());
         jTextAnimQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        jComboAnimIdade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "terneiro", "novilho", "vaca_velha" }));
+        jComboAnimIdade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0-12", "12-24", "24-36", "36+" }));
+        jComboAnimIdade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboAnimIdadeActionPerformed(evt);
+            }
+        });
 
         jComboAnimSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "boi", "touro_reprodutor", "femea" }));
 
@@ -309,7 +301,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
             }
         });
 
-        jTextAnimQuantidade.setDocument(new ValidadorNumerico());
+        jTextAnimId.setDocument(new ValidadorNumerico());
         jTextAnimId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabelAnimId.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -361,8 +353,8 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabelAnimIdade)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboAnimIdade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(128, 128, 128))
+                .addComponent(jComboAnimIdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(187, 187, 187))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -439,6 +431,10 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
     private void jButtonAnimEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnimEditarActionPerformed
         editar();
     }//GEN-LAST:event_jButtonAnimEditarActionPerformed
+
+    private void jComboAnimIdadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboAnimIdadeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboAnimIdadeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -7,8 +7,6 @@ package com.gnr.sgp.modelo.dao;
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dominio.VendasAnimais;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,28 +25,29 @@ public class VendasAnimaisDao {
     }
 
     public String Adicionar(VendasAnimais venda) {
-        String sql = "INSERT INTO vendas_animais (id_animal, quantidade, media_kg, preco_kg, valor_total, comprador, vendedor, pagamento, local_venda, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO vendas_animais (id_animal, quantidade, kg_totais, media_kg, preco_kg, valor_total, porce_comissao, comissao, comprador, vendedor, pagamento, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         if (verificarQuantidadeMenorZero(venda.getId_animal(), venda.getQuantidade()) && venda.getQuantidade() > 0) {
             try {
                 PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
                 pst.setInt(1, venda.getId_animal());
                 pst.setInt(2, venda.getQuantidade());
-                pst.setDouble(3, venda.getMedia_kg());
-                pst.setDouble(4, venda.getPreco_peso());
-                pst.setDouble(5, venda.getValor_total());
-                pst.setString(6, venda.getComprador());
-                pst.setString(7, venda.getVendedor());
-                 pst.setString(8, venda.getPagamento());
-                pst.setString(9, venda.getLocal());
-                pst.setString(10, venda.getOperador());
+                pst.setDouble(3, venda.getKg_totais());
+                pst.setDouble(4, venda.getMedia_kg());
+                pst.setDouble(5, venda.getPreco_peso());
+                pst.setDouble(6, venda.getValor_total());
+                pst.setDouble(7, venda.getPorce_comissao());
+                pst.setDouble(8, venda.getComissao());
+                pst.setString(9, venda.getComprador());
+                pst.setString(10, venda.getVendedor());
+                pst.setString(11, venda.getPagamento());
+                pst.setString(12, venda.getOperador());
 
                 int resultado = pst.executeUpdate();
 
                 if (resultado > 0) {
                     JOptionPane.showMessageDialog(null, "Venda finalizada com sucesso!");
-                    
-                                    
+
                     String sqlUpdate = "UPDATE animais SET quantidade = quantidade - ? WHERE id = ?";
                     try {
                         PreparedStatement pstmt = conexao.obterConexao().prepareStatement(sqlUpdate);
@@ -56,13 +55,13 @@ public class VendasAnimaisDao {
                         pstmt.setInt(2, venda.getId_animal());
 
                         int resultado2 = pstmt.executeUpdate();
-                        
-                  if (resultado2 > 0) {
+
+                        if (resultado2 > 0) {
                             JOptionPane.showMessageDialog(null, "Quantidade de animais atualizada com sucesso!");
                         } else {
                             JOptionPane.showMessageDialog(null, "Não foi possível atualizar a quantidade de animais.", "Erro", JOptionPane.ERROR_MESSAGE);
                         }
-                                
+
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(null, "Erro ao atualizar a quantidade de animais: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
@@ -80,7 +79,6 @@ public class VendasAnimaisDao {
         }
         return null;
     }
-
 
     public boolean verificarQuantidadeMenorZero(int id_animal, int quantidadeVenda) {
         String sql = "SELECT quantidade FROM animais WHERE id = ?";
@@ -101,5 +99,4 @@ public class VendasAnimaisDao {
         }
     }
 
- 
 }

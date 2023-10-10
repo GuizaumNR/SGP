@@ -37,6 +37,9 @@ public class TelaVenda extends javax.swing.JInternalFrame {
     double mediaKg = 0;
     double precoKg = 0;
     double valorTotal = 0;
+    double kgTotais = 0;
+    double percentual = 0;
+    double valorPercentual = 0;
 
     String operador;
 
@@ -52,34 +55,19 @@ public class TelaVenda extends javax.swing.JInternalFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 atualizarValorTotal();
+                atualizarMediaKg();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 atualizarValorTotal();
+                atualizarMediaKg();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
                 atualizarValorTotal();
-            }
-        });
-
-        // Adiciona o ouvinte de evento ao jTextFieldVendaMediaKg
-        jTextFieldVendaMediaKg.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                atualizarValorTotal();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                atualizarValorTotal();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                atualizarValorTotal();
+                atualizarMediaKg();
             }
         });
 
@@ -138,6 +126,26 @@ public class TelaVenda extends javax.swing.JInternalFrame {
             }
         });
 
+        jTextFieldVendaKgTotais.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+                atualizarMediaKg();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+                atualizarMediaKg();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+                atualizarMediaKg();
+            }
+        });
+
         setLocation(-5, -5);
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -146,29 +154,46 @@ public class TelaVenda extends javax.swing.JInternalFrame {
                 setLocation(-5, -5);
             }
         });
+
     }
 
     private void atualizarValorTotal() {
         try {
             int quantidade = Integer.parseInt(jTextFieldVendaQuantidade.getText());
-            double mediaKg = Double.parseDouble(jTextFieldVendaMediaKg.getText());
+            double kgTotais = Double.parseDouble(jTextFieldVendaKgTotais.getText());
             double precoKg = Double.parseDouble(jTextFieldVendaPrecoKg.getText());
+            double mediaKg = kgTotais / quantidade;
             double valorTotal = quantidade * mediaKg * precoKg;
 
             jTextFieldVendaTotal.setText(String.format("%.2f", valorTotal));
         } catch (NumberFormatException ex) {
+            ex.printStackTrace();
             jTextFieldVendaTotal.setText("Valor Inválido.");
+        }
+    }
+
+    private void atualizarMediaKg() {
+        try {
+            int quantidade = Integer.parseInt(jTextFieldVendaQuantidade.getText());
+            double kgTotais = Double.parseDouble(jTextFieldVendaKgTotais.getText());
+            double mediaKg = kgTotais / quantidade;
+
+            jTextFieldVendaMediaKg.setText(String.format("%.2f", mediaKg));
+
+        } catch (NumberFormatException ex) {
+            ex.printStackTrace();
+            jTextFieldVendaMediaKg.setText("Valor Inválido.");
         }
     }
 
     private void atualizarValorComissao() {
         try {
-              String totalTexto = jTextFieldVendaTotal.getText().trim().replace(",", ".");
+            String totalTexto = jTextFieldVendaTotal.getText().trim().replace(",", ".");
             if (!jTextFieldVendaTotal.getText().equals("Valor Inválido.") && !jTextFieldVendaTotal.getText().isEmpty() && !jTextFieldVendaPorcentagem.getText().isEmpty()) {
                 double valorTotal = Double.parseDouble(totalTexto);
                 double percentual = (Double.parseDouble(jTextFieldVendaPorcentagem.getText()) / 100);
                 double valorPercentual = valorTotal * percentual;
-                
+
                 jTextFieldVendaComissao.setText(String.format("%.2f", valorPercentual));
             } else {
                 jTextFieldVendaComissao.setText("Valor Inválido");
@@ -189,7 +214,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
             precoKg = Double.parseDouble(jTextFieldVendaPrecoKg.getText());
             valorTotal = quantidade * mediaKg * precoKg;
 
-            VendasAnimais venda = new VendasAnimais(01, Integer.parseInt(jTextFieldVendaAnimal.getText()), quantidade, mediaKg, precoKg, valorTotal, jTextFieldVendaComprador.getText(), jTextFieldVendaVendedor.getText(), jComboVendaPagamento.getSelectedItem().toString(), "local", operador);
+            VendasAnimais venda = new VendasAnimais(01, Integer.parseInt(jTextFieldVendaAnimal.getText()), quantidade, Double.parseDouble(jTextFieldVendaKgTotais.getText()), mediaKg, precoKg, percentual, valorPercentual, valorTotal, jTextFieldVendaComprador.getText(), jTextFieldVendaVendedor.getText(), jComboVendaPagamento.getSelectedItem().toString(), operador);
 
             VendasAnimaisDao vendasDao = new VendasAnimaisDao();
             vendasDao.Adicionar(venda);
@@ -209,14 +234,16 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         jTextFieldVendaPrecoKg.setText(null);
         jTextFieldVendaVendedor.setText(null);
         jTextFieldVendaComprador.setText(null);
-
+        jTextFieldVendaKgTotais.setText(null);
+        jTextFieldVendaPorcentagem.setText(null);
+        jTextFieldVendaComissao.setText(null);
         jTextFieldVendaTotal.setText(null);
         jComboVendaPagamento.setSelectedIndex(0);
         ((DefaultTableModel) jTableVenda.getModel()).setRowCount(0);
     }
 
     public void pesquisarAnimalId() {
-        String sql = String.format("SELECT * FROM animais WHERE id like ?");
+        String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE id like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextVendaBusca.getText() + "%");
@@ -229,21 +256,9 @@ public class TelaVenda extends javax.swing.JInternalFrame {
 
     }
 
-    public void pesquisarAnimalDescricao() {
-        String sql = String.format("SELECT * FROM animais WHERE descricao like ?");
-        try {
-            pst = conexao.obterConexao().prepareStatement(sql);
-            pst.setString(1, jTextVendaBusca.getText() + "%");
-            rs = pst.executeQuery();
-
-            jTableVenda.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void pesquisarAnimalIdade() {
-        String sql = String.format("SELECT * FROM animais WHERE idade like ?");
+        String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE idade like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextVendaBusca.getText() + "%");
@@ -257,7 +272,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalSexo() {
-        String sql = String.format("SELECT * FROM animais WHERE sexo like ?");
+        String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE sexo like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextVendaBusca.getText() + "%");
@@ -270,11 +285,13 @@ public class TelaVenda extends javax.swing.JInternalFrame {
 
     }
 
-    public void setarCampo() {
+    public void setarCampos() {
         int setar = jTableVenda.getSelectedRow();
-        String valor = jTableVenda.getModel().getValueAt(setar, 0).toString();
-        if (valor != null) {
-            jTextFieldVendaAnimal.setText(valor);
+        String valorId = jTableVenda.getModel().getValueAt(setar, 0).toString();
+
+        if (valorId != null) {
+            jTextFieldVendaAnimal.setText(valorId);
+
         }
     }
 
@@ -295,8 +312,6 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         jTextVendaBusca = new javax.swing.JTextField();
         jLabelAnimBusca = new javax.swing.JLabel();
         jLabelAnimCampos = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTableVenda = new javax.swing.JTable();
         jTextFieldVendaAnimal = new javax.swing.JTextField();
         jTextFieldVendaQuantidade = new javax.swing.JTextField();
         jTextFieldVendaMediaKg = new javax.swing.JTextField();
@@ -310,12 +325,14 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         jTextFieldVendaVendedor = new javax.swing.JTextField();
         jLabelVendaPagamento = new javax.swing.JLabel();
         jComboVendaPagamento = new javax.swing.JComboBox<>();
-        jLabelVendaValorMedio = new javax.swing.JLabel();
-        jTextFieldVendaValorMedio = new javax.swing.JTextField();
+        jLabelVendaKgTotais = new javax.swing.JLabel();
+        jTextFieldVendaKgTotais = new javax.swing.JTextField();
         jLabelVendaPorcentagem = new javax.swing.JLabel();
         jTextFieldVendaPorcentagem = new javax.swing.JTextField();
         jLabelVendaComissao = new javax.swing.JLabel();
         jTextFieldVendaComissao = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableVenda = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(227, 234, 227));
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -326,16 +343,16 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         jLabelVendaTotal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabelVendaTotal.setText("* Total:");
 
-        jLabelVendaAnimal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelVendaAnimal.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelVendaAnimal.setText("* ID Animal:");
 
-        jLabelVendaQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelVendaQuantidade.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelVendaQuantidade.setText("* Quantidade:");
 
-        jLabelVendaMediaKg.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelVendaMediaKg.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelVendaMediaKg.setText("* Média Kg:");
 
-        jLabelVendaPrecoKg.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelVendaPrecoKg.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelVendaPrecoKg.setText("* Preço Kg:");
 
         jTextVendaBusca.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -351,34 +368,12 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         jLabelAnimCampos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabelAnimCampos.setText("* Campos obrigatórios");
 
-        jTableVenda = new javax.swing.JTable(){
-            public boolean isCellEditable(int rowIndex, int colIndex){
-                return false;
-            }
-        };
-        jTableVenda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTableVenda.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Id", "Descrição", "Quant", "Idade", "Sexo"
-            }
-        ));
-        jTableVenda.setFocusable(false);
-        jTableVenda.setPreferredSize(new java.awt.Dimension(462, 402));
-        jTableVenda.getTableHeader().setReorderingAllowed(false);
-        jTableVenda.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTableVendaMouseClicked(evt);
+        jTextFieldVendaAnimal.setEditable(false);
+        jTextFieldVendaAnimal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldVendaAnimalActionPerformed(evt);
             }
         });
-        jScrollPane1.setViewportView(jTableVenda);
-
-        jTextFieldVendaAnimal.setEditable(false);
 
         jTextFieldVendaQuantidade.setDocument(new ValidadorNumerico());
 
@@ -386,7 +381,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
 
         jTextFieldVendaPrecoKg.setDocument(new ValidadorNumerico());
 
-        jLabelVendaComprador.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelVendaComprador.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelVendaComprador.setText("* Comprador:");
 
         jButtonVendaFinalizar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -397,17 +392,17 @@ public class TelaVenda extends javax.swing.JInternalFrame {
             }
         });
 
-        jComboVendaPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "descricao", "idade", "sexo" }));
+        jComboVendaPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "idade", "sexo" }));
         jComboVendaPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboVendaPesquisaActionPerformed(evt);
             }
         });
 
-        jLabelVendaVendedor.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelVendaVendedor.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelVendaVendedor.setText("* Vendedor:");
 
-        jLabelVendaPagamento.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelVendaPagamento.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelVendaPagamento.setText("* Pagamento:");
 
         jComboVendaPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dinheiro", "Cartão Débito", "Cartão Crédito", "Pix", "Permuta" }));
@@ -417,20 +412,46 @@ public class TelaVenda extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabelVendaValorMedio.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabelVendaValorMedio.setText("* Valor Médio:");
+        jLabelVendaKgTotais.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabelVendaKgTotais.setText("* Kg Totais:");
 
         jTextFieldVendaPrecoKg.setDocument(new ValidadorNumerico());
 
-        jLabelVendaPorcentagem.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelVendaPorcentagem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelVendaPorcentagem.setText("* % Comissão:");
 
         jTextFieldVendaPrecoKg.setDocument(new ValidadorNumerico());
 
-        jLabelVendaComissao.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelVendaComissao.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelVendaComissao.setText("* Comissão:");
 
         jTextFieldVendaPrecoKg.setDocument(new ValidadorNumerico());
+
+        jTableVenda = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        jTableVenda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTableVenda.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Id", "Sexo", "Quant", "Idade"
+            }
+        ));
+        jTableVenda.setFocusable(false);
+        jTableVenda.getTableHeader().setReorderingAllowed(false);
+        jTableVenda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableVendaMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableVenda);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -441,68 +462,69 @@ public class TelaVenda extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabelVendaAnimal)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabelVendaQuantidade)
-                                .addComponent(jLabelVendaMediaKg, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabelVendaPrecoKg, javax.swing.GroupLayout.Alignment.TRAILING))
-                            .addComponent(jLabelVendaValorMedio))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextFieldVendaMediaKg, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextFieldVendaQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextFieldVendaPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextFieldVendaAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jTextFieldVendaValorMedio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabelVendaAnimal)
+                                    .addComponent(jLabelVendaQuantidade))
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabelVendaComprador)
-                                            .addComponent(jLabelVendaVendedor))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jTextFieldVendaComprador)
-                                            .addComponent(jTextFieldVendaVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabelVendaPagamento)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jComboVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(jTextFieldVendaQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldVendaAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(43, 43, 43)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabelVendaComissao)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextFieldVendaComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jLabelVendaPrecoKg)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextFieldVendaPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabelVendaPorcentagem)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextFieldVendaPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                        .addComponent(jLabelVendaKgTotais)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextFieldVendaKgTotais, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabelVendaMediaKg)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextFieldVendaMediaKg, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(1, 1, 1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelVendaVendedor)
+                                .addGap(16, 16, 16)
+                                .addComponent(jTextFieldVendaVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabelVendaPagamento)
+                                    .addComponent(jLabelVendaComprador))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jComboVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldVendaComprador, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelVendaPorcentagem)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldVendaPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelVendaComissao)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldVendaComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(29, 29, 29))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabelVendaTotal)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextFieldVendaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldVendaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonVendaFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jComboVendaPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextVendaBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabelAnimBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
-                                .addComponent(jLabelAnimCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(jComboVendaPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextVendaBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelAnimBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+                        .addComponent(jLabelAnimCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -516,65 +538,78 @@ public class TelaVenda extends javax.swing.JInternalFrame {
                         .addComponent(jComboVendaPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelVendaAnimal)
+                    .addComponent(jTextFieldVendaAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelVendaVendedor)
+                    .addComponent(jTextFieldVendaVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelVendaQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldVendaQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldVendaComprador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelVendaComprador))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelVendaVendedor)
-                            .addComponent(jTextFieldVendaVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelVendaComprador)
-                            .addComponent(jTextFieldVendaComprador, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelVendaPagamento)
-                            .addComponent(jComboVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(94, 94, 94))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(175, 175, 175)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jTextFieldVendaValorMedio, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabelVendaValorMedio, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabelVendaComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextFieldVendaComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabelVendaAnimal)
-                                .addComponent(jTextFieldVendaAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(6, 6, 6)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabelVendaQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextFieldVendaQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabelVendaMediaKg)
-                                .addComponent(jTextFieldVendaMediaKg, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(10, 10, 10)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jTextFieldVendaPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabelVendaPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabelVendaPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextFieldVendaPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonVendaFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldVendaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelVendaTotal))
+                            .addComponent(jComboVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelVendaPagamento)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelVendaKgTotais, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldVendaKgTotais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelVendaPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldVendaPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(2, 2, 2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldVendaComissao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelVendaComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonVendaFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldVendaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelVendaTotal)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelVendaPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldVendaPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelVendaMediaKg)
+                            .addComponent(jTextFieldVendaMediaKg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonVendaFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVendaFinalizarActionPerformed
+        adicionar();
+    }//GEN-LAST:event_jButtonVendaFinalizarActionPerformed
+
+    private void jComboVendaPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboVendaPagamentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboVendaPagamentoActionPerformed
+
+    private void jTextFieldVendaAnimalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldVendaAnimalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldVendaAnimalActionPerformed
+
+    private void jComboVendaPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboVendaPesquisaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboVendaPesquisaActionPerformed
+
     private void jTextVendaBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextVendaBuscaKeyReleased
         if (jComboVendaPesquisa.getSelectedItem().toString() == "id") {
             pesquisarAnimalId();
-        } else if (jComboVendaPesquisa.getSelectedItem().toString() == "descricao") {
-            pesquisarAnimalDescricao();
-        } else if (jComboVendaPesquisa.getSelectedItem().toString() == "idade") {
+        }  else if (jComboVendaPesquisa.getSelectedItem().toString() == "idade") {
             pesquisarAnimalIdade();
         } else if (jComboVendaPesquisa.getSelectedItem().toString() == "sexo") {
             pesquisarAnimalSexo();
@@ -582,20 +617,8 @@ public class TelaVenda extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextVendaBuscaKeyReleased
 
     private void jTableVendaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableVendaMouseClicked
-        setarCampo();
+        setarCampos();
     }//GEN-LAST:event_jTableVendaMouseClicked
-
-    private void jButtonVendaFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVendaFinalizarActionPerformed
-        adicionar();
-    }//GEN-LAST:event_jButtonVendaFinalizarActionPerformed
-
-    private void jComboVendaPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboVendaPesquisaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboVendaPesquisaActionPerformed
-
-    private void jComboVendaPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboVendaPagamentoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboVendaPagamentoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -607,25 +630,25 @@ public class TelaVenda extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabelVendaAnimal;
     private javax.swing.JLabel jLabelVendaComissao;
     private javax.swing.JLabel jLabelVendaComprador;
+    private javax.swing.JLabel jLabelVendaKgTotais;
     private javax.swing.JLabel jLabelVendaMediaKg;
     private javax.swing.JLabel jLabelVendaPagamento;
     private javax.swing.JLabel jLabelVendaPorcentagem;
     private javax.swing.JLabel jLabelVendaPrecoKg;
     private javax.swing.JLabel jLabelVendaQuantidade;
     private javax.swing.JLabel jLabelVendaTotal;
-    private javax.swing.JLabel jLabelVendaValorMedio;
     private javax.swing.JLabel jLabelVendaVendedor;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableVenda;
     private javax.swing.JTextField jTextFieldVendaAnimal;
     private javax.swing.JTextField jTextFieldVendaComissao;
     private javax.swing.JTextField jTextFieldVendaComprador;
+    private javax.swing.JTextField jTextFieldVendaKgTotais;
     private javax.swing.JTextField jTextFieldVendaMediaKg;
     private javax.swing.JTextField jTextFieldVendaPorcentagem;
     private javax.swing.JTextField jTextFieldVendaPrecoKg;
     private javax.swing.JTextField jTextFieldVendaQuantidade;
     private javax.swing.JTextField jTextFieldVendaTotal;
-    private javax.swing.JTextField jTextFieldVendaValorMedio;
     private javax.swing.JTextField jTextFieldVendaVendedor;
     public javax.swing.JTextField jTextVendaBusca;
     // End of variables declaration//GEN-END:variables
