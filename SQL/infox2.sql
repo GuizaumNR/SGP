@@ -24,21 +24,22 @@ CREATE TABLE animais (
     sexo VARCHAR(100) NOT NULL
 );
 
-ALTER TABLE animais
-MODIFY descricao varchar(100);
+drop table compras_animais;
 
 CREATE TABLE compras_animais (
     id_compra INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     data_compra TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     id_animal INT NOT NULL,
     quantidade INT NOT NULL,
+    kg_totais DECIMAL(10, 2) NOT NULL,
     media_kg DECIMAL(10,2) NOT NULL,
     preco_kg DECIMAL(10, 2) NOT NULL,
     valor_total decimal(10,2) NOT NULL,
+    porce_comissao DECIMAL(10, 2) NOT NULL,
+    comissao DECIMAL(10, 2) NOT NULL,
     criador VARCHAR(100) NOT NULL,
     pagador VARCHAR(100) NOT NULL,
     pagamento VARCHAR(100) NOT NULL,
-    local_compra VARCHAR(100),
     operador VARCHAR(100) NOT NULL,
     
     FOREIGN KEY (id_animal) REFERENCES animais(id) ON DELETE CASCADE
@@ -106,7 +107,7 @@ CREATE TABLE despesas (
 -- CONSULTAS {
 use dbinfox;
 DELETE FROM animais;
-
+Drop table vendas_animais;
 
 select * from usuarios;
 select * from animais;

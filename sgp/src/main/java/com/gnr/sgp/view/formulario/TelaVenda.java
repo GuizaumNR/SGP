@@ -55,19 +55,19 @@ public class TelaVenda extends javax.swing.JInternalFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 atualizarValorTotal();
-                atualizarMediaKg();
+                atualizarMedia();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 atualizarValorTotal();
-                atualizarMediaKg();
+                atualizarMedia();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
                 atualizarValorTotal();
-                atualizarMediaKg();
+                atualizarMedia();
             }
         });
 
@@ -130,19 +130,19 @@ public class TelaVenda extends javax.swing.JInternalFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 atualizarValorTotal();
-                atualizarMediaKg();
+                atualizarMedia();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 atualizarValorTotal();
-                atualizarMediaKg();
+                atualizarMedia();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
                 atualizarValorTotal();
-                atualizarMediaKg();
+                atualizarMedia();
             }
         });
 
@@ -162,8 +162,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
             int quantidade = Integer.parseInt(jTextFieldVendaQuantidade.getText());
             double kgTotais = Double.parseDouble(jTextFieldVendaKgTotais.getText());
             double precoKg = Double.parseDouble(jTextFieldVendaPrecoKg.getText());
-            double mediaKg = kgTotais / quantidade;
-            double valorTotal = quantidade * mediaKg * precoKg;
+            double valorTotal = kgTotais * precoKg;
 
             jTextFieldVendaTotal.setText(String.format("%.2f", valorTotal));
         } catch (NumberFormatException ex) {
@@ -172,14 +171,13 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         }
     }
 
-    private void atualizarMediaKg() {
+    private void atualizarMedia() {
         try {
             int quantidade = Integer.parseInt(jTextFieldVendaQuantidade.getText());
             double kgTotais = Double.parseDouble(jTextFieldVendaKgTotais.getText());
             double mediaKg = kgTotais / quantidade;
 
-            jTextFieldVendaMediaKg.setText(String.format("%.2f", mediaKg));
-
+            jTextFieldVendaMediaKg.setText("" + mediaKg);
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
             jTextFieldVendaMediaKg.setText("Valor Inválido.");
@@ -190,11 +188,11 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         try {
             String totalTexto = jTextFieldVendaTotal.getText().trim().replace(",", ".");
             if (!jTextFieldVendaTotal.getText().equals("Valor Inválido.") && !jTextFieldVendaTotal.getText().isEmpty() && !jTextFieldVendaPorcentagem.getText().isEmpty()) {
-                double valorTotal = Double.parseDouble(totalTexto);
-                double percentual = (Double.parseDouble(jTextFieldVendaPorcentagem.getText()) / 100);
-                double valorPercentual = valorTotal * percentual;
+                valorTotal = Double.parseDouble(totalTexto);
+                percentual = (Double.parseDouble(jTextFieldVendaPorcentagem.getText()) / 100);
+                valorPercentual = valorTotal * percentual;
 
-                jTextFieldVendaComissao.setText(String.format("%.2f", valorPercentual));
+                jTextFieldVendaComissao.setText("" + valorPercentual);
             } else {
                 jTextFieldVendaComissao.setText("Valor Inválido");
             }
@@ -214,7 +212,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
             precoKg = Double.parseDouble(jTextFieldVendaPrecoKg.getText());
             valorTotal = quantidade * mediaKg * precoKg;
 
-            VendasAnimais venda = new VendasAnimais(01, Integer.parseInt(jTextFieldVendaAnimal.getText()), quantidade, Double.parseDouble(jTextFieldVendaKgTotais.getText()), mediaKg, precoKg, percentual, valorPercentual, valorTotal, jTextFieldVendaComprador.getText(), jTextFieldVendaVendedor.getText(), jComboVendaPagamento.getSelectedItem().toString(), operador);
+            VendasAnimais venda = new VendasAnimais(01, Integer.parseInt(jTextFieldVendaAnimal.getText()), quantidade, Double.parseDouble(jTextFieldVendaKgTotais.getText()), mediaKg, precoKg, (percentual * 100), valorPercentual, valorTotal, jTextFieldVendaComprador.getText(), jTextFieldVendaVendedor.getText(), jComboVendaPagamento.getSelectedItem().toString(), operador);
 
             VendasAnimaisDao vendasDao = new VendasAnimaisDao();
             vendasDao.Adicionar(venda);
@@ -255,7 +253,6 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         }
 
     }
-
 
     public void pesquisarAnimalIdade() {
         String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE idade like ?");
@@ -378,8 +375,11 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         jTextFieldVendaQuantidade.setDocument(new ValidadorNumerico());
 
         jTextFieldVendaMediaKg.setDocument(new ValidadorNumerico());
+        jTextFieldVendaMediaKg.setEditable(false);
 
         jTextFieldVendaPrecoKg.setDocument(new ValidadorNumerico());
+
+        jTextFieldVendaTotal.setEditable(false);
 
         jLabelVendaComprador.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelVendaComprador.setText("* Comprador:");
@@ -426,6 +426,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         jLabelVendaComissao.setText("* Comissão:");
 
         jTextFieldVendaPrecoKg.setDocument(new ValidadorNumerico());
+        jTextFieldVendaComissao.setEditable(false);
 
         jTableVenda = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex){
@@ -609,7 +610,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
     private void jTextVendaBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextVendaBuscaKeyReleased
         if (jComboVendaPesquisa.getSelectedItem().toString() == "id") {
             pesquisarAnimalId();
-        }  else if (jComboVendaPesquisa.getSelectedItem().toString() == "idade") {
+        } else if (jComboVendaPesquisa.getSelectedItem().toString() == "idade") {
             pesquisarAnimalIdade();
         } else if (jComboVendaPesquisa.getSelectedItem().toString() == "sexo") {
             pesquisarAnimalSexo();
