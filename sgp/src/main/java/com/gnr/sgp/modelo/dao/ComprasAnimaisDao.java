@@ -26,7 +26,7 @@ public class ComprasAnimaisDao {
     }
 
     public String Adicionar(ComprasAnimais compra) {
-        String sql = "INSERT INTO compras_animais (id_animal, quantidade, media_kg, preco_kg, valor_total, criador, pagador, pagamento, local_compra, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO compras_animais (id_animal, quantidade, kg_totais, media_kg, preco_kg, valor_total, criador, porce_comissao, comissao, pagador, pagamento, operador) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             Animais animalTemp = buscarAnimaisId(compra.getId_animal());
@@ -37,14 +37,16 @@ public class ComprasAnimaisDao {
                 PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
                 pst.setInt(1, compra.getId_animal());
                 pst.setInt(2, compra.getQuantidade());
-                pst.setDouble(3, compra.getMedia_kg());
-                pst.setDouble(4, compra.getPreco_kg());
-                pst.setDouble(5, compra.getValor_total());
-                pst.setString(6, compra.getCriador());
-                pst.setString(7, compra.getPagador());
-                pst.setString(8, compra.getPagamento());
-                pst.setString(9, compra.getLocal());
-                pst.setString(10, compra.getOperador());
+                pst.setDouble(3, compra.getKg_totais());
+                pst.setDouble(4, compra.getMedia_kg());
+                pst.setDouble(5, compra.getPreco_kg());
+                pst.setDouble(6, compra.getValor_total());
+                pst.setString(7, compra.getCriador());
+                pst.setDouble(8, compra.getPorce_comissao());
+                pst.setDouble(9, compra.getComissao());
+                pst.setString(10, compra.getPagador());
+                pst.setString(11, compra.getPagamento());
+                pst.setString(12, compra.getOperador());
 
                 int resultado = pst.executeUpdate();
 

@@ -13,38 +13,34 @@ public class ComprasAnimais {
     private Long id_compra;
     private int id_animal;
     private int quantidade;
+    private double kg_totais;
     private double media_kg;
     private double preco_kg;
     private double valor_total;
+    private double porce_comissao;
+    private double comissao;
     private String criador;
     private String pagador;
     private String pagamento;
-    private String local;
     private String operador;
-    
+
     public ComprasAnimais() {
     }
 
-    public ComprasAnimais(Long id_compra, int id_animal, int quantidade, double media_kg, double preco_kg, double valor_total, String criador, String pagador, String pagamento, String local, String operador) {
+    public ComprasAnimais(Long id_compra, int id_animal, int quantidade, double kg_totais, double media_kg, double preco_kg, double valor_total, double porce_comissao, double comissao, String criador, String pagador, String pagamento, String operador) {
         this.id_compra = id_compra;
         this.id_animal = id_animal;
         this.quantidade = quantidade;
+        this.kg_totais = kg_totais;
         this.media_kg = media_kg;
         this.preco_kg = preco_kg;
         this.valor_total = valor_total;
+        this.porce_comissao = porce_comissao;
+        this.comissao = comissao;
         this.criador = criador;
         this.pagador = pagador;
         this.pagamento = pagamento;
-        this.local = local;
         this.operador = operador;
-    }
-
-    public String getPagamento() {
-        return pagamento;
-    }
-
-    public void setPagamento(String pagamento) {
-        this.pagamento = pagamento;
     }
 
     public Long getId_compra() {
@@ -71,6 +67,14 @@ public class ComprasAnimais {
         this.quantidade = quantidade;
     }
 
+    public double getKg_totais() {
+        return kg_totais;
+    }
+
+    public void setKg_totais(double kg_totais) {
+        this.kg_totais = kg_totais;
+    }
+
     public double getMedia_kg() {
         return media_kg;
     }
@@ -95,6 +99,22 @@ public class ComprasAnimais {
         this.valor_total = valor_total;
     }
 
+    public double getPorce_comissao() {
+        return porce_comissao;
+    }
+
+    public void setPorce_comissao(double porce_comissao) {
+        this.porce_comissao = porce_comissao;
+    }
+
+    public double getComissao() {
+        return comissao;
+    }
+
+    public void setComissao(double comissao) {
+        this.comissao = comissao;
+    }
+
     public String getCriador() {
         return criador;
     }
@@ -111,12 +131,12 @@ public class ComprasAnimais {
         this.pagador = pagador;
     }
 
-    public String getLocal() {
-        return local;
+    public String getPagamento() {
+        return pagamento;
     }
 
-    public void setLocal(String local) {
-        this.local = local;
+    public void setPagamento(String pagamento) {
+        this.pagamento = pagamento;
     }
 
     public String getOperador() {
@@ -126,7 +146,6 @@ public class ComprasAnimais {
     public void setOperador(String operador) {
         this.operador = operador;
     }
-
     
     
     

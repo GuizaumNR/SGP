@@ -9,8 +9,6 @@ import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.ComprasAnimaisDao;
 import com.gnr.sgp.modelo.dominio.ComprasAnimais;
 import com.gnr.sgp.view.modelo.ValidadorNumerico;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.sql.PreparedStatement;
@@ -39,6 +37,9 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     double mediaKg = 0;
     double precoKg = 0;
     double valorTotal = 0;
+    double kgTotais = 0;
+    double percentual = 0;
+    double comissao = 0;
 
     String operador;
     
@@ -55,34 +56,19 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 atualizarValorTotal();
+                atualizarMedia();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 atualizarValorTotal();
+                atualizarMedia();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
                 atualizarValorTotal();
-            }
-        });
-
-        // Adiciona o ouvinte de evento ao jTextFieldVendaMediaKg
-        jTextFieldCompMediaKg.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                atualizarValorTotal();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                atualizarValorTotal();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                atualizarValorTotal();
+                atualizarMedia();
             }
         });
 
@@ -104,6 +90,61 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             }
 
         });
+        
+        jTextFieldCompTotal.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                atualizarValorComissao();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                atualizarValorComissao();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                atualizarValorComissao();
+            }
+        });
+
+        // Adiciona o ouvinte de evento ao jTextFieldVendaPorcentagem
+        jTextFieldCompPorcentagem.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                atualizarValorComissao();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                atualizarValorComissao();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                atualizarValorComissao();
+            }
+        });
+
+        jTextFieldCompKgTotais.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+                atualizarMedia();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+                atualizarMedia();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                atualizarValorTotal();
+                atualizarMedia();
+            }
+        });
 
         setLocation(-5, -5);
         this.addComponentListener(new ComponentAdapter() {
@@ -119,18 +160,50 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     private void atualizarValorTotal() {
         try {
             int quantidade = Integer.parseInt(jTextFieldCompQuantidade.getText());
-            double mediaKg = Double.parseDouble(jTextFieldCompMediaKg.getText());
+            kgTotais = Double.parseDouble(jTextFieldCompKgTotais.getText());
             double precoKg = Double.parseDouble(jTextFieldCompPrecoKg.getText());
-            double valorTotal = quantidade * mediaKg * precoKg;
+            double valorTotal = kgTotais * precoKg;
 
             jTextFieldCompTotal.setText(String.format("%.2f", valorTotal));
         } catch (NumberFormatException ex) {
-            jTextFieldCompTotal.setText("Valor Inválido");
+            ex.printStackTrace();
+            jTextFieldCompTotal.setText("Valor Inválido.");
+        }
+    }
+
+    private void atualizarMedia() {
+        try {
+            int quantidade = Integer.parseInt(jTextFieldCompQuantidade.getText());
+            double mediaKg = kgTotais / quantidade;
+
+            jTextFieldCompMediaKg.setText("" + mediaKg);
+        } catch (NumberFormatException ex) {
+            ex.printStackTrace();
+            jTextFieldCompMediaKg.setText("Valor Inválido.");
+        }
+    }
+
+    private void atualizarValorComissao() {
+        try {
+            String totalTexto = jTextFieldCompTotal.getText().trim().replace(",", ".");
+            if (!jTextFieldCompTotal.getText().equals("Valor Inválido.") && !jTextFieldCompTotal.getText().isEmpty() && !jTextFieldCompPorcentagem.getText().isEmpty()) {
+                valorTotal = Double.parseDouble(totalTexto);
+                percentual = (Double.parseDouble(jTextFieldCompPorcentagem.getText()) / 100);
+                comissao = valorTotal * percentual;
+
+                jTextFieldCompComissao.setText("" + comissao);
+            } else {
+                jTextFieldCompComissao.setText("Valor Inválido");
+            }
+
+        } catch (NumberFormatException ex) {
+            jTextFieldCompComissao.setText("Valor Inválido");
+            ex.printStackTrace();
         }
     }
 
     public void adicionar() {
-        if ((jTextFieldCompAnimal.getText().isEmpty() || jTextFieldCompQuantidade.getText().isEmpty() || jTextFieldCompMediaKg.getText().isEmpty() || jTextFieldCompPrecoKg.getText().isEmpty() || jTextFieldCompCriador.getText().isEmpty() || jTextFieldCompTotal.getText().isEmpty())) {
+        if ((jTextFieldCompAnimal.getText().isEmpty() || jTextFieldCompQuantidade.getText().isEmpty() || jTextFieldCompMediaKg.getText().isEmpty() || jTextFieldCompPrecoKg.getText().isEmpty() || jTextFieldCompCriador.getText().isEmpty() || jTextFieldCompTotal.getText().isEmpty() || jTextFieldCompKgTotais.getText().isEmpty() || jTextFieldCompPorcentagem.getText().isEmpty() || jTextFieldCompComissao.getText().isEmpty())) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
         } else {
             quantidade = Integer.parseInt(jTextFieldCompQuantidade.getText());
@@ -138,7 +211,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             precoKg = Double.parseDouble(jTextFieldCompPrecoKg.getText());
             valorTotal = quantidade * mediaKg * precoKg;
 
-            ComprasAnimais compra = new ComprasAnimais(null, Integer.parseInt(jTextFieldCompAnimal.getText()), quantidade, mediaKg, precoKg, valorTotal, jTextFieldCompCriador.getText(), jComboCompPagador.getSelectedItem().toString(), jComboCompPagamento.getSelectedItem().toString(), "local", operador);
+            ComprasAnimais compra = new ComprasAnimais(null, Integer.parseInt(jTextFieldCompAnimal.getText()), quantidade,(kgTotais*10), mediaKg, precoKg, valorTotal, (percentual * 100), comissao, jTextFieldCompCriador.getText(), jComboCompPagador.getSelectedItem().toString(), jComboCompPagamento.getSelectedItem().toString(), operador);
 
             ComprasAnimaisDao comprasDao = new ComprasAnimaisDao();
             comprasDao.Adicionar(compra);
@@ -159,7 +232,9 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         jTextFieldCompCriador.setText(null);
         jComboCompPagamento.setSelectedIndex(0);
         jComboCompPagador.setSelectedIndex(0);
-        //jTextFieldCompLocal.setText(null);
+        jTextFieldCompKgTotais.setText(null);
+        jTextFieldCompPorcentagem.setText(null);
+        jTextFieldCompComissao.setText(null);
         jTextFieldCompTotal.setText(null);
         ((DefaultTableModel) jTableComp.getModel()).setRowCount(0);
     }
@@ -249,12 +324,12 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         jComboCompPagamento = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableComp = new javax.swing.JTable();
-        jTextFieldVendaPorcentagem = new javax.swing.JTextField();
-        jLabelVendaPorcentagem = new javax.swing.JLabel();
-        jLabelVendaComissao = new javax.swing.JLabel();
-        jTextFieldVendaComissao = new javax.swing.JTextField();
-        jLabelCompMediaKg1 = new javax.swing.JLabel();
-        jTextFieldCompMediaKg1 = new javax.swing.JTextField();
+        jTextFieldCompPorcentagem = new javax.swing.JTextField();
+        jLabelCompPorcentagem = new javax.swing.JLabel();
+        jLabelCompComissao = new javax.swing.JLabel();
+        jTextFieldCompComissao = new javax.swing.JTextField();
+        jLabelCompKgTotais = new javax.swing.JLabel();
+        jTextFieldCompKgTotais = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(227, 234, 227));
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -266,9 +341,11 @@ public class TelaCompra extends javax.swing.JInternalFrame {
 
         jTextFieldCompQuantidade.setDocument(new ValidadorNumerico());
 
-        jTextFieldCompMediaKg.setDocument(new ValidadorNumerico());
+        jTextFieldCompMediaKg.setEditable(false);
 
         jTextFieldCompPrecoKg.setDocument(new ValidadorNumerico());
+
+        jTextFieldCompTotal.setEditable(false);
 
         jLabelCompAnimal1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelCompAnimal1.setText("* Criador:");
@@ -362,16 +439,20 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jTableComp);
 
-        jLabelVendaPorcentagem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabelVendaPorcentagem.setText("* % Comissão:");
+        jTextFieldCompPorcentagem.setDocument(new ValidadorNumerico());
 
-        jLabelVendaComissao.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabelVendaComissao.setText("* Comissão:");
+        jLabelCompPorcentagem.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabelCompPorcentagem.setText("* % Comissão:");
 
-        jLabelCompMediaKg1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabelCompMediaKg1.setText("* Kg Totais:");
+        jLabelCompComissao.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabelCompComissao.setText("* Comissão:");
 
-        jTextFieldCompMediaKg.setDocument(new ValidadorNumerico());
+        jTextFieldCompComissao.setEditable(false);
+
+        jLabelCompKgTotais.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabelCompKgTotais.setText("* Kg Totais:");
+
+        jTextFieldCompKgTotais.setDocument(new ValidadorNumerico());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -407,9 +488,9 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(jTextFieldCompPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabelCompMediaKg1)
+                                        .addComponent(jLabelCompKgTotais)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextFieldCompMediaKg1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTextFieldCompKgTotais, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabelCompMediaKg)
                                         .addGap(18, 18, 18)
@@ -429,21 +510,21 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTextFieldCompCriador, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelCompPagador)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboCompPagador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelVendaPorcentagem)
+                                .addComponent(jLabelCompPorcentagem)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextFieldVendaPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jTextFieldCompPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelVendaComissao)
+                                .addComponent(jLabelCompComissao)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextFieldVendaComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jTextFieldCompComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jTextFieldCompTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelCompPagador)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboCompPagador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -465,20 +546,20 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                             .addComponent(jLabelCompAnimal1))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelCompPagamento)
-                            .addComponent(jComboCompPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelCompPagador)
                             .addComponent(jComboCompPagador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelCompPagamento)
+                            .addComponent(jComboCompPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelVendaPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldVendaPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabelCompPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldCompPorcentagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextFieldVendaComissao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelVendaComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTextFieldCompComissao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelCompComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelCompAnimal)
@@ -489,8 +570,8 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                             .addComponent(jTextFieldCompQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelCompMediaKg1)
-                            .addComponent(jTextFieldCompMediaKg1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabelCompKgTotais)
+                            .addComponent(jTextFieldCompKgTotais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextFieldCompPrecoKg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -499,7 +580,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelCompMediaKg)
                             .addComponent(jTextFieldCompMediaKg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCompFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldCompTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -550,26 +631,26 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabelCompAnimal1;
     private javax.swing.JLabel jLabelCompBusca;
     private javax.swing.JLabel jLabelCompCampos;
+    private javax.swing.JLabel jLabelCompComissao;
+    private javax.swing.JLabel jLabelCompKgTotais;
     private javax.swing.JLabel jLabelCompMediaKg;
-    private javax.swing.JLabel jLabelCompMediaKg1;
     private javax.swing.JLabel jLabelCompPagador;
     private javax.swing.JLabel jLabelCompPagamento;
+    private javax.swing.JLabel jLabelCompPorcentagem;
     private javax.swing.JLabel jLabelCompPrecoKg;
     private javax.swing.JLabel jLabelCompQuantidade;
     private javax.swing.JLabel jLabelCompTotal;
-    private javax.swing.JLabel jLabelVendaComissao;
-    private javax.swing.JLabel jLabelVendaPorcentagem;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableComp;
     public javax.swing.JTextField jTextCompBusca;
     private javax.swing.JTextField jTextFieldCompAnimal;
+    private javax.swing.JTextField jTextFieldCompComissao;
     private javax.swing.JTextField jTextFieldCompCriador;
+    private javax.swing.JTextField jTextFieldCompKgTotais;
     private javax.swing.JTextField jTextFieldCompMediaKg;
-    private javax.swing.JTextField jTextFieldCompMediaKg1;
+    private javax.swing.JTextField jTextFieldCompPorcentagem;
     private javax.swing.JTextField jTextFieldCompPrecoKg;
     private javax.swing.JTextField jTextFieldCompQuantidade;
     private javax.swing.JTextField jTextFieldCompTotal;
-    private javax.swing.JTextField jTextFieldVendaComissao;
-    private javax.swing.JTextField jTextFieldVendaPorcentagem;
     // End of variables declaration//GEN-END:variables
 }

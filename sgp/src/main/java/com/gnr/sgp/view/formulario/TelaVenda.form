@@ -141,7 +141,7 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="165" max="-2" attributes="0"/>
-              <EmptySpace pref="47" max="32767" attributes="0"/>
+              <EmptySpace pref="35" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabelVendaAnimal" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jTextFieldVendaAnimal" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
@@ -156,7 +156,7 @@
                   <Component id="jLabelVendaComprador" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jComboVendaPagamento" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -183,12 +183,6 @@
                           <Component id="jTextFieldVendaComissao" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelVendaComissao" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jButtonVendaFinalizar" alignment="3" min="-2" pref="44" max="-2" attributes="0"/>
-                          <Component id="jTextFieldVendaTotal" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelVendaTotal" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -201,6 +195,12 @@
                           <Component id="jTextFieldVendaMediaKg" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
+              </Group>
+              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jButtonVendaFinalizar" alignment="3" min="-2" pref="44" max="-2" attributes="0"/>
+                  <Component id="jTextFieldVendaTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelVendaTotal" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -294,9 +294,6 @@
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
       </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextFieldVendaMediaKg.setDocument(new ValidadorNumerico());"/>
-      </AuxValues>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldVendaPrecoKg">
       <AuxValues>
@@ -393,7 +390,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldVendaKgTotais">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextFieldVendaPrecoKg.setDocument(new ValidadorNumerico());"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextFieldVendaKgTotais.setDocument(new ValidadorNumerico());"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelVendaPorcentagem">
@@ -406,7 +403,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldVendaPorcentagem">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextFieldVendaPrecoKg.setDocument(new ValidadorNumerico());"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextFieldVendaPorcentagem.setDocument(new ValidadorNumerico());"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelVendaComissao">
@@ -421,9 +418,6 @@
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
       </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTextFieldVendaPrecoKg.setDocument(new ValidadorNumerico());"/>
-      </AuxValues>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>
