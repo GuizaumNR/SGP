@@ -100,7 +100,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
             return false; // Não é possível converter para números inteiros
         }
     }
-    
+
     public static String formatarPeso(double valor) {
         // Crie um objeto DecimalFormat com o formato desejado
         DecimalFormat df = new DecimalFormat("#,##0.00 kg");
@@ -110,7 +110,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
 
         return valorFormatado;
     }
-    
+
     public static String formatarValor(double valor) {
         // Crie um objeto DecimalFormat com o formato desejado
         DecimalFormat df = new DecimalFormat("R$ #,##0.00");
@@ -120,29 +120,28 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
 
         return valorFormatado;
     }
-    
+
     public static double reverterValorFormatado(String valorFormatado) {
-    // Remova o prefixo "R$"
-    valorFormatado = valorFormatado.replace("R$", "").trim();
+        // Remova o prefixo "R$"
+        valorFormatado = valorFormatado.replace("R$", "").trim();
 
-    // Substitua o ponto pelo ponto como separador decimal
-    valorFormatado = valorFormatado.replace(".", "");
+        // Substitua o ponto pelo ponto como separador decimal
+        valorFormatado = valorFormatado.replace(".", "");
 
-    // Substitua a vírgula por ponto como separador decimal
-    valorFormatado = valorFormatado.replace(",", ".");
+        // Substitua a vírgula por ponto como separador decimal
+        valorFormatado = valorFormatado.replace(",", ".");
 
-    try {
-        // Converta a string para um tipo double
-        double valor = Double.parseDouble(valorFormatado);
+        try {
+            // Converta a string para um tipo double
+            double valor = Double.parseDouble(valorFormatado);
 
-        return valor;
-    } catch (NumberFormatException e) {
-        // Lida com valores que não podem ser convertidos para double
-        System.out.println("Erro ao reverter o valor formatado em double: " + e.getMessage());
-        return 0.0; // ou outro valor padrão de sua escolha
+            return valor;
+        } catch (NumberFormatException e) {
+            // Lida com valores que não podem ser convertidos para double
+            System.out.println("Erro ao reverter o valor formatado em double: " + e.getMessage());
+            return 0.0; // ou outro valor padrão de sua escolha
+        }
     }
-}
-
 
     public void criarDocumento(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
 
@@ -197,20 +196,24 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
 
                 if (jRadioButtonRelCompraDesc.isSelected()) {
                     if (!pagamento.equals("*")) {
-                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, c.quantidade, media_kg, "
+                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.sexo as sexo_animal, a.idade as idade_animal, c.quantidade, c.kg_totais, c.media_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "criador, pagador, pagamento, local_compra, operador "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
+                                + "criador, pagador, pagamento, operador "
                                 + "FROM compras_animais c "
                                 + "JOIN animais a ON c.id_animal = a.id "
                                 + "WHERE data_compra BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
                                 + "AND pagamento = '" + pagamento + "' "
                                 + "ORDER BY " + ordem + " DESC";
                     } else {
-                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, c.quantidade, media_kg, "
+                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.sexo as sexo_animal, a.idade as idade_animal, c.quantidade, c.kg_totais, c.media_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "criador, pagador, pagamento, local_compra, operador "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
+                                + "criador, pagador, pagamento, operador "
                                 + "FROM compras_animais c "
                                 + "JOIN animais a ON c.id_animal = a.id "
                                 + "WHERE data_compra BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
@@ -219,20 +222,24 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
 
                 } else {
                     if (!pagamento.equals("*")) {
-                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, c.quantidade, media_kg, "
+                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.sexo as sexo_animal, a.idade as idade_animal, c.quantidade, c.kg_totais, c.media_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "criador, pagador, pagamento, local_compra, operador "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
+                                + "criador, pagador, pagamento, operador "
                                 + "FROM compras_animais c "
                                 + "JOIN animais a ON c.id_animal = a.id "
                                 + "WHERE data_compra BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
                                 + "AND pagamento = '" + pagamento + "' "
                                 + "ORDER BY " + ordem;
                     } else {
-                        sqlPDF = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, c.quantidade, media_kg, "
+                        sqlPDF  = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.sexo as sexo_animal, a.idade as idade_animal, c.quantidade, c.kg_totais, c.media_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "criador, pagador, pagamento, local_compra, operador "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
+                                + "criador, pagador, pagamento, operador "
                                 + "FROM compras_animais c "
                                 + "JOIN animais a ON c.id_animal = a.id "
                                 + "WHERE data_compra BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
@@ -249,7 +256,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                     PdfDocument documentoPDF = new PdfDocument(pdfWriter);
                     Document document = new Document(documentoPDF, PageSize.A4);
 
-                    float[] columnWidths = {1, 3, 4, 2, 2, 1, 2, 3, 3, 3, 3, 2};
+                    float[] columnWidths = {1,3,1,1,1,3,3,3,4,2,3,4,4,4,4};
                     Table table = new Table(columnWidths);
                     table.setWidthPercent(100);
                     table.setHorizontalAlignment(HorizontalAlignment.CENTER);
@@ -286,7 +293,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                     document.add(new Paragraph(""));
 
                     PdfFont headerFont = PdfFontFactory.createFont();
-                    String[] headers = {"ID", "Data", "Animal", "Qtde", "Média Kg", "Preço Kg", "Total", "Criador", "Pagador", "Pagamento", "Local", "Operador"};
+                    String[] headers = {"ID", "Data", "Sexo", "idade", "Qtde", "Kg Totais", "Média Kg", "Preço Kg", "Total", "%", "Comissão", "Criador", "Pagador", "Pagamento", "Operador"};
                     for (String header : headers) {
                         Cell cell = new Cell().add(header).setFont(headerFont).setFontSize(10).setBackgroundColor(DeviceGray.BLACK).setTextAlignment(TextAlignment.CENTER).setFontColor(DeviceGray.WHITE);
                         table.addCell(cell);
@@ -304,23 +311,26 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                     while (resultPDF.next()) {
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_compra")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_descricao")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("sexo_animal")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("idade_animal")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(formatarPeso(Double.parseDouble(resultPDF.getString("kg_totais")))));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(formatarPeso(Double.parseDouble(resultPDF.getString("media_kg")))));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(14).add(resultPDF.getString("preco_kg_formatado")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(40).add(resultPDF.getString("valor_total_formatado")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("porce_formatado")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("comissao_formatado")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("criador")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("pagador")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("pagamento")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_compra")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("operador")));
 
                         int quantidade = resultPDF.getInt("quantidade"); // Substitua o nome da coluna conforme necessário
                         totalQuantidade += quantidade;
-                        
-                        String media = resultPDF.getString("media_kg");
-                        Double mediaFormatada = Double.parseDouble(media);
-                        totalKilo += mediaFormatada;
+
+                        String kg_totais = resultPDF.getString("kg_totais");
+                        Double totaisFormatado = Double.parseDouble(kg_totais);
+                        totalKilo += totaisFormatado;
 
                         String total = resultPDF.getString("valor_total_formatado");
                         double totalFormatado = reverterValorFormatado(total);
@@ -331,15 +341,18 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add("Totais"));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(String.valueOf(totalQuantidade)));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(formatarPeso(totalKilo)));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(formatarValor(totalValor)));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
                     
                     table.setAutoLayout();
                     document.add(table);

@@ -155,25 +155,25 @@ WHERE n.data_morte BETWEEN '2023-07-20' AND '2023-10-31';
 SELECT 
     id_compra, 
     DATE_FORMAT(data_compra, '%d/%m/%Y %H:%i:%s') as data_formatada, 
-    a.descricao as animal_descricao,
     c.quantidade,
-    media_kg,
-	CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado,
-    CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado,
-    criador,
-    pagador,
-    pagamento,
-    local_compra,
-    operador
+    c.media_kg,
+	CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado,
+    CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado,
+    CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado,
+    CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado,
+    c.criador,
+    c.pagador,
+    c.pagamento,
+    c.operador
 FROM compras_animais c
 JOIN animais a ON c.id_animal = a.id
-WHERE data_compra BETWEEN '2023-07-20' AND '2023-08-31'
-ORDER BY data_compra;
+WHERE c.data_compra BETWEEN '2023-07-20' AND '2023-12-31'
+ORDER BY c.data_compra;
 
 
 -- lsita de animais mais vendidos
 SELECT a.descricao AS nome_animal, SUM(va.quantidade) AS total_vendido
-FROM vendas_animais va
+FROM vendas_animais va 
 JOIN animais a ON va.id_animal = a.id
 GROUP BY va.id_animal, a.descricao
 ORDER BY total_vendido DESC;
@@ -181,11 +181,11 @@ ORDER BY total_vendido DESC;
 -- lista de vendas entre determinadas datas
 SELECT *
 FROM vendas_animais
-WHERE data_venda >= '2023-01-01' AND data_venda <= '2023-12-31';
+WHERE data_venda >= '2023-10-13' AND data_venda <= '2023-12-31';
 
 SELECT *
 FROM compras_animais
-WHERE data_compra >= '2023-08-03' AND data_compra <= '2023-08-31';
+WHERE data_compra >= '2023-10-13' AND data_compra <= '2023-12-31';
 
 SELECT * FROM nascimentos;
 
