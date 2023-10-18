@@ -6,6 +6,7 @@ package com.gnr.sgp.view.formulario;
 
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
+import static com.gnr.sgp.view.formulario.TelaRelatorioCompra.formatarPeso;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.kernel.color.DeviceGray;
 import com.itextpdf.kernel.font.PdfFont;
@@ -195,10 +196,12 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
                 if (jRadioButtonRelVendaDesc.isSelected()) {
                     if (pagamento != "*") {
-                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, preco_kg, "
+                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "vendedor, comprador, pagamento, local_venda, operador "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
+                                + "vendedor, comprador, pagamento, operador "
                                 + "FROM vendas_animais v "
                                 + "JOIN animais a ON v.id_animal = a.id "
                                 + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
@@ -206,10 +209,12 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                                 + "ORDER BY " + ordem + " DESC";
 
                     } else {
-                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, "
+                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "vendedor, comprador, pagamento, local_venda, operador "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
+                                + "vendedor, comprador, pagamento, operador "
                                 + "FROM vendas_animais v "
                                 + "JOIN animais a ON v.id_animal = a.id "
                                 + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
@@ -218,20 +223,24 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
                 } else {
                     if (pagamento != "*") {
-                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, "
+                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "vendedor, comprador, pagamento, local_venda, operador "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
+                                + "vendedor, comprador, pagamento, operador "
                                 + "FROM vendas_animais v "
                                 + "JOIN animais a ON v.id_animal = a.id "
                                 + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
                                 + "AND pagamento = '" + pagamento + "' "
                                 + "ORDER BY " + ordem;
                     } else {
-                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada, a.descricao as animal_descricao, v.quantidade, media_kg, "
+                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "vendedor, comprador, pagamento, local_venda, operador "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
+                                + "vendedor, comprador, pagamento, operador "
                                 + "FROM vendas_animais v "
                                 + "JOIN animais a ON v.id_animal = a.id "
                                 + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
@@ -247,7 +256,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                     PdfDocument documentoPDF = new PdfDocument(pdfWriter);
                     Document document = new Document(documentoPDF, PageSize.A4);
 
-                    float[] columnWidths = {1, 3, 4, 2, 2, 1, 2, 3, 3, 3, 3, 2};
+                    float[] columnWidths = {1, 3, 1, 1, 1, 3, 3, 3, 4, 2, 3, 4, 4, 4, 4};
                     Table table = new Table(columnWidths);
                     table.setWidthPercent(100);
                     table.setHorizontalAlignment(HorizontalAlignment.CENTER);
@@ -284,7 +293,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                     document.add(new Paragraph(""));
 
                     PdfFont headerFont = PdfFontFactory.createFont();
-                    String[] headers = {"ID", "Data", "Animal", "Qtde", "Média Kg", "Preço Kg", "Total", "Vend", "Comp", "Pag", "Local", "Operador"};
+                    String[] headers = {"ID", "Data", "Sexo", "idade", "Qtde", "Kg Totais", "Média Kg", "Preço Kg", "Total", "%", "Comissão", "Vend", "Comp", "Pag", "Operador"};
                     for (String header : headers) {
                         Cell cell = new Cell().add(header).setFont(headerFont).setFontSize(10).setBackgroundColor(DeviceGray.BLACK).setTextAlignment(TextAlignment.CENTER).setFontColor(DeviceGray.WHITE);
                         table.addCell(cell);
@@ -298,46 +307,57 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                     int totalQuantidade = 0;
                     double totalKilo = 0;
                     double totalValor = 0;
+                    double totalComissao = 0;
 
                     while (resultPDF.next()) {
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_venda")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("animal_descricao")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("sexo_animal")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("idade_animal")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(formatarPeso(Double.parseDouble(resultPDF.getString("kg_totais")))));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(formatarPeso(Double.parseDouble(resultPDF.getString("media_kg")))));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(14).add(resultPDF.getString("preco_kg_formatado")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(40).add(resultPDF.getString("valor_total_formatado")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("porce_formatado")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("comissao_formatado")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("vendedor")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("comprador")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("pagamento")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(resultPDF.getString("local_venda")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("operador")));
 
                         int quantidade = resultPDF.getInt("quantidade"); // Substitua o nome da coluna conforme necessário
                         totalQuantidade += quantidade;
 
-                        String media = resultPDF.getString("media_kg");
-                        Double mediaFormatada = Double.parseDouble(media);
-                        totalKilo += mediaFormatada;
+                        String totais = resultPDF.getString("kg_totais");
+                        Double totaisFormatado = Double.parseDouble(totais);
+                        totalKilo += totaisFormatado;
 
                         String total = resultPDF.getString("valor_total_formatado");
                         double totalFormatado = reverterValorFormatado(total);
                         totalValor += totalFormatado;
+                        
+                        String comissao = resultPDF.getString("comissao_formatado");
+                        double comissaoFormatado = reverterValorFormatado(comissao);
+                        totalComissao += comissaoFormatado;
 
                     }
 
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add("Totais"));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(String.valueOf(totalQuantidade)));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(formatarPeso(totalKilo)));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(formatarValor(totalValor)));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(formatarValor(totalComissao)));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
 
                     table.setAutoLayout();
                     document.add(table);

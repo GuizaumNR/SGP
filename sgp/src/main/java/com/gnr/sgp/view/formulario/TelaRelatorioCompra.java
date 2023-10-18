@@ -256,7 +256,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                     PdfDocument documentoPDF = new PdfDocument(pdfWriter);
                     Document document = new Document(documentoPDF, PageSize.A4);
 
-                    float[] columnWidths = {1,3,1,1,1,3,3,3,4,2,3,4,4,4,4};
+                    float[] columnWidths = {1, 3, 1, 1, 1, 3, 3, 3, 4, 2, 3, 4, 4, 4, 4};
                     Table table = new Table(columnWidths);
                     table.setWidthPercent(100);
                     table.setHorizontalAlignment(HorizontalAlignment.CENTER);
@@ -307,7 +307,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                     int totalQuantidade = 0;
                     double totalKilo = 0;
                     double totalValor = 0;
-
+                    double totalComissao = 0;
                     while (resultPDF.next()) {
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_compra")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
@@ -335,6 +335,10 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                         String total = resultPDF.getString("valor_total_formatado");
                         double totalFormatado = reverterValorFormatado(total);
                         totalValor += totalFormatado;
+                        
+                        String comissao = resultPDF.getString("comissao_formatado");
+                        double comissaoFormatado = reverterValorFormatado(comissao);
+                        totalComissao += comissaoFormatado;
 
                     }
 
@@ -348,7 +352,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(formatarValor(totalValor)));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(formatarValor(totalComissao)));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
