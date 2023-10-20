@@ -42,8 +42,8 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
         });
     }
     
-    public void pesquisarAnimalId() {
-        String sql = String.format("SELECT * FROM animais WHERE id like ?");
+     public void pesquisarAnimalId() {
+        String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE id like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextAnimBusca.getText() + "%");
@@ -55,23 +55,10 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
         }
 
     }
-    
-    public void pesquisarAnimalDescricao() {
-        String sql = String.format("SELECT * FROM animais WHERE descricao like ?");
-        try {
-            pst = conexao.obterConexao().prepareStatement(sql);
-            pst.setString(1, jTextAnimBusca.getText() + "%");
-            rs = pst.executeQuery();
 
-            jTableAnim.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public void pesquisarAnimalIdade() {
-        String sql = String.format("SELECT * FROM animais WHERE idade like ?");
+        String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE idade like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextAnimBusca.getText() + "%");
@@ -85,7 +72,7 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalSexo() {
-        String sql = String.format("SELECT * FROM animais WHERE sexo like ?");
+        String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE sexo like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextAnimBusca.getText() + "%");
@@ -132,13 +119,13 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
         jTableAnim.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableAnim.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Id", "Descrição", "Quant", "Idade", "Sexo"
+                "Id", "Sexo", "Quant", "Idade"
             }
         ));
         jTableAnim.setFocusable(false);
@@ -153,7 +140,7 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
         jLabelAnimBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
         jLabelAnimBusca.setText(" ");
 
-        jComboAnimPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "descricao", "idade", "sexo" }));
+        jComboAnimPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "idade", "sexo" }));
         jComboAnimPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboAnimPesquisaActionPerformed(evt);
@@ -173,7 +160,7 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
                         .addComponent(jTextAnimBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabelAnimBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 230, Short.MAX_VALUE))
+                        .addGap(0, 242, Short.MAX_VALUE))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -198,8 +185,6 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
     private void jTextAnimBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextAnimBuscaKeyReleased
         if(jComboAnimPesquisa.getSelectedItem().toString() == "id"){
             pesquisarAnimalId();
-        }else if (jComboAnimPesquisa.getSelectedItem().toString() == "descricao") {
-            pesquisarAnimalDescricao();
         } else if (jComboAnimPesquisa.getSelectedItem().toString() == "idade") {
             pesquisarAnimalIdade();
         }

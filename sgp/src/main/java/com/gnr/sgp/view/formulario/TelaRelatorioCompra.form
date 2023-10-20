@@ -37,17 +37,18 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jLabelRelCompraOrdem" min="-2" pref="53" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jComboRelCompraOrdem" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jRadioButtonRelCompraDesc" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabelRelCompraOrdem" min="-2" pref="53" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jComboRelCompraOrdem" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jRadioButtonRelCompraDesc" min="-2" max="-2" attributes="0"/>
-                          </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabelRelCompraPeriodo" min="-2" pref="53" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -58,22 +59,25 @@
                               <Component id="jFormattedRelCompraFim" min="-2" pref="75" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jRadioButtonRelCompraHoje" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace pref="110" max="32767" attributes="0"/>
                               <Component id="jLabelRelCompraPagamento" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jComboRelCompraPagamento" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabelRelCompraPagamentoParenteses" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="jButtonRelCompraLista1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jButtonRelCompraLista" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jButtonRelCompraPdf" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="272" max="-2" attributes="0"/>
-                      <Component id="jButtonRelCompra" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="372" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -87,6 +91,9 @@
                   <Component id="jFormattedRelCompraFim" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                   <Component id="jLabelRelCompraPeriodo" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                   <Component id="jRadioButtonRelCompraHoje" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelRelCompraPagamento" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="jComboRelCompraPagamento" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="jLabelRelCompraPagamentoParenteses" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -95,19 +102,155 @@
                   <Component id="jRadioButtonRelCompraDesc" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" pref="334" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabelRelCompraPagamento" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                  <Component id="jComboRelCompraPagamento" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                  <Component id="jLabelRelCompraPagamentoParenteses" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="jButtonRelCompraPdf" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                  <Component id="jButtonRelCompraLista" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                  <Component id="jButtonRelCompraLista1" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
-              <Component id="jButtonRelCompra" min="-2" pref="33" max="-2" attributes="0"/>
-              <EmptySpace pref="294" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
+    <Component class="javax.swing.JLabel" name="jLabelRelCompraPagamentoParenteses">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="(&quot; * &quot; Todas formas )"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="jRadioButtonRelCompraHoje">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Hoje"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="jRadioButtonRelCompraDesc">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Decrescente"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTable" name="jTableRelComp">
+          <Properties>
+            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+              <Table columnCount="15" rowCount="4">
+                <Column editable="true" title="Id" type="java.lang.Object"/>
+                <Column editable="true" title="Data" type="java.lang.Object"/>
+                <Column editable="true" title="Sexo" type="java.lang.Object"/>
+                <Column editable="true" title="Idade" type="java.lang.Object"/>
+                <Column editable="true" title="Qtde" type="java.lang.Object"/>
+                <Column editable="true" title="Kg Totais" type="java.lang.Object"/>
+                <Column editable="true" title="M&#xe9;dia Kg" type="java.lang.Object"/>
+                <Column editable="true" title="Pre&#xe7;o Kg" type="java.lang.Object"/>
+                <Column editable="true" title="Total" type="java.lang.Object"/>
+                <Column editable="true" title="%" type="java.lang.Object"/>
+                <Column editable="true" title="Comiss&#xe3;o" type="java.lang.Object"/>
+                <Column editable="true" title="Criador" type="java.lang.Object"/>
+                <Column editable="true" title="Pagador" type="java.lang.Object"/>
+                <Column editable="true" title="Pagamento" type="java.lang.Object"/>
+                <Column editable="true" title="Operador" type="java.lang.Object"/>
+              </Table>
+            </Property>
+            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+              <TableColumnModel selectionModel="0">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+              </TableColumnModel>
+            </Property>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTableRelCompMouseClicked"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTableRelComp = new javax.swing.JTable(){&#xa;public boolean isCellEditable(int rowIndex, int colIndex){&#xa;        return false;&#xa;}&#xa;};"/>
+          </AuxValues>
+        </Component>
+      </SubComponents>
+    </Container>
     <Component class="javax.swing.JFormattedTextField" name="jFormattedRelCompInicio">
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jFormattedRelCompInicioActionPerformed"/>
@@ -131,12 +274,12 @@
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JFormattedTextField(mfData);"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonRelCompra">
+    <Component class="javax.swing.JButton" name="jButtonRelCompraPdf">
       <Properties>
         <Property name="text" type="java.lang.String" value="Gerar PDF"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRelCompraActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRelCompraPdfActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelRelCompraPagamento">
@@ -190,20 +333,21 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabelRelCompraPagamentoParenteses">
+    <Component class="javax.swing.JButton" name="jButtonRelCompraLista">
       <Properties>
-        <Property name="text" type="java.lang.String" value="(&quot; * &quot; Todas formas )"/>
+        <Property name="text" type="java.lang.String" value="Gerar Lista"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRelCompraListaActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JRadioButton" name="jRadioButtonRelCompraHoje">
+    <Component class="javax.swing.JButton" name="jButtonRelCompraLista1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Hoje"/>
+        <Property name="text" type="java.lang.String" value="Excluir Registro"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JRadioButton" name="jRadioButtonRelCompraDesc">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Decrescente"/>
-      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRelCompraLista1ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
