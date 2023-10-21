@@ -6,7 +6,6 @@ package com.gnr.sgp.view.formulario;
 
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
-import static com.gnr.sgp.view.formulario.TelaRelatorioCompra.formatarPeso;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.kernel.color.DeviceGray;
 import com.itextpdf.kernel.font.PdfFont;
@@ -43,6 +42,7 @@ import java.util.logging.Logger;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -141,6 +141,126 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
             System.out.println("Erro ao reverter o valor formatado em double: " + e.getMessage());
             return 0.0; // ou outro valor padrão de sua escolha
         }
+    }
+    
+    public void criarLista(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
+
+        Date dataInicio = new Date();
+        Date dataFim = new Date();
+// Convertendo as strings para o formato de data padrão
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        if (!jRadioButtonRelVendaHoje.isSelected()) {
+
+            dataInicio = dateFormat.parse(inicio);
+            dataFim = dateFormat.parse(fim);
+
+        } else {
+            // Defina a data atual como base
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dataSistema);
+
+            // Obtenha o último dia do mês
+            int ultimoDia = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+            // Configure o dia para o último dia do mês
+            calendar.set(Calendar.DAY_OF_MONTH, ultimoDia);
+            // Obtenha a data do último dia do mês
+            Date ultimoDiaDoMes = calendar.getTime();
+            String ultimoDiaFormatado = formato.format(ultimoDiaDoMes);
+
+            dataInicio = dateFormat.parse(formato.format(dataSistema));
+            dataFim = dateFormat.parse(ultimoDiaFormatado);
+        }
+        try {
+            if (validaData(dateFormat.format(dataInicio)) && validaData(dateFormat.format(dataFim))) {
+
+                if (dateFormat.format(dataInicio).equals(dateFormat.format(dataFim))) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dataFim);
+
+                    // Adicione um mês
+                    calendar.add(Calendar.MONTH, 1);
+
+                    // Acesse a nova data após adicionar um mês
+                    Date dataAposUmMes = calendar.getTime();
+
+                    dataFim = dataAposUmMes;
+                }
+
+// Convertendo as datas de volta para o formato do banco de dados
+                SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String inicioFormatado = dbDateFormat.format(dataInicio);
+                String fimFormatado = dbDateFormat.format(dataFim);
+                String sql = "";
+
+                if (jRadioButtonRelVendaDesc.isSelected()) {
+                    if (pagamento != "*") {
+                        sql = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
+                                + "vendedor, comprador, pagamento, operador "
+                                + "FROM vendas_animais v "
+                                + "JOIN animais a ON v.id_animal = a.id "
+                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "AND pagamento = '" + pagamento + "' "
+                                + "ORDER BY " + ordem + " DESC";
+
+                    } else {
+                        sql = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
+                                + "vendedor, comprador, pagamento, operador "
+                                + "FROM vendas_animais v "
+                                + "JOIN animais a ON v.id_animal = a.id "
+                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "ORDER BY " + ordem + " DESC";
+                    }
+
+                } else {
+                    if (pagamento != "*") {
+                        sql = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
+                                + "vendedor, comprador, pagamento, operador "
+                                + "FROM vendas_animais v "
+                                + "JOIN animais a ON v.id_animal = a.id "
+                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "AND pagamento = '" + pagamento + "' "
+                                + "ORDER BY " + ordem;
+                    } else {
+                        sql = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
+                                + "vendedor, comprador, pagamento, operador "
+                                + "FROM vendas_animais v "
+                                + "JOIN animais a ON v.id_animal = a.id "
+                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "ORDER BY " + ordem;
+                    }
+                }
+                
+                pst = conexao.obterConexao().prepareStatement(sql);
+                rs = pst.executeQuery();
+
+                jTableRelComp.setModel(DbUtils.resultSetToTableModel(rs));
+                
+                 } else {
+                JOptionPane.showMessageDialog(null, "Data inválida.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Data inválida.");
+        }
+
     }
 
     public void criarDocumento(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
@@ -293,7 +413,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                     document.add(new Paragraph(""));
 
                     PdfFont headerFont = PdfFontFactory.createFont();
-                    String[] headers = {"ID", "Data", "Sexo", "idade", "Qtde", "Kg Totais", "Média Kg", "Preço Kg", "Total", "%", "Comissão", "Vend", "Comp", "Pag", "Operador"};
+                    String[] headers = {"ID", "Data", "Sexo", "Idade", "Qtde", "Kg Totais", "Média Kg", "Preço Kg", "Total", "%", "Comissão", "Vend", "Comp", "Pag", "Operador"};
                     for (String header : headers) {
                         Cell cell = new Cell().add(header).setFont(headerFont).setFontSize(10).setBackgroundColor(DeviceGray.BLACK).setTextAlignment(TextAlignment.CENTER).setFontColor(DeviceGray.WHITE);
                         table.addCell(cell);
@@ -398,6 +518,9 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
         jLabelRelVendaPagamentoParenteses = new javax.swing.JLabel();
         jRadioButtonRelVendaHoje = new javax.swing.JRadioButton();
         jRadioButtonRelVendaDesc = new javax.swing.JRadioButton();
+        jButtonRelCompraLista = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableRelComp = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(227, 234, 227));
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -448,41 +571,75 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
         jRadioButtonRelVendaDesc.setText("Decrescente");
 
+        jButtonRelCompraLista.setText("Gerar Lista");
+        jButtonRelCompraLista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRelCompraListaActionPerformed(evt);
+            }
+        });
+
+        jTableRelComp = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        jTableRelComp.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Id", "Data", "Sexo", "Idade", "Qtde", "Kg Totais", "Média Kg", "Preço Kg", "Total", "%", "Comissão", "Criador", "Pagador", "Pagamento", "Operador"
+            }
+        ));
+        jTableRelComp.setFocusable(false);
+        jTableRelComp.getTableHeader().setReorderingAllowed(false);
+        jTableRelComp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableRelCompMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableRelComp);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jRadioButtonRelVendaDesc))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelRelVendaPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedRelVendInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabelRelVendaPeriodoA)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jFormattedRelVendaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jRadioButtonRelVendaHoje))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelRelVendaPagamento)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jComboRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabelRelVendaPagamentoParenteses))))
+                        .addComponent(jLabelRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButtonRelVendaDesc))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(272, 272, 272)
-                        .addComponent(jButtonRelVenda)))
-                .addContainerGap(372, Short.MAX_VALUE))
+                        .addComponent(jLabelRelVendaPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jFormattedRelVendInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabelRelVendaPeriodoA)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jFormattedRelVendaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButtonRelVendaHoje)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelRelVendaPagamento)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jComboRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelRelVendaPagamentoParenteses)))
+                .addContainerGap(98, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonRelCompraLista)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonRelVenda)
+                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 726, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -493,20 +650,22 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                     .addComponent(jLabelRelVendaPeriodoA)
                     .addComponent(jFormattedRelVendaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelRelVendaPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButtonRelVendaHoje))
+                    .addComponent(jRadioButtonRelVendaHoje)
+                    .addComponent(jLabelRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelRelVendaPagamentoParenteses, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelRelVendaOrdem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jRadioButtonRelVendaDesc))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelRelVendaPagamentoParenteses, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52)
-                .addComponent(jButtonRelVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(294, Short.MAX_VALUE))
+                    .addComponent(jButtonRelVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonRelCompraLista, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -540,8 +699,27 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboRelVendaPagamentoActionPerformed
 
+    private void jButtonRelCompraListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelCompraListaActionPerformed
+ try {
+            criarLista(jFormattedRelVendInicio.getText(), jFormattedRelVendaFim.getText(), jComboRelVendaOrdem.getSelectedItem().toString(), jComboRelVendaPagamento.getSelectedItem().toString());
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaRelatorioVenda.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (ParseException ex) {
+            Logger.getLogger(TelaRelatorioVenda.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonRelCompraListaActionPerformed
+
+    private void jTableRelCompMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableRelCompMouseClicked
+
+    }//GEN-LAST:event_jTableRelCompMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonRelCompraLista;
     private javax.swing.JButton jButtonRelVenda;
     private javax.swing.JComboBox<String> jComboRelVendaOrdem;
     private javax.swing.JComboBox<String> jComboRelVendaPagamento;
@@ -554,5 +732,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabelRelVendaPeriodoA;
     private javax.swing.JRadioButton jRadioButtonRelVendaDesc;
     private javax.swing.JRadioButton jRadioButtonRelVendaHoje;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTableRelComp;
     // End of variables declaration//GEN-END:variables
 }

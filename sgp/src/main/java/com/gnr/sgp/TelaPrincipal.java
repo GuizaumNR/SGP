@@ -101,19 +101,37 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jButtonMinimizar.setFocusable(false);
 
 //        jlabelLogo.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\logo.png"));
-        jDesktok.add(telaFornecedor);
-        jDesktok.add(telaUsuario);
-        jDesktok.add(telaAnimal);
-        jDesktok.add(telaVenda);
-        jDesktok.add(telaCompra);
-        jDesktok.add(telaRelVenda);
-        jDesktok.add(telaRelCompra);
-        jDesktok.add(telaNasc);
-        jDesktok.add(telaFale);
-        jDesktok.add(telaRelNasc);
-        jDesktok.add(telaRelFale);
-        jDesktok.add(telaConAni);
-        jDesktok.add(telaConUsu); 
+        jDesktop.add(telaFornecedor);
+        jDesktop.add(telaUsuario);
+        jDesktop.add(telaAnimal);
+        jDesktop.add(telaVenda);
+        jDesktop.add(telaCompra);
+        jDesktop.add(telaRelVenda);
+        jDesktop.add(telaRelCompra);
+        jDesktop.add(telaNasc);
+        jDesktop.add(telaFale);
+        jDesktop.add(telaRelNasc);
+        jDesktop.add(telaRelFale);
+        jDesktop.add(telaConAni);
+        jDesktop.add(telaConUsu);
+        
+        int largura = jDesktop.getWidth() - 2;
+        int altura = jDesktop.getHeight() - 2;
+        
+        telaFornecedor.setSize(largura, altura);
+        telaUsuario.setSize(largura, altura);
+        telaAnimal.setSize(largura, altura);
+        telaVenda.setSize(largura, altura);
+        telaCompra.setSize(largura, altura);
+        telaRelVenda.setSize(largura, altura);
+        telaRelCompra.setSize(largura, altura);
+        telaNasc.setSize(largura, altura);
+        telaFale.setSize(largura, altura);
+        telaRelNasc.setSize(largura, altura);
+        telaRelFale.setSize(largura, altura);
+        telaConAni.setSize(largura, altura);
+        telaConUsu.setSize(largura, altura);
+        
     }
 
     public void setOperador(String operador) {
@@ -194,9 +212,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
         labelOperador = new javax.swing.JLabel();
         labelVersao = new javax.swing.JLabel();
         labelSuporte = new javax.swing.JLabel();
-        jDesktok = new javax.swing.JDesktopPane();
+        jDesktop = new javax.swing.JDesktopPane();
         LabelAviso = new javax.swing.JLabel();
-        jlabelLogo = new javax.swing.JLabel();
 
         jMenuBar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jMenuBar.setBorderPainted(false);
@@ -482,12 +499,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jPanelDownLayout.setHorizontalGroup(
             jPanelDownLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelDownLayout.createSequentialGroup()
-                .addComponent(labelVersao, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
-                .addGap(18, 18, Short.MAX_VALUE)
-                .addComponent(labelSuporte, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(labelOperador, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(labelVersao, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+                .addGap(18, 19, Short.MAX_VALUE)
+                .addComponent(labelSuporte, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addComponent(labelOperador, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                .addGap(18, 19, Short.MAX_VALUE)
                 .addComponent(labelDataEHora, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanelDownLayout.setVerticalGroup(
@@ -508,27 +525,25 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jDesktok.setBackground(new java.awt.Color(237, 249, 237));
+        jDesktop.setBackground(new java.awt.Color(237, 249, 237));
         if (screenWidth <= 1366) {
-            jDesktok.setPreferredSize(new java.awt.Dimension(820, 620));
+            jDesktop.setPreferredSize(new java.awt.Dimension(820, 620));
         }
-        jDesktok.setMinimumSize(new java.awt.Dimension(640, 480));
-        jDesktok.setPreferredSize(new java.awt.Dimension(730, 545));
+        jDesktop.setMinimumSize(new java.awt.Dimension(640, 480));
+        jDesktop.setPreferredSize(new java.awt.Dimension(730, 545));
 
-        javax.swing.GroupLayout jDesktokLayout = new javax.swing.GroupLayout(jDesktok);
-        jDesktok.setLayout(jDesktokLayout);
-        jDesktokLayout.setHorizontalGroup(
-            jDesktokLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 820, Short.MAX_VALUE)
+        javax.swing.GroupLayout jDesktopLayout = new javax.swing.GroupLayout(jDesktop);
+        jDesktop.setLayout(jDesktopLayout);
+        jDesktopLayout.setHorizontalGroup(
+            jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
-        jDesktokLayout.setVerticalGroup(
-            jDesktokLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jDesktopLayout.setVerticalGroup(
+            jDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 545, Short.MAX_VALUE)
         );
 
         LabelAviso.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
-        jlabelLogo.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\logo.png"));
 
         javax.swing.GroupLayout painelTelaPrincipalLayout = new javax.swing.GroupLayout(painelTelaPrincipal);
         painelTelaPrincipal.setLayout(painelTelaPrincipalLayout);
@@ -539,11 +554,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
             .addGroup(painelTelaPrincipalLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(painelTelaPrincipalLayout.createSequentialGroup()
-                        .addComponent(jDesktok, javax.swing.GroupLayout.PREFERRED_SIZE, 820, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jlabelLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE))
-                    .addComponent(LabelAviso, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(LabelAviso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jDesktop, javax.swing.GroupLayout.DEFAULT_SIZE, 1068, Short.MAX_VALUE))
                 .addContainerGap())
         );
         painelTelaPrincipalLayout.setVerticalGroup(
@@ -553,9 +565,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LabelAviso, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(painelTelaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jDesktok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlabelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jDesktop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanelDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -935,7 +945,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel LabelAviso;
     private javax.swing.JButton jButtonMinimizar;
     private javax.swing.JButton jButtonSair;
-    private javax.swing.JDesktopPane jDesktok;
+    private javax.swing.JDesktopPane jDesktop;
     private javax.swing.JMenu jMenuAjuda;
     private javax.swing.JMenuItem jMenuAjudaSobre;
     private javax.swing.JMenuBar jMenuBar;
@@ -965,7 +975,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelBotoes;
     private javax.swing.JPanel jPanelDown;
     private javax.swing.JPanel jPanelTop;
-    private javax.swing.JLabel jlabelLogo;
     private javax.swing.JLabel labelDataEHora;
     private javax.swing.JLabel labelOperador;
     private javax.swing.JLabel labelSuporte;

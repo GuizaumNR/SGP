@@ -144,7 +144,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
         }
     }
 
-    public void CriarLista(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
+    public void criarLista(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
         Date dataInicio = new Date();
         Date dataFim = new Date();
 // Convertendo as strings para o formato de data padrão
@@ -636,13 +636,14 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                                 .addComponent(jFormattedRelCompraFim, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jRadioButtonRelCompraHoje)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
                                 .addComponent(jLabelRelCompraPagamento)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jComboRelCompraPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabelRelCompraPagamentoParenteses))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabelRelCompraPagamentoParenteses)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jButtonRelCompraLista1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -669,9 +670,9 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                     .addComponent(jComboRelCompraOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelRelCompraOrdem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jRadioButtonRelCompraDesc))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonRelCompraPdf, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonRelCompraLista, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -712,7 +713,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
     private void jButtonRelCompraListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelCompraListaActionPerformed
        
         try {
-            CriarLista(jFormattedRelCompInicio.getText(), jFormattedRelCompraFim.getText(), jComboRelCompraOrdem.getSelectedItem().toString(), jComboRelCompraPagamento.getSelectedItem().toString());
+            criarLista(jFormattedRelCompInicio.getText(), jFormattedRelCompraFim.getText(), jComboRelCompraOrdem.getSelectedItem().toString(), jComboRelCompraPagamento.getSelectedItem().toString());
         } catch (SQLException ex) {
             Logger.getLogger(TelaRelatorioCompra.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
