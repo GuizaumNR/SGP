@@ -9,7 +9,7 @@ package com.gnr.sgp.modelo.dominio;
  * @author Guilherme
  */
 public class ComprasAnimais {
-    
+
     private Long id_compra;
     private int id_animal;
     private int quantidade;
@@ -146,7 +146,5 @@ public class ComprasAnimais {
     public void setOperador(String operador) {
         this.operador = operador;
     }
-    
-    
-    
+
 }

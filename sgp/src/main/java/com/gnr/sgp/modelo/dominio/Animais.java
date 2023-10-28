@@ -9,12 +9,12 @@ package com.gnr.sgp.modelo.dominio;
  * @author Guilherme
  */
 public class Animais {
+
     private long id;
     private String descricao;
     private String quantidade;
     private String idade;
     private String sexo;
-    
 
     public Animais() {
     }
@@ -26,8 +26,6 @@ public class Animais {
         this.idade = idade;
         this.sexo = sexo;
     }
-
-   
 
     public long getId() {
         return id;
@@ -45,7 +43,7 @@ public class Animais {
         this.descricao = descricao;
     }
 
-     public String getQuantidade() {
+    public String getQuantidade() {
         return quantidade;
     }
 
@@ -68,5 +66,5 @@ public class Animais {
     public void setSexo(String sexo) {
         this.sexo = sexo;
     }
-    
+
 }

@@ -11,8 +11,6 @@ import com.gnr.sgp.view.formulario.TelaUsuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JOptionPane;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -28,6 +26,7 @@ public class UsuariosDao {
     public UsuariosDao() {
         this.conexao = new ConexaoMysql();
     }
+
     ;
 
     public String adicionar(Usuarios usuario) {
@@ -37,25 +36,25 @@ public class UsuariosDao {
 
         if (usuarioTemp != null) {
             JOptionPane.showMessageDialog(null, "Erro: Este login já existe no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }else {
+        } else {
 
-        try {
-            PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
+            try {
+                PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
 
-            preencherValoresPreparedStatment(pst, usuario);
+                preencherValoresPreparedStatment(pst, usuario);
 
-            int resultado = pst.executeUpdate();
+                int resultado = pst.executeUpdate();
 
-            if (resultado > 0) {
-                JOptionPane.showMessageDialog(null, "Usuário adicionado com sucesso!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Não foi possível adicionar o usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
+                if (resultado > 0) {
+                    JOptionPane.showMessageDialog(null, "Usuário adicionado com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não foi possível adicionar o usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar o usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
             }
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar o usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
         }
         return null;
     }
@@ -86,31 +85,31 @@ public class UsuariosDao {
         return null;
 
     }
-    
-    public String deletar(Usuarios usuario){
-         String sql = "DELETE FROM usuarios WHERE login = ?";
-         
-         Usuarios usuarioTemp = buscarUsuariosLogin(usuario.getLogin());
+
+    public String deletar(Usuarios usuario) {
+        String sql = "DELETE FROM usuarios WHERE login = ?";
+
+        Usuarios usuarioTemp = buscarUsuariosLogin(usuario.getLogin());
 
         if (usuarioTemp == null) {
             JOptionPane.showMessageDialog(null, "Erro: Este login não existe no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
-            try {
-                PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
-                pst.setString(1, usuario.getLogin());
-                
-                int deletado = pst.executeUpdate();
+        try {
+            PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
+            pst.setString(1, usuario.getLogin());
+
+            int deletado = pst.executeUpdate();
             if (deletado > 0) {
                 JOptionPane.showMessageDialog(null, "Dados do usuário deletados com sucesso!");;
 
             } else {
                 JOptionPane.showMessageDialog(null, "Não foi possível deletar os dados do usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
+        }
         return null;
     }
 
@@ -128,8 +127,6 @@ public class UsuariosDao {
             preparedStatement.setLong(6, usuario.getId());
         }
     }
-
-
 
     private Usuarios getUsuarios(ResultSet result) throws SQLException {
         Usuarios usuarios = new Usuarios();

@@ -6,9 +6,6 @@ package com.gnr.sgp.view.formulario;
 
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
-import static com.gnr.sgp.view.formulario.TelaRelatorioVenda.formatarPeso;
-import static com.gnr.sgp.view.formulario.TelaRelatorioVenda.formatarValor;
-import static com.gnr.sgp.view.formulario.TelaRelatorioVenda.reverterValorFormatado;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.kernel.color.DeviceGray;
 import com.itextpdf.kernel.font.PdfFont;
@@ -32,7 +29,6 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,7 +36,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 import net.proteanit.sql.DbUtils;
@@ -86,6 +81,38 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                 setLocation(-5, -5);
             }
         });
+
+    }
+
+    public void deletar() throws SQLException {
+        int setar = jTableRelComp.getSelectedRow();
+        String valorId = jTableRelComp.getModel().getValueAt(setar, 0).toString();
+
+        String sqlAnimal = "UPDATE animais a "
+                + "JOIN compras_animais c ON a.id = c.id_animal "
+                + "SET a.quantidade = a.quantidade - c.quantidade "
+                + "WHERE c.id_compra = '" + valorId + "' ";
+
+        String sqlCompra = "DELETE FROM compras_animais WHERE id_compra = '" + valorId + "' ";
+
+        pst = conexao.obterConexao().prepareStatement(sqlAnimal);
+        int resultado = pst.executeUpdate();
+
+        PreparedStatement pstmt = conexao.obterConexao().prepareStatement(sqlCompra);
+        int resultado2 = pstmt.executeUpdate();
+
+        System.out.println(valorId);
+
+        if (resultado > 0 && resultado2 > 0) {
+            JOptionPane.showMessageDialog(null, "Registro deletado, e quantidade de animais ajustada.");
+            try {
+                criarLista(jFormattedRelCompInicio.getText(), jFormattedRelCompraFim.getText(), jComboRelCompraOrdem.getSelectedItem().toString(), jComboRelCompraPagamento.getSelectedItem().toString());
+            } catch (SQLException ex) {
+                Logger.getLogger(TelaRelatorioCompra.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(TelaRelatorioCompra.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     }
 
@@ -252,7 +279,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                 rs = pst.executeQuery();
 
                 jTableRelComp.setModel(DbUtils.resultSetToTableModel(rs));
-                
+
             } else {
                 JOptionPane.showMessageDialog(null, "Data inválida.");
             }
@@ -520,7 +547,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
         jLabelRelCompraOrdem = new javax.swing.JLabel();
         jComboRelCompraPagamento = new javax.swing.JComboBox<>();
         jButtonRelCompraLista = new javax.swing.JButton();
-        jButtonRelCompraLista1 = new javax.swing.JButton();
+        jButtonRelCompraExcluir = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(227, 234, 227));
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -603,10 +630,10 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
             }
         });
 
-        jButtonRelCompraLista1.setText("Excluir Registro");
-        jButtonRelCompraLista1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRelCompraExcluir.setText("Excluir Registro");
+        jButtonRelCompraExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonRelCompraLista1ActionPerformed(evt);
+                jButtonRelCompraExcluirActionPerformed(evt);
             }
         });
 
@@ -645,7 +672,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButtonRelCompraLista1)
+                                .addComponent(jButtonRelCompraExcluir)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButtonRelCompraLista)
                                 .addGap(18, 18, 18)
@@ -676,7 +703,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonRelCompraPdf, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonRelCompraLista, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonRelCompraLista1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonRelCompraExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26))
         );
 
@@ -711,7 +738,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jComboRelCompraPagamentoActionPerformed
 
     private void jButtonRelCompraListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelCompraListaActionPerformed
-       
+
         try {
             criarLista(jFormattedRelCompInicio.getText(), jFormattedRelCompraFim.getText(), jComboRelCompraOrdem.getSelectedItem().toString(), jComboRelCompraPagamento.getSelectedItem().toString());
         } catch (SQLException ex) {
@@ -721,14 +748,18 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jButtonRelCompraListaActionPerformed
 
-    private void jButtonRelCompraLista1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelCompraLista1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonRelCompraLista1ActionPerformed
+    private void jButtonRelCompraExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelCompraExcluirActionPerformed
+        try {
+            deletar();
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaRelatorioCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonRelCompraExcluirActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonRelCompraExcluir;
     private javax.swing.JButton jButtonRelCompraLista;
-    private javax.swing.JButton jButtonRelCompraLista1;
     private javax.swing.JButton jButtonRelCompraPdf;
     private javax.swing.JComboBox<String> jComboRelCompraOrdem;
     private javax.swing.JComboBox<String> jComboRelCompraPagamento;

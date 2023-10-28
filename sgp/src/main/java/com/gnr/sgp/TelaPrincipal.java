@@ -29,7 +29,6 @@ import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
 import javax.swing.Timer;
 
 /**
@@ -79,7 +78,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setVisible(true);
         requestFocus();
         labelVersao.setText(" Versão: " + VERSION);
-        LabelAviso.setText("Espaço para avisos.");
+        LabelAviso.setText("");
         labelSuporte.setText("Suporte: Guilherme - (53) 99912-8134");
         menu();
         atualizarDataHora();
@@ -96,6 +95,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
             }
         });
+
+        jMenuRelatorioManejo.setEnabled(false);
+        jMenuAjuda.setEnabled(false);
+        jMenuOpcoes.setEnabled(false);
+        jMenuConsultaManejo.setEnabled(false);
+        jMenuCadastroManejo.setEnabled(false);
 
         jButtonSair.setFocusable(false);
         jButtonMinimizar.setFocusable(false);
@@ -114,10 +119,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jDesktop.add(telaRelFale);
         jDesktop.add(telaConAni);
         jDesktop.add(telaConUsu);
-        
+
         int largura = jDesktop.getWidth() - 2;
         int altura = jDesktop.getHeight() - 2;
-        
+
         telaFornecedor.setSize(largura, altura);
         telaUsuario.setSize(largura, altura);
         telaAnimal.setSize(largura, altura);
@@ -131,7 +136,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         telaRelFale.setSize(largura, altura);
         telaConAni.setSize(largura, altura);
         telaConUsu.setSize(largura, altura);
-        
+
     }
 
     public void setOperador(String operador) {
@@ -189,7 +194,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenuConsultaAnimais = new javax.swing.JMenuItem();
         jMenuConsultaFornecedores = new javax.swing.JMenuItem();
         jMenuConsultaUsuarios = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuConsultaManejo = new javax.swing.JMenuItem();
         jMenuMovEstoque = new javax.swing.JMenu();
         jMenuMovEstoqueNasc = new javax.swing.JMenuItem();
         jMenuMovEstoqueFale = new javax.swing.JMenuItem();
@@ -319,14 +324,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
         jMenuConsulta.add(jMenuConsultaUsuarios);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        jMenuItem1.setText("Consulta de Manejo");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuConsultaManejo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jMenuConsultaManejo.setText("Consulta de Manejo");
+        jMenuConsultaManejo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jMenuConsultaManejoActionPerformed(evt);
             }
         });
-        jMenuConsulta.add(jMenuItem1);
+        jMenuConsulta.add(jMenuConsultaManejo);
 
         jMenuBar.add(jMenuConsulta);
 
@@ -722,9 +727,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuRelatorioManejoActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuConsultaManejoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuConsultaManejoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMenuConsultaManejoActionPerformed
 
     private void jMenuRelatorioComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRelatorioComprasActionPerformed
 
@@ -960,8 +965,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuConsulta;
     private javax.swing.JMenuItem jMenuConsultaAnimais;
     private javax.swing.JMenuItem jMenuConsultaFornecedores;
+    private javax.swing.JMenuItem jMenuConsultaManejo;
     private javax.swing.JMenuItem jMenuConsultaUsuarios;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenu jMenuMovEstoque;
     private javax.swing.JMenuItem jMenuMovEstoqueFale;
     private javax.swing.JMenuItem jMenuMovEstoqueNasc;

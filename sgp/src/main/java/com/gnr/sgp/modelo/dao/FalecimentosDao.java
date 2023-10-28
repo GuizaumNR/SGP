@@ -40,8 +40,7 @@ public class FalecimentosDao {
 
                 if (resultado > 0) {
                     JOptionPane.showMessageDialog(null, "Falecimento registrado com sucesso!");
-                    
-                                    
+
                     String sqlUpdate = "UPDATE animais SET quantidade = quantidade - ? WHERE id = ?";
                     try {
                         PreparedStatement pstmt = conexao.obterConexao().prepareStatement(sqlUpdate);
@@ -49,13 +48,13 @@ public class FalecimentosDao {
                         pstmt.setInt(2, fale.getId_animal());
 
                         int resultado2 = pstmt.executeUpdate();
-                        
-                  if (resultado2 > 0) {
+
+                        if (resultado2 > 0) {
                             JOptionPane.showMessageDialog(null, "Quantidade de animais atualizada com sucesso!");
                         } else {
                             JOptionPane.showMessageDialog(null, "Não foi possível atualizar a quantidade de animais.", "Erro", JOptionPane.ERROR_MESSAGE);
                         }
-                                
+
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(null, "Erro ao atualizar a quantidade de animais: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
@@ -73,7 +72,6 @@ public class FalecimentosDao {
         }
         return null;
     }
-
 
     public boolean verificarQuantidadeMenorZero(int id_animal, int quantidadeFalecimento) {
         String sql = "SELECT quantidade FROM animais WHERE id = ?";
@@ -94,5 +92,4 @@ public class FalecimentosDao {
         }
     }
 
- 
 }

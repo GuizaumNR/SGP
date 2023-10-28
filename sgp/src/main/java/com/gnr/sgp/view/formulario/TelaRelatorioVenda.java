@@ -29,17 +29,13 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 import net.proteanit.sql.DbUtils;
@@ -88,6 +84,42 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
     }
 
+    public void deletar() throws SQLException {
+        int setar = jTableRelComp.getSelectedRow();
+        String valorId = jTableRelComp.getModel().getValueAt(setar, 0).toString();
+
+        String sqlAnimal = "UPDATE animais a "
+                + "JOIN vendas_animais v ON a.id = v.id_animal "
+                + "SET a.quantidade = a.quantidade + v.quantidade "
+                + "WHERE v.id_venda = '" + valorId + "' ";
+
+        String sqlCompra = "DELETE FROM vendas_animais WHERE id_venda = '" + valorId + "' ";
+
+        pst = conexao.obterConexao().prepareStatement(sqlAnimal);
+        int resultado = pst.executeUpdate();
+
+        PreparedStatement pstmt = conexao.obterConexao().prepareStatement(sqlCompra);
+        int resultado2 = pstmt.executeUpdate();
+
+        System.out.println(valorId);
+
+        if (resultado > 0 && resultado2 > 0) {
+            JOptionPane.showMessageDialog(null, "Registro deletado, e quantidade de animais ajustada.");
+            try {
+                criarLista(jFormattedRelVendInicio.getText(), jFormattedRelVendaFim.getText(), jComboRelVendaOrdem.getSelectedItem().toString(), jComboRelVendaPagamento.getSelectedItem().toString());
+
+            } catch (SQLException ex) {
+                Logger.getLogger(TelaRelatorioVenda.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
+            } catch (ParseException ex) {
+                Logger.getLogger(TelaRelatorioVenda.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+
     private static boolean validaData(String dateStr) {
         String[] parts = dateStr.split("/");
 
@@ -110,7 +142,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
         return valorFormatado;
     }
-    
+
     public static String formatarValor(double valor) {
         // Crie um objeto DecimalFormat com o formato desejado
         DecimalFormat df = new DecimalFormat("R$ #,##0.00");
@@ -142,7 +174,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
             return 0.0; // ou outro valor padrão de sua escolha
         }
     }
-    
+
     public void criarLista(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
 
         Date dataInicio = new Date();
@@ -247,13 +279,13 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                                 + "ORDER BY " + ordem;
                     }
                 }
-                
+
                 pst = conexao.obterConexao().prepareStatement(sql);
                 rs = pst.executeQuery();
 
                 jTableRelComp.setModel(DbUtils.resultSetToTableModel(rs));
-                
-                 } else {
+
+            } else {
                 JOptionPane.showMessageDialog(null, "Data inválida.");
             }
         } catch (Exception e) {
@@ -456,7 +488,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                         String total = resultPDF.getString("valor_total_formatado");
                         double totalFormatado = reverterValorFormatado(total);
                         totalValor += totalFormatado;
-                        
+
                         String comissao = resultPDF.getString("comissao_formatado");
                         double comissaoFormatado = reverterValorFormatado(comissao);
                         totalComissao += comissaoFormatado;
@@ -521,6 +553,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
         jButtonRelCompraLista = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableRelComp = new javax.swing.JTable();
+        jButtonRelVendaExcluir = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(227, 234, 227));
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -591,7 +624,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Data", "Sexo", "Idade", "Qtde", "Kg Totais", "Média Kg", "Preço Kg", "Total", "%", "Comissão", "Criador", "Pagador", "Pagamento", "Operador"
+                "Id", "Data", "Sexo", "Idade", "Qtde", "Kg Totais", "Média Kg", "Preço Kg", "Total", "%", "Comissão", "Vendedor", "Comprador", "Pagamento", "Operador"
             }
         ));
         jTableRelComp.setFocusable(false);
@@ -603,6 +636,13 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jTableRelComp);
 
+        jButtonRelVendaExcluir.setText("Excluir Registro");
+        jButtonRelVendaExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRelVendaExcluirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -611,35 +651,38 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabelRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonRelVendaExcluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonRelCompraLista)
                         .addGap(18, 18, 18)
-                        .addComponent(jRadioButtonRelVendaDesc))
+                        .addComponent(jButtonRelVenda))
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabelRelVendaPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jFormattedRelVendInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabelRelVendaPeriodoA)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jFormattedRelVendaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRadioButtonRelVendaHoje)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabelRelVendaPagamento)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelRelVendaPagamentoParenteses)))
-                .addContainerGap(98, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonRelCompraLista)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonRelVenda)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jRadioButtonRelVendaDesc))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelRelVendaPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jFormattedRelVendInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabelRelVendaPeriodoA)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jFormattedRelVendaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jRadioButtonRelVendaHoje)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabelRelVendaPagamento)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jComboRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelRelVendaPagamentoParenteses)))
+                        .addGap(0, 92, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 726, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -661,11 +704,12 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                     .addComponent(jRadioButtonRelVendaDesc))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonRelVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonRelCompraLista, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(jButtonRelCompraLista, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonRelVendaExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26))
         );
 
         pack();
@@ -700,7 +744,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jComboRelVendaPagamentoActionPerformed
 
     private void jButtonRelCompraListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelCompraListaActionPerformed
- try {
+        try {
             criarLista(jFormattedRelVendInicio.getText(), jFormattedRelVendaFim.getText(), jComboRelVendaOrdem.getSelectedItem().toString(), jComboRelVendaPagamento.getSelectedItem().toString());
 
         } catch (SQLException ex) {
@@ -717,10 +761,19 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jTableRelCompMouseClicked
 
+    private void jButtonRelVendaExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelVendaExcluirActionPerformed
+        try {
+            deletar();
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaRelatorioCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonRelVendaExcluirActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonRelCompraLista;
     private javax.swing.JButton jButtonRelVenda;
+    private javax.swing.JButton jButtonRelVendaExcluir;
     private javax.swing.JComboBox<String> jComboRelVendaOrdem;
     private javax.swing.JComboBox<String> jComboRelVendaPagamento;
     public javax.swing.JFormattedTextField jFormattedRelVendInicio;

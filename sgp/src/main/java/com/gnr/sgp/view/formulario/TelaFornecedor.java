@@ -35,7 +35,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
 
         this.conexao = new ConexaoMysql();
         initComponents();
-        
+
         setLocation(-5, -5);
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -60,7 +60,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
             limpaCampos();
         }
     }
-    
+
     public void editar() {
         if ((jTextFornNome.getText().isEmpty() || jTextFornTelefone.getText().isEmpty())) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
@@ -87,7 +87,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
             limpaCampos();
         }
     }
-    
+
     public void pesquisarFornecedorNome() {
         String sql = String.format("SELECT * FROM fornecedores WHERE nome like ?");
         try {
@@ -101,8 +101,8 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
         }
 
     }
-    
-     public void pesquisarFornecedorId() {
+
+    public void pesquisarFornecedorId() {
         String sql = String.format("SELECT * FROM fornecedores WHERE id like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
@@ -122,11 +122,11 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
         String valorEnd = jTableForn.getModel().getValueAt(setar, 2).toString();
         String valorTele = jTableForn.getModel().getValueAt(setar, 3).toString();
         String valorEmail = jTableForn.getModel().getValueAt(setar, 4).toString();
-        if(valorNome != null && valorEnd != null && valorTele != null && valorEmail != null){
-        jTextFornNome.setText(valorNome);
-        jTextFornEndereco.setText(valorEnd);
-        jTextFornTelefone.setText(valorTele);
-        jTextFornEmail.setText(valorEmail);
+        if (valorNome != null && valorEnd != null && valorTele != null && valorEmail != null) {
+            jTextFornNome.setText(valorNome);
+            jTextFornEndereco.setText(valorEnd);
+            jTextFornTelefone.setText(valorTele);
+            jTextFornEmail.setText(valorEmail);
         }
     }
 

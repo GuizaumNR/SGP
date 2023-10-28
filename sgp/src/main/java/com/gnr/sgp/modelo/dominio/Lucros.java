@@ -11,7 +11,7 @@ import java.util.Date;
  * @author Guilherme
  */
 public class Lucros {
-    
+
     private Long id;
     private String descricao;
     private double valor;
@@ -58,6 +58,5 @@ public class Lucros {
     public void setData_lucro(Date data_lucro) {
         this.data_lucro = data_lucro;
     }
-    
-    
+
 }

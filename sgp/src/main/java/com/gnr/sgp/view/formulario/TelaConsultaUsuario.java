@@ -90,7 +90,6 @@ public class TelaConsultaUsuario extends javax.swing.JInternalFrame {
 
     }
 
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -196,7 +195,7 @@ public class TelaConsultaUsuario extends javax.swing.JInternalFrame {
 
     private void jTableFornMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFornMouseClicked
         //evento para setar os campos clicando com o botao esquerdo do mouse
-     
+
     }//GEN-LAST:event_jTableFornMouseClicked
 
     private void jComboUsuPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboUsuPesquisaActionPerformed

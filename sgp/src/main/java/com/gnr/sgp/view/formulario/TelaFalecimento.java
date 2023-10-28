@@ -7,9 +7,7 @@ package com.gnr.sgp.view.formulario;
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.FalecimentosDao;
-import com.gnr.sgp.modelo.dao.NascimentosDao;
 import com.gnr.sgp.modelo.dominio.Falecimentos;
-import com.gnr.sgp.modelo.dominio.Nascimentos;
 import com.gnr.sgp.view.modelo.ValidadorNumerico;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -32,18 +30,16 @@ public class TelaFalecimento extends javax.swing.JInternalFrame {
     private final Conexao conexao;
     PreparedStatement pst = null;
     ResultSet rs = null;
-    
+
     ValidadorNumerico validaNumeros = new ValidadorNumerico();
 
     String operador;
-    
+
     public TelaFalecimento() {
-       
-         
+
         this.conexao = new ConexaoMysql();
         initComponents();
 //        componentMoved(e);
-        
 
         setLocation(-5, -5);
         this.addComponentListener(new ComponentAdapter() {
@@ -81,7 +77,7 @@ public class TelaFalecimento extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalId() {
-        String sql = String.format("SELECT * FROM animais WHERE id like ?");
+        String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE id like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextFaleBusca.getText() + "%");
@@ -92,23 +88,10 @@ public class TelaFalecimento extends javax.swing.JInternalFrame {
             e.printStackTrace();
         }
 
-    }
-
-    public void pesquisarAnimalDescricao() {
-        String sql = String.format("SELECT * FROM animais WHERE descricao like ?");
-        try {
-            pst = conexao.obterConexao().prepareStatement(sql);
-            pst.setString(1, jTextFaleBusca.getText() + "%");
-            rs = pst.executeQuery();
-
-            jTableFale.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     public void pesquisarAnimalIdade() {
-        String sql = String.format("SELECT * FROM animais WHERE idade like ?");
+        String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE idade like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextFaleBusca.getText() + "%");
@@ -122,7 +105,7 @@ public class TelaFalecimento extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalSexo() {
-        String sql = String.format("SELECT * FROM animais WHERE sexo like ?");
+        String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE sexo like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextFaleBusca.getText() + "%");
@@ -138,8 +121,8 @@ public class TelaFalecimento extends javax.swing.JInternalFrame {
     public void setarCampo() {
         int setar = jTableFale.getSelectedRow();
         String valor = jTableFale.getModel().getValueAt(setar, 0).toString();
-        if(valor != null){
-        jTextFieldFaleAnimal.setText(valor);
+        if (valor != null) {
+            jTextFieldFaleAnimal.setText(valor);
         }
     }
 
@@ -184,13 +167,13 @@ public class TelaFalecimento extends javax.swing.JInternalFrame {
         jTableFale.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableFale.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Id", "Descrição", "Quant", "Idade", "Sexo"
+                "Id", "Sexo", "Quant", "Idade"
             }
         ));
         jTableFale.setFocusable(false);
@@ -246,7 +229,7 @@ public class TelaFalecimento extends javax.swing.JInternalFrame {
             }
         });
 
-        jComboFalePesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "descricao", "idade", "sexo" }));
+        jComboFalePesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "idade", "sexo" }));
         jComboFalePesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboFalePesquisaActionPerformed(evt);
@@ -267,7 +250,7 @@ public class TelaFalecimento extends javax.swing.JInternalFrame {
                         .addComponent(jTextFaleBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabelFaleBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                         .addComponent(jLabelFaleCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(15, 15, 15)
@@ -336,9 +319,7 @@ public class TelaFalecimento extends javax.swing.JInternalFrame {
     private void jTextFaleBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFaleBuscaKeyReleased
         if (jComboFalePesquisa.getSelectedItem().toString() == "id") {
             pesquisarAnimalId();
-        } else if (jComboFalePesquisa.getSelectedItem().toString() == "descricao") {
-            pesquisarAnimalDescricao();
-        } else if (jComboFalePesquisa.getSelectedItem().toString() == "idade") {
+        }  else if (jComboFalePesquisa.getSelectedItem().toString() == "idade") {
             pesquisarAnimalIdade();
         } else if (jComboFalePesquisa.getSelectedItem().toString() == "sexo") {
             pesquisarAnimalSexo();

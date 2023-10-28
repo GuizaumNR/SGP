@@ -11,7 +11,8 @@ import java.util.Date;
  * @author Guilherme
  */
 public class Despesas {
-      private Long id;
+
+    private Long id;
     private String descricao;
     private double valor;
     private Date data_despesa;
@@ -57,6 +58,5 @@ public class Despesas {
     public void setData_despesa(Date data_despesa) {
         this.data_despesa = data_despesa;
     }
-    
-    
+
 }

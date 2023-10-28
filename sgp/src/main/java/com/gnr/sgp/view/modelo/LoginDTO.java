@@ -9,7 +9,7 @@ package com.gnr.sgp.view.modelo;
  * @author Guilherme
  */
 public class LoginDTO {
-       
+
     private String usuario;
     private String senha;
 
@@ -18,7 +18,6 @@ public class LoginDTO {
         this.senha = senha;
     }
 
-    
     public String getUsuario() {
         return usuario;
     }
@@ -34,6 +33,5 @@ public class LoginDTO {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-    
-    
+
 }

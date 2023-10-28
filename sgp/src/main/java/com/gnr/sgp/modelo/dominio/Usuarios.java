@@ -11,21 +11,17 @@ import java.util.Objects;
  * @author Guilherme
  */
 public class Usuarios {
-    
-    
+
     private Long id;
     private String login;
     private String senha;
     private String tipo;
     private String nome;
 
-   
-
     public Usuarios() {
-        this.tipo = "consulta"; 
+        this.tipo = "consulta";
     }
-    
-   
+
     public Usuarios(Long id, String login, String senha, String tipo, String nome) {
         this.id = id;
         this.login = login;
@@ -34,13 +30,14 @@ public class Usuarios {
         this.nome = nome;
     }
 
-     public void setNome(String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
     public String getNome() {
         return nome;
-    } 
+    }
+
     public Long getId() {
         return id;
     }
@@ -94,6 +91,5 @@ public class Usuarios {
         final Usuarios other = (Usuarios) obj;
         return Objects.equals(this.id, other.id);
     }
-    
-    
+
 }

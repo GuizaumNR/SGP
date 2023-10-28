@@ -9,7 +9,7 @@ package com.gnr.sgp.modelo.dominio;
  * @author Guilherme
  */
 public class Nascimentos {
-    
+
     private long id_nasc;
     private int id_animal;
     private int quantidade;
@@ -77,6 +77,4 @@ public class Nascimentos {
         this.operador = operador;
     }
 
-    
-    
 }

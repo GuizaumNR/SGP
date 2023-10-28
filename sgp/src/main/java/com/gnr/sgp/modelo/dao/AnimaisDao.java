@@ -57,42 +57,41 @@ public class AnimaisDao {
     }
 
     public String deletar(Animais animal) {
-    String sql = "DELETE FROM animais WHERE id = ?";
-    Animais animalTemp = buscarAnimaisId(animal.getId());
+        String sql = "DELETE FROM animais WHERE id = ?";
+        Animais animalTemp = buscarAnimaisId(animal.getId());
 
-    if (animalTemp == null) {
-        JOptionPane.showMessageDialog(null, "Erro: Este id não existe no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
-        return null;
-    }
+        if (animalTemp == null) {
+            JOptionPane.showMessageDialog(null, "Erro: Este id não existe no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
 
-    try {
-        // Exclua registros em tabelas relacionadas (por exemplo, compras_animais, vendas_animais, etc.)
-        String deleteComprasAnimaisSQL = "DELETE FROM compras_animais WHERE id_animal = ?";
-        String deleteVendasAnimaisSQL = "DELETE FROM vendas_animais WHERE id_animal = ?";
-        String deleteNascimentosAnimaisSQL = "DELETE FROM nascimentos WHERE id_animal = ?";
-        String deleteFalecimentosAnimaisSQL = "DELETE FROM falecimentos WHERE id_animal = ?";
-        // Adicione outras tabelas relacionadas aqui
+        try {
+            // Exclua registros em tabelas relacionadas (por exemplo, compras_animais, vendas_animais, etc.)
+            String deleteComprasAnimaisSQL = "DELETE FROM compras_animais WHERE id_animal = ?";
+            String deleteVendasAnimaisSQL = "DELETE FROM vendas_animais WHERE id_animal = ?";
+            String deleteNascimentosAnimaisSQL = "DELETE FROM nascimentos WHERE id_animal = ?";
+            String deleteFalecimentosAnimaisSQL = "DELETE FROM falecimentos WHERE id_animal = ?";
+            // Adicione outras tabelas relacionadas aqui
 
-        PreparedStatement pstComprasAnimais = conexao.obterConexao().prepareStatement(deleteComprasAnimaisSQL);
-        pstComprasAnimais.setInt(1, (int) animalTemp.getId());
+            PreparedStatement pstComprasAnimais = conexao.obterConexao().prepareStatement(deleteComprasAnimaisSQL);
+            pstComprasAnimais.setInt(1, (int) animalTemp.getId());
 
-        PreparedStatement pstVendasAnimais = conexao.obterConexao().prepareStatement(deleteVendasAnimaisSQL);
-        pstVendasAnimais.setInt(1, (int) animalTemp.getId());
-        
-        PreparedStatement pstNascimentosAnimais = conexao.obterConexao().prepareStatement(deleteNascimentosAnimaisSQL);
-        pstNascimentosAnimais.setInt(1, (int) animalTemp.getId());
-        
-        PreparedStatement pstFalecimentosAnimais = conexao.obterConexao().prepareStatement(deleteFalecimentosAnimaisSQL);
-        pstFalecimentosAnimais.setInt(1, (int) animalTemp.getId());
-        
-        pstComprasAnimais.executeUpdate();
-        pstVendasAnimais.executeUpdate();
-        pstNascimentosAnimais.executeUpdate();
-        pstFalecimentosAnimais.executeUpdate();
+            PreparedStatement pstVendasAnimais = conexao.obterConexao().prepareStatement(deleteVendasAnimaisSQL);
+            pstVendasAnimais.setInt(1, (int) animalTemp.getId());
 
-        // Execute as exclusões nas tabelas relacionadas
-        
-        PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
+            PreparedStatement pstNascimentosAnimais = conexao.obterConexao().prepareStatement(deleteNascimentosAnimaisSQL);
+            pstNascimentosAnimais.setInt(1, (int) animalTemp.getId());
+
+            PreparedStatement pstFalecimentosAnimais = conexao.obterConexao().prepareStatement(deleteFalecimentosAnimaisSQL);
+            pstFalecimentosAnimais.setInt(1, (int) animalTemp.getId());
+
+            pstComprasAnimais.executeUpdate();
+            pstVendasAnimais.executeUpdate();
+            pstNascimentosAnimais.executeUpdate();
+            pstFalecimentosAnimais.executeUpdate();
+
+            // Execute as exclusões nas tabelas relacionadas
+            PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
             pst.setLong(1, animal.getId());
 
             int deletado = pst.executeUpdate();
@@ -101,13 +100,13 @@ public class AnimaisDao {
             } else {
                 JOptionPane.showMessageDialog(null, "Não foi possível deletar os dados do animal.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-    } 
-    
-    return null;
-}
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return null;
+    }
 
     public String editar(Animais animal) {
         String sql = "UPDATE animais SET quantidade = ?, idade = ?, sexo = ? WHERE id = ?";
@@ -136,7 +135,7 @@ public class AnimaisDao {
     private Animais getAnimais(ResultSet result) throws SQLException {
         Animais animal = new Animais();
         animal.setId(result.getLong("id"));
-       animal.setDescricao(result.getString("descricao"));
+        animal.setDescricao(result.getString("descricao"));
         animal.setQuantidade(result.getString("quantidade"));
         animal.setIdade(result.getString("idade"));
         animal.setSexo(result.getString("sexo"));

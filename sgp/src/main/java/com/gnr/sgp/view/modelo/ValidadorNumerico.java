@@ -12,10 +12,10 @@ import java.awt.*;
  *
  * @author Guilherme
  */
-public class ValidadorNumerico extends PlainDocument{
-    
+public class ValidadorNumerico extends PlainDocument {
+
     public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-       if (str != null) {
+        if (str != null) {
             // Verifica se a string contém apenas dígitos numéricos ou um único ponto decimal
             if (str.matches("[0-9]*\\.?[0-9]*")) {
                 super.insertString(offs, str, a);

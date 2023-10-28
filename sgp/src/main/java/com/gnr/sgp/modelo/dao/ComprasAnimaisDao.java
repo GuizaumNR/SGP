@@ -62,12 +62,12 @@ public class ComprasAnimaisDao {
                         int resultado2 = pstmt.executeUpdate();
 
                         if (resultado2 > 0) {
-                             JOptionPane.showMessageDialog(null, "Quantidade de animais atualizada com sucesso!");
+                            JOptionPane.showMessageDialog(null, "Quantidade de animais atualizada com sucesso!");
                         } else {
                             JOptionPane.showMessageDialog(null, "Não foi possível atualizar a quantidade de animais.", "Erro", JOptionPane.ERROR_MESSAGE);
                         }
                     } catch (SQLException e) {
-                         JOptionPane.showMessageDialog(null, "Erro ao atualizar a quantidade de animais: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Erro ao atualizar a quantidade de animais: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }
 //                TelaFornecedor.limpaCampos(null);
                 } else {

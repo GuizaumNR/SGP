@@ -45,79 +45,58 @@
                       <Component id="jTextCompBusca" min="-2" pref="350" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabelCompBusca" min="-2" pref="32" max="-2" attributes="0"/>
-                      <EmptySpace pref="87" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="jLabelCompCampos" min="-2" pref="161" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jLabelCompAnimal" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="jTextFieldCompAnimal" min="-2" pref="124" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="jLabelCompQuantidade" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jTextFieldCompQuantidade" min="-2" pref="124" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="jLabelCompPrecoKg" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="jTextFieldCompPrecoKg" min="-2" pref="125" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="jLabelCompKgTotais" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jTextFieldCompKgTotais" min="-2" pref="124" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jLabelCompMediaKg" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="jTextFieldCompMediaKg" min="-2" pref="124" max="-2" attributes="0"/>
-                                  </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="jLabelCompAnimal" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelCompQuantidade" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelCompKgTotais" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelCompPrecoKg" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelCompMediaKg" alignment="1" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jTextFieldCompAnimal" pref="124" max="32767" attributes="0"/>
+                                  <Component id="jTextFieldCompKgTotais" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jTextFieldCompQuantidade" alignment="0" pref="124" max="32767" attributes="0"/>
+                                  <Component id="jTextFieldCompPrecoKg" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jTextFieldCompMediaKg" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="295" max="-2" attributes="0"/>
                               <Component id="jLabelCompTotal" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabelCompPagamento" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jComboCompPagamento" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabelCompAnimal1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTextFieldCompCriador" min="-2" pref="233" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabelCompPorcentagem" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jTextFieldCompPorcentagem" min="-2" pref="125" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabelCompComissao" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jTextFieldCompComissao" min="-2" pref="125" max="-2" attributes="0"/>
-                          </Group>
                           <Group type="102" attributes="0">
                               <Component id="jTextFieldCompTotal" min="-2" pref="160" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jButtonCompFinalizar" min="-2" pref="170" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="jLabelCompPagador" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jComboCompPagador" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="jLabelCompPagador" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelCompAnimal1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelCompPagamento" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelCompPorcentagem" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelCompComissao" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jComboCompPagador" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jTextFieldCompCriador" min="-2" pref="220" max="-2" attributes="0"/>
+                                  <Component id="jComboCompPagamento" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jTextFieldCompPorcentagem" alignment="0" min="-2" pref="125" max="-2" attributes="0"/>
+                                  <Component id="jTextFieldCompComissao" min="-2" pref="125" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                   </Group>
@@ -142,11 +121,11 @@
               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jTextFieldCompCriador" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelCompAnimal1" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabelCompAnimal1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextFieldCompCriador" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabelCompPagador" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jComboCompPagador" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -170,27 +149,27 @@
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabelCompAnimal" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextFieldCompAnimal" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextFieldCompAnimal" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabelCompQuantidade" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                           <Component id="jTextFieldCompQuantidade" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabelCompKgTotais" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextFieldCompKgTotais" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jTextFieldCompPrecoKg" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabelCompPrecoKg" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabelCompMediaKg" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextFieldCompMediaKg" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabelCompMediaKg" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextFieldCompMediaKg" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>

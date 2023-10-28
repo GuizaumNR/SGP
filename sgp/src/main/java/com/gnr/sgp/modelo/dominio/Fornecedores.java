@@ -8,9 +8,8 @@ package com.gnr.sgp.modelo.dominio;
  *
  * @author Guilherme
  */
-
 public class Fornecedores {
-    
+
     private long id;
     private String nome;
     private String telefone;
@@ -67,5 +66,5 @@ public class Fornecedores {
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
-    
+
 }

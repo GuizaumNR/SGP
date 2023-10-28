@@ -9,8 +9,6 @@ import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.AnimaisDao;
 import com.gnr.sgp.modelo.dominio.Animais;
 import com.gnr.sgp.view.modelo.ValidadorNumerico;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.sql.PreparedStatement;
@@ -55,10 +53,10 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
     }
 
     public void adicionar() {
-        if ((jTextAnimQuantidade.getText().isEmpty()) || jTextAnimId.getText().isEmpty() ) {
+        if ((jTextAnimQuantidade.getText().isEmpty())) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
         } else {
-            Animais animal = new Animais(Integer.parseInt(jTextAnimId.getText().toString()), null, jTextAnimQuantidade.getText(), jComboAnimIdade.getSelectedItem().toString(), jComboAnimSexo.getSelectedItem().toString());
+            Animais animal = new Animais(01, null, jTextAnimQuantidade.getText(), jComboAnimIdade.getSelectedItem().toString(), jComboAnimSexo.getSelectedItem().toString());
 
             AnimaisDao animaisDao = new AnimaisDao();
             animaisDao.adicionar(animal);
@@ -73,16 +71,16 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         if ((jTextAnimId.getText().isEmpty())) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
         } else {
-        //int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar " + jTextAnimDescricao.getText() + " do banco de dados?", "Atenção", JOptionPane.YES_NO_OPTION);
-        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar o animal do banco de dados?", "Atenção", JOptionPane.YES_NO_OPTION);
-        if (confirma == JOptionPane.YES_OPTION) {
-            Animais animal = new Animais(Integer.parseInt(jTextAnimId.getText().toString()), jTextAnimDescricao.getText(), jTextAnimQuantidade.getText(), jComboAnimIdade.getSelectedItem().toString(), jComboAnimSexo.getSelectedItem().toString());
+            //int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar " + jTextAnimDescricao.getText() + " do banco de dados?", "Atenção", JOptionPane.YES_NO_OPTION);
+            int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar o animal do banco de dados?", "Atenção", JOptionPane.YES_NO_OPTION);
+            if (confirma == JOptionPane.YES_OPTION) {
+                Animais animal = new Animais(Integer.parseInt(jTextAnimId.getText().toString()), jTextAnimDescricao.getText(), jTextAnimQuantidade.getText(), jComboAnimIdade.getSelectedItem().toString(), jComboAnimSexo.getSelectedItem().toString());
 
-            AnimaisDao animaisDao = new AnimaisDao();
-            animaisDao.deletar(animal);
+                AnimaisDao animaisDao = new AnimaisDao();
+                animaisDao.deletar(animal);
 
-            limpaCampos();
-        }
+                limpaCampos();
+            }
         }
     }
 
@@ -113,7 +111,6 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         }
 
     }
-
 
     public void pesquisarAnimalIdade() {
         String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE idade like ?");
@@ -302,6 +299,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         });
 
         jTextAnimId.setDocument(new ValidadorNumerico());
+        jTextAnimId.setEditable(false);
         jTextAnimId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabelAnimId.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -315,6 +313,14 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonAnimDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(92, 92, 92)
+                        .addComponent(jButtonAnimEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(91, 91, 91)
+                        .addComponent(jButtonAnimAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jComboAnimPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextAnimBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -322,39 +328,27 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
                         .addComponent(jLabelAnimBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                         .addComponent(jLabelAnimCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonAnimDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(92, 92, 92)
-                .addComponent(jButtonAnimEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(91, 91, 91)
-                .addComponent(jButtonAnimAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabelAnimQuantidade)
+                        .addComponent(jLabelAnimId)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextAnimQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTextAnimId, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabelAnimIdade)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jComboAnimIdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelAnimQuantidade)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextAnimQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabelAnimSexo)
-                                .addGap(17, 17, 17))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelAnimId)
-                                .addGap(18, 18, 18)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboAnimSexo, 0, 1, Short.MAX_VALUE)
-                            .addComponent(jTextAnimId, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabelAnimIdade)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboAnimIdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(187, 187, 187))
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboAnimSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -370,13 +364,19 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
                             .addComponent(jTextAnimBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelAnimIdade)
-                    .addComponent(jComboAnimIdade, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelAnimId)
-                    .addComponent(jTextAnimId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelAnimIdade)
+                            .addComponent(jComboAnimIdade, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelAnimId)
+                            .addComponent(jTextAnimId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelAnimSexo)
                     .addComponent(jComboAnimSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -398,7 +398,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
     private void jTextAnimBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextAnimBuscaKeyReleased
         if (jComboAnimPesquisa.getSelectedItem().toString() == "id") {
             pesquisarAnimalId();
-        
+
         } else if (jComboAnimPesquisa.getSelectedItem().toString() == "idade") {
             pesquisarAnimalIdade();
         } else if (jComboAnimPesquisa.getSelectedItem().toString() == "sexo") {

@@ -69,7 +69,7 @@
                           </Group>
                           <Component id="jScrollPane1" alignment="1" pref="714" max="32767" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="jButtonRelCompraLista1" min="-2" max="-2" attributes="0"/>
+                              <Component id="jButtonRelCompraExcluir" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="jButtonRelCompraLista" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -108,7 +108,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonRelCompraPdf" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                   <Component id="jButtonRelCompraLista" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                  <Component id="jButtonRelCompraLista1" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                  <Component id="jButtonRelCompraExcluir" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
           </Group>
@@ -342,12 +342,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRelCompraListaActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonRelCompraLista1">
+    <Component class="javax.swing.JButton" name="jButtonRelCompraExcluir">
       <Properties>
         <Property name="text" type="java.lang.String" value="Excluir Registro"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRelCompraLista1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRelCompraExcluirActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

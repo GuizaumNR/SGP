@@ -6,11 +6,9 @@ package com.gnr.sgp.controller;
 
 import com.gnr.sgp.TelaPrincipal;
 import com.gnr.sgp.modelo.dao.AutenticacaoDao;
-import com.gnr.sgp.modelo.dao.VendasAnimaisDao;
 import com.gnr.sgp.modelo.dominio.Usuarios;
 import com.gnr.sgp.modelo.exception.NegocioException;
 import com.gnr.sgp.view.formulario.Login;
-import com.gnr.sgp.view.formulario.TelaCompra;
 import com.gnr.sgp.view.modelo.LoginDTO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

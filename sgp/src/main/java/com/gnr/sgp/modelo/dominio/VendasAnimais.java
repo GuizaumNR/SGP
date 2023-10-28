@@ -16,8 +16,8 @@ public class VendasAnimais {
     private double kg_totais;
     private double media_kg;
     private double preco_peso;
-   private double porce_comissao;
-   private double comissao;
+    private double porce_comissao;
+    private double comissao;
     private double valor_total;
     private String comprador;
     private String vendedor;
@@ -148,5 +148,4 @@ public class VendasAnimais {
         this.operador = operador;
     }
 
-   
 }

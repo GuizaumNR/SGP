@@ -29,14 +29,12 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 
@@ -49,7 +47,6 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
     /**
      * Creates new form TelaVenda
      */
-    
     private final Conexao conexao;
     PreparedStatement pst = null;
     ResultSet rs = null;
@@ -234,9 +231,9 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                     PdfFont dataFont = PdfFontFactory.createFont();
                     PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
                     ResultSet resultPDF = pstPDF.executeQuery();
-                    
+
                     int totalQuantidade = 0;
-                    
+
                     while (resultPDF.next()) {
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id")));
                         table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));

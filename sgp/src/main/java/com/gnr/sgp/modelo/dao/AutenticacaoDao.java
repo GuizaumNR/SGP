@@ -7,7 +7,6 @@ package com.gnr.sgp.modelo.dao;
 import com.gnr.sgp.modelo.dominio.Usuarios;
 import com.gnr.sgp.modelo.exception.NegocioException;
 import com.gnr.sgp.view.modelo.LoginDTO;
-import javax.swing.JOptionPane;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -17,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class AutenticacaoDao {
 
     private final UsuariosDao usuarioDao;
-    
 
     public AutenticacaoDao() {
         this.usuarioDao = new UsuariosDao();
@@ -45,9 +43,7 @@ public class AutenticacaoDao {
         if (usuario == null) {
             return null;
         }
-        
-       
-        
+
         if (validarSenha(usuario.getSenha(), login.getSenha())) {
             return usuario;
         }
