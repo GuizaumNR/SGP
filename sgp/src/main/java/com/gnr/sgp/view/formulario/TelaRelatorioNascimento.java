@@ -91,7 +91,7 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
                 + "SET a.quantidade = a.quantidade - n.quantidade "
                 + "WHERE n.id = '" + valorId + "' ";
 
-        String sqlCompra = "DELETE FROM nascimentos WHERE id_venda = '" + valorId + "' ";
+        String sqlCompra = "DELETE FROM nascimentos WHERE id = '" + valorId + "' ";
 
         pst = conexao.obterConexao().prepareStatement(sqlAnimal);
         int resultado = pst.executeUpdate();

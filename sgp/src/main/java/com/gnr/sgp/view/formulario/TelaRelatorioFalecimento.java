@@ -37,6 +37,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -80,6 +81,42 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
         });
 
     }
+    
+    public void deletar() throws SQLException {
+        int setar = jTableRelComp.getSelectedRow();
+        String valorId = jTableRelComp.getModel().getValueAt(setar, 0).toString();
+
+        String sqlAnimal = "UPDATE animais a "
+                + "JOIN falecimentos f ON a.id = f.id_animal "
+                + "SET a.quantidade = a.quantidade + f.quantidade "
+                + "WHERE f.id = '" + valorId + "' ";
+
+        String sqlCompra = "DELETE FROM falecimentos WHERE id = '" + valorId + "' ";
+
+        pst = conexao.obterConexao().prepareStatement(sqlAnimal);
+        int resultado = pst.executeUpdate();
+
+        PreparedStatement pstmt = conexao.obterConexao().prepareStatement(sqlCompra);
+        int resultado2 = pstmt.executeUpdate();
+
+        System.out.println(valorId);
+
+        if (resultado > 0 && resultado2 > 0) {
+            JOptionPane.showMessageDialog(null, "Registro deletado, e quantidade de animais ajustada.");
+            try {
+                criarLista(jFormattedRelFaleInicio.getText(), jFormattedRelFaleFim.getText(), jComboRelFaleOrdem.getSelectedItem().toString());
+
+            } catch (SQLException ex) {
+                Logger.getLogger(TelaRelatorioVenda.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
+            } catch (ParseException ex) {
+                Logger.getLogger(TelaRelatorioVenda.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
 
     private static boolean validaData(String dateStr) {
         String[] parts = dateStr.split("/");
@@ -94,6 +131,102 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
         }
     }
 
+    public void criarLista(String inicio, String fim, String ordem) throws SQLException, ParseException {
+
+        Date dataInicio = new Date();
+        Date dataFim = new Date();
+// Convertendo as strings para o formato de data padrão
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        if (!jRadioButtonRelFaleHoje.isSelected()) {
+
+            dataInicio = dateFormat.parse(inicio);
+            dataFim = dateFormat.parse(fim);
+
+        } else {
+            // Defina a data atual como base
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dataSistema);
+
+            // Obtenha o último dia do mês
+            int ultimoDia = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+            // Configure o dia para o último dia do mês
+            calendar.set(Calendar.DAY_OF_MONTH, ultimoDia);
+            // Obtenha a data do último dia do mês
+            Date ultimoDiaDoMes = calendar.getTime();
+            String ultimoDiaFormatado = formato.format(ultimoDiaDoMes);
+
+            dataInicio = dateFormat.parse(formato.format(dataSistema));
+            dataFim = dateFormat.parse(ultimoDiaFormatado);
+        }
+        try {
+            if (validaData(dateFormat.format(dataInicio)) && validaData(dateFormat.format(dataFim))) {
+
+                if (dateFormat.format(dataInicio).equals(dateFormat.format(dataFim))) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dataFim);
+
+                    // Adicione um mês
+                    calendar.add(Calendar.MONTH, 1);
+
+                    // Acesse a nova data após adicionar um mês
+                    Date dataAposUmMes = calendar.getTime();
+
+                    dataFim = dataAposUmMes;
+                }
+
+// Convertendo as datas de volta para o formato do banco de dados
+                SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String inicioFormatado = dbDateFormat.format(dataInicio);
+                String fimFormatado = dbDateFormat.format(dataFim);
+                String sql = "";
+
+                if (jRadioButtonRelFaleDesc.isSelected()) {
+                    sql = "SELECT "
+                            + "f.id, "
+                            + "	DATE_FORMAT(data_morte, '%d/%m/%Y') as data_formatada, "
+                            + "a.sexo as animal_sexo, "
+                            + "a.idade as animal_idade, "
+                            + "f.quantidade, "
+                            + "observacao, "
+                            + "local_falecimento, "
+                            + "operador "
+                            + "FROM falecimentos f "
+                            + "JOIN animais a ON f.id_animal = a.id "
+                            + "WHERE f.data_morte BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                            + "ORDER BY " + ordem + " DESC";
+                } else {
+                    sql = "SELECT "
+                            + "f.id, "
+                            + "DATE_FORMAT(data_morte, '%d/%m/%Y') as data_formatada, "
+                            + "a.sexo as animal_sexo, "
+                            + "a.idade as animal_idade, "
+                            + "f.quantidade, "
+                            + "observacao, "
+                            + "local_falecimento, "
+                            + "operador "
+                            + "FROM falecimentos f "
+                            + "JOIN animais a ON f.id_animal = a.id "
+                            + "WHERE f.data_morte BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                            + "ORDER BY " + ordem;
+                }
+
+                pst = conexao.obterConexao().prepareStatement(sql);
+                rs = pst.executeQuery();
+
+                jTableRelComp.setModel(DbUtils.resultSetToTableModel(rs));
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Data inválida.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Data inválida.");
+        }
+
+    }
+    
     public void criarDocumento(String inicio, String fim, String ordem) throws SQLException, ParseException {
 
         Date dataInicio = new Date();
@@ -294,6 +427,10 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
         jLabelRelFaleOrdem = new javax.swing.JLabel();
         jRadioButtonRelFaleHoje = new javax.swing.JRadioButton();
         jRadioButtonRelFaleDesc = new javax.swing.JRadioButton();
+        jButtonRelCompraLista = new javax.swing.JButton();
+        jButtonRelVendaExcluir = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableRelComp = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(227, 234, 227));
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -338,14 +475,53 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
 
         jRadioButtonRelFaleDesc.setText("Decrescente");
 
+        jButtonRelCompraLista.setText("Gerar Lista");
+        jButtonRelCompraLista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRelCompraListaActionPerformed(evt);
+            }
+        });
+
+        jButtonRelVendaExcluir.setText("Excluir Registro");
+        jButtonRelVendaExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRelVendaExcluirActionPerformed(evt);
+            }
+        });
+
+        jTableRelComp = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        jTableRelComp.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Id", "Data", "Sexo", "Idade", "Qtde", "Observação ", "Local", "Operador"
+            }
+        ));
+        jTableRelComp.setFocusable(false);
+        jTableRelComp.getTableHeader().setReorderingAllowed(false);
+        jTableRelComp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableRelCompMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableRelComp);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabelRelFaleOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -362,11 +538,16 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jFormattedRelFaleFim, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jRadioButtonRelFaleHoje))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(272, 272, 272)
-                        .addComponent(jButtonRelFale)))
-                .addContainerGap(372, Short.MAX_VALUE))
+                                .addComponent(jRadioButtonRelFaleHoje)))
+                        .addGap(0, 409, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButtonRelVendaExcluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonRelCompraLista)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonRelFale))
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -383,9 +564,14 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                     .addComponent(jComboRelFaleOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelRelFaleOrdem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jRadioButtonRelFaleDesc))
-                .addGap(102, 102, 102)
-                .addComponent(jButtonRelFale, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(294, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonRelFale, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonRelCompraLista, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonRelVendaExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -419,9 +605,37 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboRelFaleOrdemActionPerformed
 
+    private void jButtonRelCompraListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelCompraListaActionPerformed
+        try {
+            criarLista(jFormattedRelFaleInicio.getText(), jFormattedRelFaleFim.getText(), jComboRelFaleOrdem.getSelectedItem().toString());
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaRelatorioVenda.class
+                .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (ParseException ex) {
+            Logger.getLogger(TelaRelatorioVenda.class
+                .getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonRelCompraListaActionPerformed
+
+    private void jButtonRelVendaExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelVendaExcluirActionPerformed
+        try {
+            deletar();
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaRelatorioCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonRelVendaExcluirActionPerformed
+
+    private void jTableRelCompMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableRelCompMouseClicked
+
+    }//GEN-LAST:event_jTableRelCompMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonRelCompraLista;
     private javax.swing.JButton jButtonRelFale;
+    private javax.swing.JButton jButtonRelVendaExcluir;
     private javax.swing.JComboBox<String> jComboRelFaleOrdem;
     private javax.swing.JFormattedTextField jFormattedRelFaleFim;
     public javax.swing.JFormattedTextField jFormattedRelFaleInicio;
@@ -430,5 +644,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabelRelFalePeriodoA;
     private javax.swing.JRadioButton jRadioButtonRelFaleDesc;
     private javax.swing.JRadioButton jRadioButtonRelFaleHoje;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTableRelComp;
     // End of variables declaration//GEN-END:variables
 }
