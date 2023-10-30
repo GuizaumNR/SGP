@@ -103,7 +103,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarUsuarioId() {
-        String sql = String.format("SELECT * FROM usuarios WHERE id like ?");
+        String sql = String.format("SELECT id as ID, nome as Nome, login as Login, tipo as Tipo FROM usuarios WHERE id like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextUsuBusca.getText() + "%");
@@ -116,7 +116,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarUsuarioLogin() {
-        String sql = String.format("SELECT * FROM usuarios WHERE login like ?");
+        String sql = String.format("SELECT id as ID, nome as Nome, login as Login, tipo as Tipo FROM usuarios WHERE login like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextUsuBusca.getText() + "%");
@@ -129,7 +129,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarUsuarioNome() {
-        String sql = String.format("SELECT * FROM usuarios WHERE nome like ?");
+        String sql = String.format("SELECT id as ID, nome as Nome, login as Login, tipo as Tipo FROM usuarios WHERE nome like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextUsuBusca.getText() + "%");
@@ -143,7 +143,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarUsuarioTipo() {
-        String sql = String.format("SELECT * FROM usuarios WHERE tipo like ?");
+        String sql = String.format("SELECT id as ID, nome as Nome, login as Login, tipo as Tipo FROM usuarios WHERE tipo like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextUsuBusca.getText() + "%");
@@ -286,7 +286,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Id", "Login", "Nome", "Tipo"
+                "ID", "Login", "Nome", "Tipo"
             }
         ));
         jTableForn.getTableHeader().setReorderingAllowed(false);
@@ -297,7 +297,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jTableForn);
 
-        jComboUsuPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Id", "Login", "Nome", "Tipo" }));
+        jComboUsuPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Login", "Nome", "Tipo" }));
         jComboUsuPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboUsuPesquisaActionPerformed(evt);
@@ -326,7 +326,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         });
 
         jLabelUsuId.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabelUsuId.setText("* Id:");
+        jLabelUsuId.setText("* ID:");
 
         jLabelUsuNome.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabelUsuNome.setText("* Nome:");
@@ -372,16 +372,16 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabelUsuSenha)
                                 .addGap(18, 18, 18)
-                                .addComponent(jPassUsuSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jPassUsuSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonUsuAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(65, 65, 65)
+                        .addComponent(jButtonUsuEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(65, 65, 65)
+                        .addComponent(jButtonUsuDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonUsuAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(65, 65, 65)
-                .addComponent(jButtonUsuEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(65, 65, 65)
-                .addComponent(jButtonUsuDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -467,7 +467,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
 
     private void jTextUsuBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextUsuBuscaKeyReleased
         //enquanto for digitando fazer isto
-        if (jComboUsuPesquisa.getSelectedItem().toString() == "Id") {
+        if (jComboUsuPesquisa.getSelectedItem().toString() == "ID") {
             pesquisarUsuarioId();
         } else if (jComboUsuPesquisa.getSelectedItem().toString() == "Login") {
             pesquisarUsuarioLogin();

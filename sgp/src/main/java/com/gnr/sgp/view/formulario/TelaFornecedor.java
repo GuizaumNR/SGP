@@ -89,7 +89,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarFornecedorNome() {
-        String sql = String.format("SELECT * FROM fornecedores WHERE nome like ?");
+        String sql = String.format("SELECT id as ID, nome as Nome, telefone as Telefone, endereco as Endereço, email as Email FROM fornecedores WHERE nome like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextFornBusca.getText() + "%");
@@ -103,7 +103,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarFornecedorId() {
-        String sql = String.format("SELECT * FROM fornecedores WHERE id like ?");
+        String sql = String.format("SELECT id as ID, nome as Nome, telefone as Telefone, endereco as Endereço, email as Email FROM fornecedores WHERE id like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextFornBusca.getText() + "%");
@@ -252,7 +252,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Id", "Nome", "Endereço", "Telefone", "Email"
+                "ID", "Nome", "Telefone", "Endereço", "Email"
             }
         ));
         jTableForn.getTableHeader().setReorderingAllowed(false);
@@ -266,7 +266,7 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
         jLabelFornBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
         jLabelFornBusca.setText(" ");
 
-        jComboFornPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "nome", "id" }));
+        jComboFornPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Nome" }));
         jComboFornPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboFornPesquisaActionPerformed(evt);
@@ -372,9 +372,9 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
 
     private void jTextFornBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFornBuscaKeyReleased
         //enquanto for digitando fazer isto
-        if (jComboFornPesquisa.getSelectedItem().toString() == "nome") {
+        if (jComboFornPesquisa.getSelectedItem().toString() == "Nome") {
             pesquisarFornecedorNome();
-        } else if (jComboFornPesquisa.getSelectedItem().toString() == "id") {
+        } else if (jComboFornPesquisa.getSelectedItem().toString() == "ID") {
             pesquisarFornecedorId();
         }
 

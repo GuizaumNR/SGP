@@ -142,16 +142,16 @@
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="15" rowCount="4">
-                <Column editable="true" title="Id" type="java.lang.Object"/>
+                <Column editable="true" title="ID" type="java.lang.Object"/>
                 <Column editable="true" title="Data" type="java.lang.Object"/>
                 <Column editable="true" title="Sexo" type="java.lang.Object"/>
                 <Column editable="true" title="Idade" type="java.lang.Object"/>
                 <Column editable="true" title="Qtde" type="java.lang.Object"/>
-                <Column editable="true" title="Kg Totais" type="java.lang.Object"/>
-                <Column editable="true" title="M&#xe9;dia Kg" type="java.lang.Object"/>
-                <Column editable="true" title="Pre&#xe7;o Kg" type="java.lang.Object"/>
+                <Column editable="true" title="Kg_Totais" type="java.lang.Object"/>
+                <Column editable="true" title="M&#xe9;dia_Kg" type="java.lang.Object"/>
+                <Column editable="true" title="Pre&#xe7;o_Kg" type="java.lang.Object"/>
                 <Column editable="true" title="Total" type="java.lang.Object"/>
-                <Column editable="true" title="%" type="java.lang.Object"/>
+                <Column editable="true" title="Porce" type="java.lang.Object"/>
                 <Column editable="true" title="Comiss&#xe3;o" type="java.lang.Object"/>
                 <Column editable="true" title="Criador" type="java.lang.Object"/>
                 <Column editable="true" title="Pagador" type="java.lang.Object"/>

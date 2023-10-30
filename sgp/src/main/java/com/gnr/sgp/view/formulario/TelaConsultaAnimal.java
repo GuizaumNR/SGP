@@ -42,7 +42,7 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalId() {
-        String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE id like ?");
+        String sql = String.format("SELECT id as ID, sexo as Sexo, quantidade as Qtde, idade as Idade FROM animais WHERE id like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextAnimBusca.getText() + "%");
@@ -56,7 +56,7 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalIdade() {
-        String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE idade like ?");
+        String sql = String.format("SELECT id as ID, sexo as Sexo, quantidade as Qtde, idade as Idade FROM animais WHERE idade like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextAnimBusca.getText() + "%");
@@ -70,7 +70,7 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalSexo() {
-        String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE sexo like ?");
+        String sql = String.format("SELECT id as ID, sexo as Sexo, quantidade as Qtde, idade as Idade FROM animais WHERE sexo like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextAnimBusca.getText() + "%");
@@ -124,7 +124,7 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Id", "Sexo", "Quant", "Idade"
+                "ID", "Sexo", "Qtde", "Idade"
             }
         ));
         jTableAnim.setFocusable(false);
@@ -139,7 +139,7 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
         jLabelAnimBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
         jLabelAnimBusca.setText(" ");
 
-        jComboAnimPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "idade", "sexo" }));
+        jComboAnimPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Idade", "Sexo" }));
         jComboAnimPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboAnimPesquisaActionPerformed(evt);
@@ -182,11 +182,11 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextAnimBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextAnimBuscaKeyReleased
-        if (jComboAnimPesquisa.getSelectedItem().toString() == "id") {
+        if (jComboAnimPesquisa.getSelectedItem().toString() == "ID") {
             pesquisarAnimalId();
-        } else if (jComboAnimPesquisa.getSelectedItem().toString() == "idade") {
+        } else if (jComboAnimPesquisa.getSelectedItem().toString() == "Idade") {
             pesquisarAnimalIdade();
-        } else if (jComboAnimPesquisa.getSelectedItem().toString() == "sexo") {
+        } else if (jComboAnimPesquisa.getSelectedItem().toString() == "Sexo") {
             pesquisarAnimalSexo();
         }
 

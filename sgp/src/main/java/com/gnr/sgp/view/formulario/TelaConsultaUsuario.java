@@ -37,7 +37,7 @@ public class TelaConsultaUsuario extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarUsuarioId() {
-        String sql = String.format("SELECT * FROM usuarios WHERE id like ?");
+        String sql = String.format("SELECT id as ID, nome as Nome, login as Login, tipo as Tipo FROM usuarios WHERE id like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextUsuBusca.getText() + "%");
@@ -50,7 +50,7 @@ public class TelaConsultaUsuario extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarUsuarioLogin() {
-        String sql = String.format("SELECT * FROM usuarios WHERE login like ?");
+        String sql = String.format("SELECT id as ID, nome as Nome, login as Login, tipo as Tipo FROM usuarios WHERE login like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextUsuBusca.getText() + "%");
@@ -63,7 +63,7 @@ public class TelaConsultaUsuario extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarUsuarioNome() {
-        String sql = String.format("SELECT * FROM usuarios WHERE nome like ?");
+        String sql = String.format("SELECT id as ID, nome as Nome, login as Login, tipo as Tipo FROM usuarios WHERE nome like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextUsuBusca.getText() + "%");
@@ -77,7 +77,7 @@ public class TelaConsultaUsuario extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarUsuarioTipo() {
-        String sql = String.format("SELECT * FROM usuarios WHERE tipo like ?");
+        String sql = String.format("SELECT id as ID, nome as Nome, login as Login, tipo as Tipo FROM usuarios WHERE tipo like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextUsuBusca.getText() + "%");
@@ -126,7 +126,7 @@ public class TelaConsultaUsuario extends javax.swing.JInternalFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Id", "Login", "Nome", "Tipo"
+                "ID", "Login", "Nome", "Tipo"
             }
         ));
         jTableForn.getTableHeader().setReorderingAllowed(false);
@@ -137,7 +137,7 @@ public class TelaConsultaUsuario extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jTableForn);
 
-        jComboUsuPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Id", "Login", "Nome", "Tipo" }));
+        jComboUsuPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Login", "Nome", "Tipo" }));
         jComboUsuPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboUsuPesquisaActionPerformed(evt);
@@ -204,7 +204,7 @@ public class TelaConsultaUsuario extends javax.swing.JInternalFrame {
 
     private void jTextUsuBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextUsuBuscaKeyReleased
         //enquanto for digitando fazer isto
-        if (jComboUsuPesquisa.getSelectedItem().toString() == "Id") {
+        if (jComboUsuPesquisa.getSelectedItem().toString() == "ID") {
             pesquisarUsuarioId();
         } else if (jComboUsuPesquisa.getSelectedItem().toString() == "Login") {
             pesquisarUsuarioLogin();

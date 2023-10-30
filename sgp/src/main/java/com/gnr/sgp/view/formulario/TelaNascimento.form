@@ -148,7 +148,7 @@
               <Table columnCount="4" rowCount="4">
                 <Column editable="true" title="Id" type="java.lang.Object"/>
                 <Column editable="true" title="Sexo" type="java.lang.Object"/>
-                <Column editable="true" title="Quant" type="java.lang.Object"/>
+                <Column editable="true" title="Qtde" type="java.lang.Object"/>
                 <Column editable="true" title="Idade" type="java.lang.Object"/>
               </Table>
             </Property>
@@ -287,9 +287,9 @@
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="3">
-            <StringItem index="0" value="id"/>
-            <StringItem index="1" value="idade"/>
-            <StringItem index="2" value="sexo"/>
+            <StringItem index="0" value="ID"/>
+            <StringItem index="1" value="Idade"/>
+            <StringItem index="2" value="Sexo"/>
           </StringArray>
         </Property>
       </Properties>

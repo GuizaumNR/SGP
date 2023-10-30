@@ -239,7 +239,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalId() {
-        String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE id like ?");
+        String sql = String.format("SELECT id as ID, sexo as Sexo, quantidade as Qtde, idade as Idade FROM animais WHERE id like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextCompBusca.getText() + "%");
@@ -253,7 +253,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalIdade() {
-        String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE idade like ?");
+        String sql = String.format("SELECT id as ID, sexo as Sexo, quantidade as Qtde, idade as Idade FROM animais WHERE idade like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextCompBusca.getText() + "%");
@@ -267,7 +267,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalSexo() {
-        String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE sexo like ?");
+        String sql = String.format("SELECT id as ID, sexo as Sexo, quantidade as Qtde, idade as Idade FROM animais WHERE sexo like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextCompBusca.getText() + "%");
@@ -277,7 +277,6 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void setarCampos() {
@@ -384,7 +383,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             }
         });
 
-        jComboCompPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "idade", "sexo" }));
+        jComboCompPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Idade", "Sexo" }));
         jComboCompPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboCompPesquisaActionPerformed(evt);
@@ -425,7 +424,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Id", "Sexo", "Quant", "Idade"
+                "ID", "Sexo", "Qtde", "Idade"
             }
         ));
         jTableComp.setFocusable(false);
@@ -544,9 +543,9 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                             .addComponent(jTextFieldCompComissao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabelCompComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelCompAnimal)
-                            .addComponent(jTextFieldCompAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldCompAnimal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelCompAnimal))
                         .addGap(8, 8, 8)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelCompQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -575,11 +574,11 @@ public class TelaCompra extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextCompBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextCompBuscaKeyReleased
-        if (jComboCompPesquisa.getSelectedItem().toString() == "id") {
+        if (jComboCompPesquisa.getSelectedItem().toString() == "ID") {
             pesquisarAnimalId();
-        } else if (jComboCompPesquisa.getSelectedItem().toString() == "idade") {
+        } else if (jComboCompPesquisa.getSelectedItem().toString() == "Idade") {
             pesquisarAnimalIdade();
-        } else if (jComboCompPesquisa.getSelectedItem().toString() == "sexo") {
+        } else if (jComboCompPesquisa.getSelectedItem().toString() == "Sexo") {
             pesquisarAnimalSexo();
         }
     }//GEN-LAST:event_jTextCompBuscaKeyReleased

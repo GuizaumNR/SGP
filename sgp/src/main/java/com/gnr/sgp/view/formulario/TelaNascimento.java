@@ -77,7 +77,7 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalId() {
-        String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE id like ?");
+        String sql = String.format("SELECT id as ID, sexo as Sexo, quantidade as Qtde, idade as Idade FROM animais WHERE id like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextNascBusca.getText() + "%");
@@ -91,7 +91,7 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalIdade() {
-        String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE idade like ?");
+        String sql = String.format("SELECT id as ID, sexo as Sexo, quantidade as Qtde, idade as Idade FROM animais WHERE idade like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextNascBusca.getText() + "%");
@@ -105,7 +105,7 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalSexo() {
-        String sql = String.format("SELECT id, sexo, quantidade, idade FROM animais WHERE sexo like ?");
+        String sql = String.format("SELECT id as ID, sexo as Sexo, quantidade as Qtde, idade as Idade FROM animais WHERE sexo like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextNascBusca.getText() + "%");
@@ -115,7 +115,6 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void setarCampo() {
@@ -173,7 +172,7 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Id", "Sexo", "Quant", "Idade"
+                "Id", "Sexo", "Qtde", "Idade"
             }
         ));
         jTableNasc.setFocusable(false);
@@ -229,7 +228,7 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
             }
         });
 
-        jComboNascPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "idade", "sexo" }));
+        jComboNascPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Idade", "Sexo" }));
         jComboNascPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboNascPesquisaActionPerformed(evt);
@@ -317,11 +316,11 @@ public class TelaNascimento extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTableNascMouseClicked
 
     private void jTextNascBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextNascBuscaKeyReleased
-        if (jComboNascPesquisa.getSelectedItem().toString() == "id") {
+        if (jComboNascPesquisa.getSelectedItem().toString() == "ID") {
             pesquisarAnimalId();
-        } else if (jComboNascPesquisa.getSelectedItem().toString() == "idade") {
+        } else if (jComboNascPesquisa.getSelectedItem().toString() == "Idade") {
             pesquisarAnimalIdade();
-        } else if (jComboNascPesquisa.getSelectedItem().toString() == "sexo") {
+        } else if (jComboNascPesquisa.getSelectedItem().toString() == "Sexo") {
             pesquisarAnimalSexo();
         }
     }//GEN-LAST:event_jTextNascBuscaKeyReleased

@@ -224,24 +224,24 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
 
                 if (jRadioButtonRelCompraDesc.isSelected()) {
                     if (!pagamento.equals("*")) {
-                        sql = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.sexo as sexo_animal, a.idade as idade_animal, c.quantidade, c.kg_totais, c.media_kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
-                                + "criador, pagador, pagamento, operador "
+                        sql = "SELECT id_compra as ID, DATE_FORMAT(data_compra, '%d/%m/%Y') as Data, a.sexo as Sexo, a.idade as Idade, c.quantidade as Qtde, c.kg_totais as Kg_Totais, c.media_kg as Média_Kg, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Comissão, "
+                                + "criador as Criador, pagador as Pagador, pagamento as Pagamento, operador as OperadorS "
                                 + "FROM compras_animais c "
                                 + "JOIN animais a ON c.id_animal = a.id "
                                 + "WHERE data_compra BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
                                 + "AND pagamento = '" + pagamento + "' "
                                 + "ORDER BY " + ordem + " DESC";
                     } else {
-                        sql = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.sexo as sexo_animal, a.idade as idade_animal, c.quantidade, c.kg_totais, c.media_kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
-                                + "criador, pagador, pagamento, operador "
+                        sql = "SELECT id_compra as ID, DATE_FORMAT(data_compra, '%d/%m/%Y') as Data, a.sexo as Sexo, a.idade as Idade, c.quantidade as Qtde, c.kg_totais as Kg_Totais, c.media_kg as Média_Kg, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Comissão, "
+                                + "criador as Criador, pagador as Pagador, pagamento as Pagamento, operador as OperadorS "
                                 + "FROM compras_animais c "
                                 + "JOIN animais a ON c.id_animal = a.id "
                                 + "WHERE data_compra BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
@@ -250,24 +250,24 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
 
                 } else {
                     if (!pagamento.equals("*")) {
-                        sql = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.sexo as sexo_animal, a.idade as idade_animal, c.quantidade, c.kg_totais, c.media_kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
-                                + "criador, pagador, pagamento, operador "
+                        sql = "SELECT id_compra as ID, DATE_FORMAT(data_compra, '%d/%m/%Y') as Data, a.sexo as Sexo, a.idade as Idade, c.quantidade as Qtde, c.kg_totais as Kg_Totais, c.media_kg as Média_Kg, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Comissão, "
+                                + "criador as Criador, pagador as Pagador, pagamento as Pagamento, operador as OperadorS "
                                 + "FROM compras_animais c "
                                 + "JOIN animais a ON c.id_animal = a.id "
                                 + "WHERE data_compra BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
                                 + "AND pagamento = '" + pagamento + "' "
                                 + "ORDER BY " + ordem;
                     } else {
-                        sql = "SELECT id_compra, DATE_FORMAT(data_compra, '%d/%m/%Y') as data_formatada, a.sexo as sexo_animal, a.idade as idade_animal, c.quantidade, c.kg_totais, c.media_kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
-                                + "criador, pagador, pagamento, operador "
+                        sql = "SELECT id_compra as ID, DATE_FORMAT(data_compra, '%d/%m/%Y') as Data, a.sexo as Sexo, a.idade as Idade, c.quantidade as Qtde, c.kg_totais as Kg_Totais, c.media_kg as Média_Kg, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
+                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
+                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Comissão, "
+                                + "criador as Criador, pagador as Pagador, pagamento as Pagamento, operador as OperadorS "
                                 + "FROM compras_animais c "
                                 + "JOIN animais a ON c.id_animal = a.id "
                                 + "WHERE data_compra BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
@@ -574,7 +574,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Data", "Sexo", "Idade", "Qtde", "Kg Totais", "Média Kg", "Preço Kg", "Total", "%", "Comissão", "Criador", "Pagador", "Pagamento", "Operador"
+                "ID", "Data", "Sexo", "Idade", "Qtde", "Kg_Totais", "Média_Kg", "Preço_Kg", "Total", "Porce", "Comissão", "Criador", "Pagador", "Pagamento", "Operador"
             }
         ));
         jTableRelComp.setFocusable(false);

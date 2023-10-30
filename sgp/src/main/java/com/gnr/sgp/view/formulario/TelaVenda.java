@@ -240,7 +240,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalId() {
-        String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE id like ?");
+        String sql = String.format("SELECT id as ID, sexo as Sexo, quantidade as Qtde, idade as Idade FROM animais WHERE id like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextVendaBusca.getText() + "%");
@@ -254,7 +254,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalIdade() {
-        String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE idade like ?");
+        String sql = String.format("SELECT id as ID, sexo as Sexo, quantidade as Qtde, idade as Idade FROM animais WHERE idade like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextVendaBusca.getText() + "%");
@@ -268,7 +268,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarAnimalSexo() {
-        String sql = String.format("SELECT id, quantidade, idade, sexo FROM animais WHERE sexo like ?");
+        String sql = String.format("SELECT id as ID, sexo as Sexo, quantidade as Qtde, idade as Idade FROM animais WHERE sexo like ?");
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextVendaBusca.getText() + "%");
@@ -278,7 +278,6 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void setarCampos() {
@@ -390,7 +389,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
             }
         });
 
-        jComboVendaPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "idade", "sexo" }));
+        jComboVendaPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Idade", "Sexo" }));
         jComboVendaPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboVendaPesquisaActionPerformed(evt);
@@ -439,7 +438,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Id", "Sexo", "Quant", "Idade"
+                "ID", "Sexo", "Qtde", "Idade"
             }
         ));
         jTableVenda.setFocusable(false);
@@ -599,11 +598,11 @@ public class TelaVenda extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jComboVendaPesquisaActionPerformed
 
     private void jTextVendaBuscaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextVendaBuscaKeyReleased
-        if (jComboVendaPesquisa.getSelectedItem().toString() == "id") {
+        if (jComboVendaPesquisa.getSelectedItem().toString() == "ID") {
             pesquisarAnimalId();
-        } else if (jComboVendaPesquisa.getSelectedItem().toString() == "idade") {
+        } else if (jComboVendaPesquisa.getSelectedItem().toString() == "Idade") {
             pesquisarAnimalIdade();
-        } else if (jComboVendaPesquisa.getSelectedItem().toString() == "sexo") {
+        } else if (jComboVendaPesquisa.getSelectedItem().toString() == "Sexo") {
             pesquisarAnimalSexo();
         }
     }//GEN-LAST:event_jTextVendaBuscaKeyReleased
