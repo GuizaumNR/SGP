@@ -403,7 +403,7 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         jLabelCompPagamento.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelCompPagamento.setText("* Pagamento:");
 
-        jComboCompPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dinheiro", "Cartão Débito", "Cartão Crédito", "Pix", "Permuta" }));
+        jComboCompPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dinheiro", "Cartão Débito", "Cartão Crédito", "Pix" }));
         jComboCompPagamento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboCompPagamentoActionPerformed(evt);

@@ -9,11 +9,37 @@ import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.VendasAnimaisDao;
 import com.gnr.sgp.modelo.dominio.VendasAnimais;
 import com.gnr.sgp.view.modelo.ValidadorNumerico;
+import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.kernel.color.DeviceGray;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfPage;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.border.Border;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.LineSeparator;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.HorizontalAlignment;
+import com.itextpdf.layout.property.TextAlignment;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -202,21 +228,157 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         }
     }
 
-    public void adicionar() {
-        if ((jTextFieldVendaAnimal.getText().isEmpty() || jTextFieldVendaQuantidade.getText().isEmpty() || jTextFieldVendaMediaKg.getText().isEmpty() || jTextFieldVendaPrecoKg.getText().isEmpty() || jTextFieldVendaComprador.getText().isEmpty() || jTextFieldVendaTotal.getText().isEmpty() || jTextFieldVendaVendedor.getText().isEmpty() || jTextFieldVendaKgTotais.getText().isEmpty() || jTextFieldVendaPorcentagem.getText().isEmpty() || jTextFieldVendaComissao.getText().isEmpty())) {
-            JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
-        } else {
-            quantidade = Integer.parseInt(jTextFieldVendaQuantidade.getText());
-            mediaKg = Double.parseDouble(jTextFieldVendaMediaKg.getText());
-            precoKg = Double.parseDouble(jTextFieldVendaPrecoKg.getText());
-            valorTotal = quantidade * mediaKg * precoKg;
+    public void adicionar() throws SQLException, ParseException {
 
-            VendasAnimais venda = new VendasAnimais(01, Integer.parseInt(jTextFieldVendaAnimal.getText()), quantidade, (kgTotais * 10), mediaKg, precoKg, (percentual * 100), comissao, valorTotal, jTextFieldVendaComprador.getText(), jTextFieldVendaVendedor.getText(), jComboVendaPagamento.getSelectedItem().toString(), operador);
+        quantidade = Integer.parseInt(jTextFieldVendaQuantidade.getText());
+        mediaKg = Double.parseDouble(jTextFieldVendaMediaKg.getText());
+        precoKg = Double.parseDouble(jTextFieldVendaPrecoKg.getText());
+        valorTotal = quantidade * mediaKg * precoKg;
 
-            VendasAnimaisDao vendasDao = new VendasAnimaisDao();
-            vendasDao.Adicionar(venda);
+        VendasAnimais venda = new VendasAnimais(01, Integer.parseInt(jTextFieldVendaAnimal.getText()), quantidade, (kgTotais * 10), mediaKg, precoKg, (percentual * 100), comissao, valorTotal, jTextFieldVendaComprador.getText(), jTextFieldVendaVendedor.getText(), jComboVendaPagamento.getSelectedItem().toString(), operador);
 
-            limpaCampos();
+        VendasAnimaisDao vendasDao = new VendasAnimaisDao();
+        vendasDao.Adicionar(venda);
+
+        criarDocumento();
+
+        limpaCampos();
+
+    }
+
+    public static String formatarPeso(double valor) {
+        // Crie um objeto DecimalFormat com o formato desejado
+        DecimalFormat df = new DecimalFormat("#,##0.00 kg");
+
+        // Formate o valor como uma string
+        String valorFormatado = df.format(valor);
+
+        return valorFormatado;
+    }
+
+    public void criarDocumento() throws SQLException, ParseException {
+
+        String path = "";
+
+        String sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
+                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
+                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
+                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
+                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
+                + "vendedor, comprador, pagamento, operador "
+                + "FROM vendas_animais v "
+                + "JOIN animais a ON v.id_animal = a.id "
+                + "ORDER BY id_venda DESC LIMIT 1";
+
+        try {
+            // Linhas da tabela com os dados do ResultSet
+            PdfFont dataFont = PdfFontFactory.createFont();
+            PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
+            ResultSet resultPDF = pstPDF.executeQuery();
+
+            if (resultPDF.next()) {
+
+                String username = System.getProperty("user.name");
+                Calendar now = Calendar.getInstance();
+                String hora = String.format("%1$tH:%1$tM:%1$tS", now);
+                String data = new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + " " + hora;
+
+                String idVenda = resultPDF.getString("id_venda");
+                String dataVenda = data;
+                String sexoAnimal = resultPDF.getString("sexo_animal");
+                String idadeAnimal = resultPDF.getString("idade_animal");
+                String quantidade = resultPDF.getString("quantidade");
+                String kgTotais = resultPDF.getString("kg_totais");
+                String mediaKg = resultPDF.getString("media_kg");
+                String precoKgFormatado = resultPDF.getString("preco_kg_formatado");
+                String valorTotalFormatado = resultPDF.getString("valor_total_formatado");
+                String porcentagemComissao = resultPDF.getString("porce_formatado");
+                String comissaoFormatada = resultPDF.getString("comissao_formatado");
+                String vendedor = resultPDF.getString("vendedor");
+                String comprador = resultPDF.getString("comprador");
+                String pagamento = resultPDF.getString("pagamento");
+                String operador = resultPDF.getString("operador");
+
+                // Criar o documento PDF
+                path = "C:\\Users\\" + username + "\\Documents\\Venda_N" + resultPDF.getString("id_venda") + ".pdf";
+                PdfWriter pdfWriter = new PdfWriter(path);
+                PdfDocument documentoPDF = new PdfDocument(pdfWriter);
+                Document document = new Document(documentoPDF, PageSize.A6);
+
+                // Adicionar conteúdo ao documento
+                document.add(new Paragraph("CUPOM NÃO FISCAL").setBold().setFontSize(12).setTextAlignment(TextAlignment.CENTER));
+                document.add(new Paragraph("--------------------------------------------------------"));
+
+                // Detalhes da venda
+                float[] vendaColumnWidths = {1, 1, 1};
+                Table vendaTable = new Table(vendaColumnWidths);
+                vendaTable.setWidthPercent(100);
+
+                vendaTable.addCell(new Cell().add("Pecuária MML").setFontSize(8).setBorder(Border.NO_BORDER));
+                vendaTable.addCell(new Cell().add("Venda n°: " + idVenda).setFontSize(8).setBorder(Border.NO_BORDER));
+                vendaTable.addCell(new Cell().add("Data: " + dataVenda).setFontSize(8).setBorder(Border.NO_BORDER));
+
+                document.add(vendaTable);
+                document.add(new Paragraph("--------------------------------------------------------"));
+
+                // Detalhes do animal
+                float[] animalColumnWidths = {3, 3, 1, 1, 1};
+                Table animalTable = new Table(animalColumnWidths);
+                animalTable.setWidthPercent(100);
+
+                animalTable.addCell(new Cell().add("Sexo: " + sexoAnimal).setFontSize(8).setBorder(Border.NO_BORDER));
+                animalTable.addCell(new Cell().add("Idade: " + idadeAnimal).setFontSize(8).setBorder(Border.NO_BORDER));
+                animalTable.addCell(new Cell().add("Quantidade: " + quantidade).setFontSize(8).setBorder(Border.NO_BORDER));
+                animalTable.addCell(new Cell().add(" ").setFontSize(8).setBorder(Border.NO_BORDER));
+                animalTable.addCell(new Cell().add(" ").setFontSize(8).setBorder(Border.NO_BORDER));
+                animalTable.addCell(new Cell().add("Kilos Totais: " + kgTotais).setFontSize(8).setBorder(Border.NO_BORDER));
+                animalTable.addCell(new Cell().add("Média dos Kilos: " + mediaKg).setFontSize(8).setBorder(Border.NO_BORDER));
+
+                document.add(animalTable);
+                document.add(new Paragraph("--------------------------------------------------------"));
+
+                // Valores financeiros
+                float[] valoresColumnWidths = {1, 1};
+                Table valoresTable = new Table(valoresColumnWidths);
+                valoresTable.setWidthPercent(100);
+
+                valoresTable.addCell(new Cell().add("Preço por Kg: " + precoKgFormatado).setFontSize(8).setBorder(Border.NO_BORDER));
+                valoresTable.addCell(new Cell().add("Valor Total: " + valorTotalFormatado).setFontSize(8).setBorder(Border.NO_BORDER));
+
+                document.add(new Paragraph("Valores:").setFontSize(8));
+                document.add(valoresTable);
+                document.add(new Paragraph("--------------------------------------------------------"));
+
+                // Comissão
+                float[] comissaoColumnWidths = {1, 1};
+                Table comissaoTable = new Table(comissaoColumnWidths);
+                comissaoTable.setWidthPercent(100);
+
+                comissaoTable.addCell(new Cell().add("Porcentagem: " + porcentagemComissao).setFontSize(8).setBorder(Border.NO_BORDER));
+                comissaoTable.addCell(new Cell().add("Valor: " + comissaoFormatada).setFontSize(8).setBorder(Border.NO_BORDER));
+
+                document.add(new Paragraph("Comissão:").setFontSize(8));
+                document.add(comissaoTable);
+                document.add(new Paragraph("--------------------------------------------------------"));
+
+                // Informações adicionais
+                float[] infoColumnWidths = {1, 1, 1, 1};
+                Table infoTable = new Table(infoColumnWidths);
+                infoTable.setWidthPercent(100);
+
+                infoTable.addCell(new Cell().add("Vendedor: " + vendedor).setFontSize(8).setBorder(Border.NO_BORDER));
+                infoTable.addCell(new Cell().add("Comprador: " + comprador).setFontSize(8).setBorder(Border.NO_BORDER));
+                infoTable.addCell(new Cell().add("Pagamento: " + pagamento).setFontSize(8).setBorder(Border.NO_BORDER));
+                infoTable.addCell(new Cell().add("Operador: " + operador).setFontSize(8).setBorder(Border.NO_BORDER));
+
+                document.add(new Paragraph("Informações adicionais:").setFontSize(8));
+                document.add(infoTable);
+                // Fechar o documento
+                document.close();
+            }
+            JOptionPane.showMessageDialog(null, "PDF criado em " + path);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -402,7 +564,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         jLabelVendaPagamento.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabelVendaPagamento.setText("* Pagamento:");
 
-        jComboVendaPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dinheiro", "Cartão Débito", "Cartão Crédito", "Pix", "Permuta" }));
+        jComboVendaPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dinheiro", "Cartão Débito", "Cartão Crédito", "Pix" }));
         jComboVendaPagamento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboVendaPagamentoActionPerformed(evt);
@@ -582,7 +744,17 @@ public class TelaVenda extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonVendaFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVendaFinalizarActionPerformed
-        adicionar();
+        if ((jTextFieldVendaAnimal.getText().isEmpty() || jTextFieldVendaQuantidade.getText().isEmpty() || jTextFieldVendaMediaKg.getText().isEmpty() || jTextFieldVendaPrecoKg.getText().isEmpty() || jTextFieldVendaComprador.getText().isEmpty() || jTextFieldVendaTotal.getText().isEmpty() || jTextFieldVendaVendedor.getText().isEmpty() || jTextFieldVendaKgTotais.getText().isEmpty() || jTextFieldVendaPorcentagem.getText().isEmpty() || jTextFieldVendaComissao.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
+        } else {
+            try {
+                adicionar();
+            } catch (SQLException ex) {
+                Logger.getLogger(TelaVenda.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(TelaVenda.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_jButtonVendaFinalizarActionPerformed
 
     private void jComboVendaPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboVendaPagamentoActionPerformed
