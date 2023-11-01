@@ -228,7 +228,9 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
                 if (jRadioButtonRelVendaDesc.isSelected()) {
                     if (pagamento != "*") {
-                        sql = "SELECT id_venda as ID, DATE_FORMAT(data_venda, '%d/%m/%Y') as Data,  a.sexo as Sexo, a.idade as Idade, v.quantidade as Qtde, v.kg_totais as Kg_Totais, v.media_kg as Média_Kg, "
+                        sql = "SELECT id_venda as ID, DATE_FORMAT(data_venda, '%d/%m/%Y') as Data,  a.sexo as Sexo, a.idade as Idade, v.quantidade as Qtde, "
+                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.kg_totais, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Kg_Totais, "
+                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.media_kg, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Média_Kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
                                 + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
@@ -238,10 +240,12 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                                 + "JOIN animais a ON v.id_animal = a.id "
                                 + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
                                 + "AND pagamento = '" + pagamento + "' "
-                                + "ORDER BY " + ordem + " DESC";
+                                + "ORDER BY v." + ordem + " DESC";
 
                     } else {
-                        sql = "SELECT id_venda as ID, DATE_FORMAT(data_venda, '%d/%m/%Y') as Data,  a.sexo as Sexo, a.idade as Idade, v.quantidade as Qtde, v.kg_totais as Kg_Totais, v.media_kg as Média_Kg, "
+                        sql = "SELECT id_venda as ID, DATE_FORMAT(data_venda, '%d/%m/%Y') as Data,  a.sexo as Sexo, a.idade as Idade, v.quantidade as Qtde, "
+                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.kg_totais, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Kg_Totais, "
+                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.media_kg, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Média_Kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
                                 + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
@@ -250,12 +254,14 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                                 + "FROM vendas_animais v "
                                 + "JOIN animais a ON v.id_animal = a.id "
                                 + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                                + "ORDER BY " + ordem + " DESC";
+                                + "ORDER BY v." + ordem + " DESC";
                     }
 
                 } else {
                     if (pagamento != "*") {
-                        sql = "SELECT id_venda as ID, DATE_FORMAT(data_venda, '%d/%m/%Y') as Data,  a.sexo as Sexo, a.idade as Idade, v.quantidade as Qtde, v.kg_totais as Kg_Totais, v.media_kg as Média_Kg, "
+                        sql = "SELECT id_venda as ID, DATE_FORMAT(data_venda, '%d/%m/%Y') as Data,  a.sexo as Sexo, a.idade as Idade, v.quantidade as Qtde, "
+                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.kg_totais, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Kg_Totais, "
+                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.media_kg, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Média_Kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
                                 + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
@@ -265,9 +271,11 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                                 + "JOIN animais a ON v.id_animal = a.id "
                                 + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
                                 + "AND pagamento = '" + pagamento + "' "
-                                + "ORDER BY " + ordem;
+                                + "ORDER BY v." + ordem;
                     } else {
-                        sql = "SELECT id_venda as ID, DATE_FORMAT(data_venda, '%d/%m/%Y') as Data,  a.sexo as Sexo, a.idade as Idade, v.quantidade as Qtde, v.kg_totais as Kg_Totais, v.media_kg as Média_Kg, "
+                        sql = "SELECT id_venda as ID, DATE_FORMAT(data_venda, '%d/%m/%Y') as Data,  a.sexo as Sexo, a.idade as Idade, v.quantidade as Qtde, "
+                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.kg_totais, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Kg_Totais, "
+                                + "CONCAT('Kg ', REPLACE(REPLACE(REPLACE(FORMAT(v.media_kg, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Média_Kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
                                 + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
@@ -276,7 +284,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                                 + "FROM vendas_animais v "
                                 + "JOIN animais a ON v.id_animal = a.id "
                                 + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                                + "ORDER BY " + ordem;
+                                + "ORDER BY v." + ordem;
                     }
                 }
 
@@ -358,7 +366,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                                 + "JOIN animais a ON v.id_animal = a.id "
                                 + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
                                 + "AND pagamento = '" + pagamento + "' "
-                                + "ORDER BY " + ordem + " DESC";
+                                + "ORDER BY v." + ordem + " DESC";
 
                     } else {
                         sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
@@ -370,7 +378,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                                 + "FROM vendas_animais v "
                                 + "JOIN animais a ON v.id_animal = a.id "
                                 + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                                + "ORDER BY " + ordem + " DESC";
+                                + "ORDER BY v." + ordem + " DESC";
                     }
 
                 } else {
@@ -385,7 +393,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                                 + "JOIN animais a ON v.id_animal = a.id "
                                 + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
                                 + "AND pagamento = '" + pagamento + "' "
-                                + "ORDER BY " + ordem;
+                                + "ORDER BY v." + ordem;
                     } else {
                         sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
                                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
@@ -396,7 +404,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                                 + "FROM vendas_animais v "
                                 + "JOIN animais a ON v.id_animal = a.id "
                                 + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                                + "ORDER BY " + ordem;
+                                + "ORDER BY v." + ordem;
                     }
                 }
                 try {
