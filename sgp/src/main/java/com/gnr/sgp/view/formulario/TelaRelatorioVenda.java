@@ -1,6 +1,25 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
+ * The MIT License
+ *
+ * Copyright 2023 Guilherme Rodrigues.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.gnr.sgp.view.formulario;
 
@@ -41,6 +60,7 @@ import javax.swing.text.MaskFormatter;
 import net.proteanit.sql.DbUtils;
 
 /**
+ * Classse responsavel pelos relatorios de vendas.
  *
  * @author Guilherme
  */
@@ -49,7 +69,6 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
     /**
      * Creates new form TelaVenda
      */
-    //adicionar porcentagem
     private final Conexao conexao;
     PreparedStatement pst = null;
     ResultSet rs = null;
@@ -58,7 +77,6 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
     Date dataSistema = new Date();
     SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-//    Calendar now = Calendar.getInstance();
 
     public TelaRelatorioVenda() {
 
@@ -84,6 +102,11 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
     }
 
+    /**
+     * Deleta um registro de venda e ajusta a quantidade de animais.
+     *
+     * @throws SQLException
+     */
     public void deletar() throws SQLException {
         int setar = jTableRelComp.getSelectedRow();
         String valorId = jTableRelComp.getModel().getValueAt(setar, 0).toString();
@@ -120,6 +143,12 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
     }
 
+    /**
+     * Valida se a data está no formato correto.
+     *
+     * @param dateStr Data no formato string.
+     * @return true se a data for válida, false caso contrário.
+     */
     private static boolean validaData(String dateStr) {
         String[] parts = dateStr.split("/");
 
@@ -133,6 +162,12 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Formata o valor do peso.
+     *
+     * @param valor Valor do peso.
+     * @return Valor formatado.
+     */
     public static String formatarPeso(double valor) {
         // Crie um objeto DecimalFormat com o formato desejado
         DecimalFormat df = new DecimalFormat("#,##0.00 kg");
@@ -143,6 +178,12 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
         return valorFormatado;
     }
 
+    /**
+     * Formata o valor em moeda.
+     *
+     * @param valor Valor a ser formatado.
+     * @return Valor formatado em moeda.
+     */
     public static String formatarValor(double valor) {
         // Crie um objeto DecimalFormat com o formato desejado
         DecimalFormat df = new DecimalFormat("R$ #,##0.00");
@@ -153,6 +194,12 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
         return valorFormatado;
     }
 
+    /**
+     * Reverte o valor formatado para um double.
+     *
+     * @param valorFormatado Valor formatado.
+     * @return Valor revertido para double.
+     */
     public static double reverterValorFormatado(String valorFormatado) {
         // Remova o prefixo "R$"
         valorFormatado = valorFormatado.replace("R$", "").trim();
@@ -175,6 +222,17 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Cria uma lista de vendas com base nos parâmetros fornecidos e a exibe em
+     * um JTable.
+     *
+     * @param inicio Data de início no formato "dd/MM/yyyy".
+     * @param fim Data de término no formato "dd/MM/yyyy".
+     * @param ordem Coluna pela qual os resultados devem ser ordenados.
+     * @param pagamento Método de pagamento a ser filtrado.
+     * @throws SQLException Se ocorrer um erro ao acessar o banco de dados.
+     * @throws ParseException Se ocorrer um erro ao fazer parsing das datas.
+     */
     public void criarLista(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
 
         Date dataInicio = new Date();
@@ -303,6 +361,16 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
     }
 
+    /**
+     * Cria um documento PDF com base nos parâmetros fornecidos e os exibe.
+     *
+     * @param inicio Data de início no formato "dd/MM/yyyy".
+     * @param fim Data de término no formato "dd/MM/yyyy".
+     * @param ordem Coluna pela qual os resultados devem ser ordenados.
+     * @param pagamento Método de pagamento a ser filtrado.
+     * @throws SQLException Se ocorrer um erro ao acessar o banco de dados.
+     * @throws ParseException Se ocorrer um erro ao fazer parsing das datas.
+     */
     public void criarDocumento(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
 
         Date dataInicio = new Date();

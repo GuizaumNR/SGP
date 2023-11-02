@@ -1,6 +1,25 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * The MIT License
+ *
+ * Copyright 2023 Guilherme Rodrigues.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.gnr.sgp.modelo.dao;
 
@@ -13,6 +32,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
+ * Classe responsavel pela ligacao com a tabela animais no banco de dados.
  *
  * @author Guilherme
  */
@@ -43,7 +63,6 @@ public class AnimaisDao {
 
                 if (resultado > 0) {
                     JOptionPane.showMessageDialog(null, "Animal adicionado com sucesso!");
-//                TelaFornecedor.limpaCampos(null);
                 } else {
                     JOptionPane.showMessageDialog(null, "Não foi possível adicionar o animal.");
                 }
@@ -66,12 +85,10 @@ public class AnimaisDao {
         }
 
         try {
-            // Exclua registros em tabelas relacionadas (por exemplo, compras_animais, vendas_animais, etc.)
             String deleteComprasAnimaisSQL = "DELETE FROM compras_animais WHERE id_animal = ?";
             String deleteVendasAnimaisSQL = "DELETE FROM vendas_animais WHERE id_animal = ?";
             String deleteNascimentosAnimaisSQL = "DELETE FROM nascimentos WHERE id_animal = ?";
             String deleteFalecimentosAnimaisSQL = "DELETE FROM falecimentos WHERE id_animal = ?";
-            // Adicione outras tabelas relacionadas aqui
 
             PreparedStatement pstComprasAnimais = conexao.obterConexao().prepareStatement(deleteComprasAnimaisSQL);
             pstComprasAnimais.setInt(1, (int) animalTemp.getId());
@@ -90,7 +107,6 @@ public class AnimaisDao {
             pstNascimentosAnimais.executeUpdate();
             pstFalecimentosAnimais.executeUpdate();
 
-            // Execute as exclusões nas tabelas relacionadas
             PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
             pst.setLong(1, animal.getId());
 

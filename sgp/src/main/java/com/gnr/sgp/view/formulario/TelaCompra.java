@@ -1,6 +1,25 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
+ * The MIT License
+ *
+ * Copyright 2023 Guilherme Rodrigues.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.gnr.sgp.view.formulario;
 
@@ -39,6 +58,8 @@ import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
 /**
+ * A classe TelaCompra representa uma tela de interface gráfica para
+ * gerenciamento de compras de animais.
  *
  * @author Guilherme
  */
@@ -219,6 +240,14 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Adiciona uma compra ao banco de dados. Cria um objeto ComprasAnimais,
+     * chama o método Adicionar do ComprasAnimaisDao e gera um cupom em formato
+     * PDF.
+     *
+     * @throws SQLException Exceção relacionada ao acesso ao banco de dados.
+     * @throws ParseException Exceção relacionada à análise de strings.
+     */
     public void adicionar() throws SQLException, ParseException {
         if ((jTextFieldCompAnimal.getText().isEmpty() || jTextFieldCompQuantidade.getText().isEmpty() || jTextFieldCompMediaKg.getText().isEmpty() || jTextFieldCompPrecoKg.getText().isEmpty() || jTextFieldCompCriador.getText().isEmpty() || jTextFieldCompTotal.getText().isEmpty() || jTextFieldCompKgTotais.getText().isEmpty() || jTextFieldCompPorcentagem.getText().isEmpty() || jTextFieldCompComissao.getText().isEmpty())) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
@@ -228,32 +257,38 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             precoKg = Double.parseDouble(jTextFieldCompPrecoKg.getText());
             valorTotal = quantidade * mediaKg * precoKg;
 
-            ComprasAnimais compra = new ComprasAnimais(null, Integer.parseInt(jTextFieldCompAnimal.getText()), quantidade, kgTotais , mediaKg, precoKg, valorTotal, (percentual * 100), comissao, jTextFieldCompCriador.getText(), jComboCompPagador.getSelectedItem().toString(), jComboCompPagamento.getSelectedItem().toString(), operador);
+            ComprasAnimais compra = new ComprasAnimais(null, Integer.parseInt(jTextFieldCompAnimal.getText()), quantidade, kgTotais, mediaKg, precoKg, valorTotal, (percentual * 100), comissao, jTextFieldCompCriador.getText(), jComboCompPagador.getSelectedItem().toString(), jComboCompPagamento.getSelectedItem().toString(), operador);
 
             ComprasAnimaisDao comprasDao = new ComprasAnimaisDao();
             comprasDao.Adicionar(compra);
-            
+
             criarCupom();
-                    
+
             limpaCampos();
         }
     }
-    
-     public void criarCupom() throws SQLException, ParseException {
+
+    /**
+     * Cria um cupom em formato PDF com os detalhes da última compra.
+     *
+     * @throws SQLException Exceção relacionada ao acesso ao banco de dados.
+     * @throws ParseException Exceção relacionada à análise de strings.
+     */
+    public void criarCupom() throws SQLException, ParseException {
 
         String path = "";
 
         String sqlPDF = "SELECT id_compra as ID, DATE_FORMAT(data_compra, '%d/%m/%Y') as Data, a.sexo as Sexo, a.idade as Idade, c.quantidade as Qtde, "
-                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(c.kg_totais, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Kg_Totais, "
-                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(c.media_kg, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Média_Kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
-                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Comissão, "
-                                + "criador as Criador, pagador as Pagador, pagamento as Pagamento, operador as Operador "
-                                + "FROM compras_animais c "
-                                + "JOIN animais a ON c.id_animal = a.id "
-                                + "ORDER BY id_compra DESC LIMIT 1";
+                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(c.kg_totais, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Kg_Totais, "
+                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(c.media_kg, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Média_Kg, "
+                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
+                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
+                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(c.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
+                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(c.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Comissão, "
+                + "criador as Criador, pagador as Pagador, pagamento as Pagamento, operador as Operador "
+                + "FROM compras_animais c "
+                + "JOIN animais a ON c.id_animal = a.id "
+                + "ORDER BY id_compra DESC LIMIT 1";
 
         try {
             // Linhas da tabela com os dados do ResultSet

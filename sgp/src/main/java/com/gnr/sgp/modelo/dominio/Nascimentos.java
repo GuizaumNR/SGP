@@ -5,6 +5,9 @@
 package com.gnr.sgp.modelo.dominio;
 
 /**
+ * A classe Nascimentos representa informações sobre os nascimentos em um
+ * sistema. Cada instância desta classe contém detalhes como ID do nascimento,
+ * ID do animal, quantidade, observação, local e operador.
  *
  * @author Guilherme
  */

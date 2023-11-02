@@ -1,6 +1,25 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
+ * The MIT License
+ *
+ * Copyright 2023 Guilherme Rodrigues.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.gnr.sgp.view.formulario;
 
@@ -40,7 +59,7 @@ import javax.swing.text.MaskFormatter;
 import net.proteanit.sql.DbUtils;
 
 /**
- *
+ * Classe responsavel pelos relatorios de falecimentos.
  * @author Guilherme
  */
 public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
@@ -56,7 +75,6 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
 
     Date dataSistema = new Date();
     SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-//    Calendar now = Calendar.getInstance();
 
     public TelaRelatorioFalecimento() {
 
@@ -82,6 +100,10 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
 
     }
     
+    /**
+     * Método para deletar um registro de falecimento.
+     * @throws SQLException Exceção em caso de erro no banco de dados.
+     */
     public void deletar() throws SQLException {
         int setar = jTableRelComp.getSelectedRow();
         String valorId = jTableRelComp.getModel().getValueAt(setar, 0).toString();
@@ -118,6 +140,11 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
 
     }
 
+    /**
+     * Método estático para validar uma data no formato "dd/MM/yyyy".
+     * @param dateStr String contendo a data a ser validada.
+     * @return True se a data é válida, false caso contrário.
+     */
     private static boolean validaData(String dateStr) {
         String[] parts = dateStr.split("/");
 
@@ -131,11 +158,19 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
         }
     }
 
+     /**
+     * Método para criar uma lista de registros de falecimentos com base em critérios específicos.
+     * @param inicio Data de início do período desejado.
+     * @param fim Data de fim do período desejado.
+     * @param ordem Critério de ordenação dos resultados.
+     * @throws SQLException Exceção em caso de erro no banco de dados.
+     * @throws ParseException Exceção em caso de erro na análise de datas.
+     */
     public void criarLista(String inicio, String fim, String ordem) throws SQLException, ParseException {
 
         Date dataInicio = new Date();
         Date dataFim = new Date();
-// Convertendo as strings para o formato de data padrão
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         if (!jRadioButtonRelFaleHoje.isSelected()) {
@@ -144,16 +179,12 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
             dataFim = dateFormat.parse(fim);
 
         } else {
-            // Defina a data atual como base
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dataSistema);
 
-            // Obtenha o último dia do mês
             int ultimoDia = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            // Configure o dia para o último dia do mês
             calendar.set(Calendar.DAY_OF_MONTH, ultimoDia);
-            // Obtenha a data do último dia do mês
             Date ultimoDiaDoMes = calendar.getTime();
             String ultimoDiaFormatado = formato.format(ultimoDiaDoMes);
 
@@ -167,16 +198,13 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(dataFim);
 
-                    // Adicione um mês
                     calendar.add(Calendar.MONTH, 1);
 
-                    // Acesse a nova data após adicionar um mês
                     Date dataAposUmMes = calendar.getTime();
 
                     dataFim = dataAposUmMes;
                 }
 
-// Convertendo as datas de volta para o formato do banco de dados
                 SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String inicioFormatado = dbDateFormat.format(dataInicio);
                 String fimFormatado = dbDateFormat.format(dataFim);
@@ -227,11 +255,18 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
 
     }
     
+    /**
+     * Método para criar um documento PDF contendo registros de falecimentos.
+     * @param inicio Data de início do período desejado.
+     * @param fim Data de fim do período desejado.
+     * @param ordem Critério de ordenação dos resultados.
+     * @throws SQLException Exceção em caso de erro no banco de dados.
+     * @throws ParseException Exceção em caso de erro na análise de datas.
+     */
     public void criarDocumento(String inicio, String fim, String ordem) throws SQLException, ParseException {
 
         Date dataInicio = new Date();
         Date dataFim = new Date();
-// Convertendo as strings para o formato de data padrão
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         if (!jRadioButtonRelFaleHoje.isSelected()) {
@@ -240,16 +275,12 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
             dataFim = dateFormat.parse(fim);
 
         } else {
-            // Defina a data atual como base
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dataSistema);
 
-            // Obtenha o último dia do mês
             int ultimoDia = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            // Configure o dia para o último dia do mês
             calendar.set(Calendar.DAY_OF_MONTH, ultimoDia);
-            // Obtenha a data do último dia do mês
             Date ultimoDiaDoMes = calendar.getTime();
             String ultimoDiaFormatado = formato.format(ultimoDiaDoMes);
 
@@ -263,16 +294,13 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(dataFim);
 
-                    // Adicione um mês
                     calendar.add(Calendar.MONTH, 1);
 
-                    // Acesse a nova data após adicionar um mês
                     Date dataAposUmMes = calendar.getTime();
 
                     dataFim = dataAposUmMes;
                 }
 
-// Convertendo as datas de volta para o formato do banco de dados
                 SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String inicioFormatado = dbDateFormat.format(dataInicio);
                 String fimFormatado = dbDateFormat.format(dataFim);

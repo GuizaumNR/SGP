@@ -1,6 +1,25 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
+ * The MIT License
+ *
+ * Copyright 2023 Guilherme Rodrigues.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.gnr.sgp.view.formulario;
 
@@ -41,7 +60,7 @@ import javax.swing.text.MaskFormatter;
 import net.proteanit.sql.DbUtils;
 
 /**
- *
+ * Classe responsavel pelos relatorios de compras.
  * @author Guilherme
  */
 //adicionar porcentagem
@@ -58,7 +77,6 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
 
     Date dataSistema = new Date();
     SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-//    Calendar now = Calendar.getInstance();
 
     public TelaRelatorioCompra() {
 
@@ -84,6 +102,12 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
 
     }
 
+    /**
+     * Deleta registros de compras, ajusta a quantidade de animais e atualiza a
+     * lista de relatórios.
+     *
+     * @throws SQLException
+     */
     public void deletar() throws SQLException {
         int setar = jTableRelComp.getSelectedRow();
         String valorId = jTableRelComp.getModel().getValueAt(setar, 0).toString();
@@ -116,6 +140,12 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
 
     }
 
+    /**
+     * Deleta registros de compras, ajusta a quantidade de animais e atualiza a
+     * lista de relatórios.
+     *
+     * @throws SQLException
+     */
     private static boolean validaData(String dateStr) {
         String[] parts = dateStr.split("/");
 
@@ -129,52 +159,77 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Formata um valor double como uma string representando peso.
+     *
+     * @param valor O valor a ser formatado.
+     * @return A string formatada representando o peso.
+     */
     public static String formatarPeso(double valor) {
-        // Crie um objeto DecimalFormat com o formato desejado
+
         DecimalFormat df = new DecimalFormat("#,##0.00 kg");
 
-        // Formate o valor como uma string
         String valorFormatado = df.format(valor);
 
         return valorFormatado;
     }
 
+    /**
+     * Formata um valor double como uma string representando valor monetário.
+     *
+     * @param valor O valor a ser formatado.
+     * @return A string formatada representando o valor monetário.
+     */
     public static String formatarValor(double valor) {
-        // Crie um objeto DecimalFormat com o formato desejado
+
         DecimalFormat df = new DecimalFormat("R$ #,##0.00");
 
-        // Formate o valor como uma string
         String valorFormatado = df.format(valor);
 
         return valorFormatado;
     }
 
+    /**
+     * Converte uma string formatada em valor monetário para um double.
+     *
+     * @param valorFormatado A string formatada representando o valor monetário.
+     * @return O valor monetário como um double.
+     */
     public static double reverterValorFormatado(String valorFormatado) {
-        // Remova o prefixo "R$"
+
         valorFormatado = valorFormatado.replace("R$", "").trim();
 
-        // Substitua o ponto pelo ponto como separador decimal
         valorFormatado = valorFormatado.replace(".", "");
 
-        // Substitua a vírgula por ponto como separador decimal
         valorFormatado = valorFormatado.replace(",", ".");
 
         try {
-            // Converta a string para um tipo double
+
             double valor = Double.parseDouble(valorFormatado);
 
             return valor;
         } catch (NumberFormatException e) {
-            // Lida com valores que não podem ser convertidos para double
+
             System.out.println("Erro ao reverter o valor formatado em double: " + e.getMessage());
-            return 0.0; // ou outro valor padrão de sua escolha
+            return 0.0;
         }
     }
 
+    /**
+     * Cria uma lista de relatórios de compras com base nos parâmetros
+     * fornecidos e atualiza a tabela na interface gráfica.
+     *
+     * @param inicio A data de início do período.
+     * @param fim A data de término do período.
+     * @param ordem A ordem de classificação.
+     * @param pagamento O método de pagamento.
+     * @throws SQLException
+     * @throws ParseException
+     */
     public void criarLista(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
         Date dataInicio = new Date();
         Date dataFim = new Date();
-// Convertendo as strings para o formato de data padrão
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         String sql = null;
@@ -185,16 +240,12 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
             dataFim = dateFormat.parse(fim);
 
         } else {
-            // Defina a data atual como base
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dataSistema);
 
-            // Obtenha o último dia do mês
             int ultimoDia = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            // Configure o dia para o último dia do mês
             calendar.set(Calendar.DAY_OF_MONTH, ultimoDia);
-            // Obtenha a data do último dia do mês
             Date ultimoDiaDoMes = calendar.getTime();
             String ultimoDiaFormatado = formato.format(ultimoDiaDoMes);
 
@@ -208,16 +259,13 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(dataFim);
 
-                    // Adicione um mês
                     calendar.add(Calendar.MONTH, 1);
 
-                    // Acesse a nova data após adicionar um mês
                     Date dataAposUmMes = calendar.getTime();
 
                     dataFim = dataAposUmMes;
                 }
 
-// Convertendo as datas de volta para o formato do banco de dados
                 SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String inicioFormatado = dbDateFormat.format(dataInicio);
                 String fimFormatado = dbDateFormat.format(dataFim);
@@ -297,11 +345,23 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Cria um documento PDF contendo um relatório de compras.
+     *
+     * @param inicio Data de início do período do relatório (formato
+     * dd/MM/yyyy).
+     * @param fim Data de fim do período do relatório (formato dd/MM/yyyy).
+     * @param ordem Ordem de classificação do relatório.
+     * @param pagamento Método de pagamento a ser considerado no relatório.
+     * @throws SQLException Exceção relacionada a problemas de acesso ao banco
+     * de dados.
+     * @throws ParseException Exceção relacionada a problemas de conversão de
+     * data.
+     */
     public void criarDocumento(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
 
         Date dataInicio = new Date();
         Date dataFim = new Date();
-// Convertendo as strings para o formato de data padrão
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         if (!jRadioButtonRelCompraHoje.isSelected()) {
@@ -310,16 +370,12 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
             dataFim = dateFormat.parse(fim);
 
         } else {
-            // Defina a data atual como base
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dataSistema);
 
-            // Obtenha o último dia do mês
             int ultimoDia = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            // Configure o dia para o último dia do mês
             calendar.set(Calendar.DAY_OF_MONTH, ultimoDia);
-            // Obtenha a data do último dia do mês
             Date ultimoDiaDoMes = calendar.getTime();
             String ultimoDiaFormatado = formato.format(ultimoDiaDoMes);
 
@@ -332,17 +388,12 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                 if (dateFormat.format(dataInicio).equals(dateFormat.format(dataFim))) {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(dataFim);
-
-                    // Adicione um mês
                     calendar.add(Calendar.MONTH, 1);
-
-                    // Acesse a nova data após adicionar um mês
                     Date dataAposUmMes = calendar.getTime();
 
                     dataFim = dataAposUmMes;
                 }
 
-// Convertendo as datas de volta para o formato do banco de dados
                 SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String inicioFormatado = dbDateFormat.format(dataInicio);
                 String fimFormatado = dbDateFormat.format(dataFim);
@@ -414,7 +465,7 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                     Table table = new Table(columnWidths);
                     table.setWidthPercent(100);
                     table.setHorizontalAlignment(HorizontalAlignment.CENTER);
-                    // Definindo fontes
+
                     PdfFont fontBold = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
                     PdfFont fontNormal = PdfFontFactory.createFont(FontConstants.HELVETICA);
 
@@ -453,7 +504,6 @@ public class TelaRelatorioCompra extends javax.swing.JInternalFrame {
                         table.addCell(cell);
                     }
 
-                    // Linhas da tabela com os dados do ResultSet
                     PdfFont dataFont = PdfFontFactory.createFont();
                     PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
                     ResultSet resultPDF = pstPDF.executeQuery();

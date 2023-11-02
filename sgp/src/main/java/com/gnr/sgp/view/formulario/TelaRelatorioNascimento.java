@@ -40,6 +40,7 @@ import javax.swing.text.MaskFormatter;
 import net.proteanit.sql.DbUtils;
 
 /**
+ * Classe responsavel pelos relatorios de nascimentos.
  *
  * @author Guilherme
  */
@@ -56,7 +57,6 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
 
     Date dataSistema = new Date();
     SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-//    Calendar now = Calendar.getInstance();
 
     public TelaRelatorioNascimento() {
 
@@ -81,7 +81,13 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
         });
 
     }
-    
+
+    /**
+     * Método para deletar um registro de nascimento e ajustar a quantidade de
+     * animais.
+     *
+     * @throws SQLException Exceção em caso de erro no banco de dados.
+     */
     public void deletar() throws SQLException {
         int setar = jTableRelComp.getSelectedRow();
         String valorId = jTableRelComp.getModel().getValueAt(setar, 0).toString();
@@ -118,6 +124,12 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
 
     }
 
+    /**
+     * Método para validar uma data no formato "dd/MM/yyyy".
+     *
+     * @param dateStr String contendo a data a ser validada.
+     * @return true se a data for válida, false caso contrário.
+     */
     private static boolean validaData(String dateStr) {
         String[] parts = dateStr.split("/");
 
@@ -130,12 +142,20 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
             return false; // Não é possível converter para números inteiros
         }
     }
-    
+
+    /**
+     * Método para criar uma lista de nascimentos e exibir no jTable.
+     *
+     * @param inicio Data de início no formato "dd/MM/yyyy".
+     * @param fim Data de fim no formato "dd/MM/yyyy".
+     * @param ordem Ordem de classificação.
+     * @throws SQLException Exceção em caso de erro no banco de dados.
+     * @throws ParseException Exceção em caso de erro ao converter a data.
+     */
     public void criarLista(String inicio, String fim, String ordem) throws SQLException, ParseException {
 
         Date dataInicio = new Date();
         Date dataFim = new Date();
-// Convertendo as strings para o formato de data padrão
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         if (!jRadioButtonRelNascHoje.isSelected()) {
@@ -144,16 +164,12 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
             dataFim = dateFormat.parse(fim);
 
         } else {
-            // Defina a data atual como base
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dataSistema);
 
-            // Obtenha o último dia do mês
             int ultimoDia = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            // Configure o dia para o último dia do mês
             calendar.set(Calendar.DAY_OF_MONTH, ultimoDia);
-            // Obtenha a data do último dia do mês
             Date ultimoDiaDoMes = calendar.getTime();
             String ultimoDiaFormatado = formato.format(ultimoDiaDoMes);
 
@@ -166,17 +182,12 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
                 if (dateFormat.format(dataInicio).equals(dateFormat.format(dataFim))) {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(dataFim);
-
-                    // Adicione um mês
                     calendar.add(Calendar.MONTH, 1);
-
-                    // Acesse a nova data após adicionar um mês
                     Date dataAposUmMes = calendar.getTime();
 
                     dataFim = dataAposUmMes;
                 }
 
-// Convertendo as datas de volta para o formato do banco de dados
                 SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String inicioFormatado = dbDateFormat.format(dataInicio);
                 String fimFormatado = dbDateFormat.format(dataFim);
@@ -224,12 +235,21 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
         }
 
     }
-    
+
+    /**
+     * Método para criar um documento PDF com o relatório de nascimentos.
+     *
+     * @param inicio Data de início no formato "dd/MM/yyyy".
+     * @param fim Data de fim no formato "dd/MM/yyyy".
+     * @param ordem Ordem de classificação.
+     * @throws SQLException Exceção em caso de erro no banco de dados.
+     * @throws ParseException Exceção em caso de erro ao converter a data.
+     */
     public void criarDocumento(String inicio, String fim, String ordem) throws SQLException, ParseException {
 
         Date dataInicio = new Date();
         Date dataFim = new Date();
-// Convertendo as strings para o formato de data padrão
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         if (!jRadioButtonRelNascHoje.isSelected()) {
@@ -238,16 +258,12 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
             dataFim = dateFormat.parse(fim);
 
         } else {
-            // Defina a data atual como base
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dataSistema);
 
-            // Obtenha o último dia do mês
             int ultimoDia = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            // Configure o dia para o último dia do mês
             calendar.set(Calendar.DAY_OF_MONTH, ultimoDia);
-            // Obtenha a data do último dia do mês
             Date ultimoDiaDoMes = calendar.getTime();
             String ultimoDiaFormatado = formato.format(ultimoDiaDoMes);
 
@@ -260,17 +276,12 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
                 if (dateFormat.format(dataInicio).equals(dateFormat.format(dataFim))) {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(dataFim);
-
-                    // Adicione um mês
                     calendar.add(Calendar.MONTH, 1);
-
-                    // Acesse a nova data após adicionar um mês
                     Date dataAposUmMes = calendar.getTime();
 
                     dataFim = dataAposUmMes;
                 }
 
-// Convertendo as datas de volta para o formato do banco de dados
                 SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String inicioFormatado = dbDateFormat.format(dataInicio);
                 String fimFormatado = dbDateFormat.format(dataFim);
@@ -317,7 +328,6 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
                     Table table = new Table(columnWidths);
                     table.setWidthPercent(100);
                     table.setHorizontalAlignment(HorizontalAlignment.CENTER);
-                    // Definindo fontes
                     PdfFont fontBold = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
                     PdfFont fontNormal = PdfFontFactory.createFont(FontConstants.HELVETICA);
 
@@ -356,7 +366,6 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
                         table.addCell(cell);
                     }
 
-                    // Linhas da tabela com os dados do ResultSet
                     PdfFont dataFont = PdfFontFactory.createFont();
                     PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
                     ResultSet resultPDF = pstPDF.executeQuery();
@@ -606,11 +615,11 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
 
         } catch (SQLException ex) {
             Logger.getLogger(TelaRelatorioVenda.class
-                .getName()).log(Level.SEVERE, null, ex);
+                    .getName()).log(Level.SEVERE, null, ex);
 
         } catch (ParseException ex) {
             Logger.getLogger(TelaRelatorioVenda.class
-                .getName()).log(Level.SEVERE, null, ex);
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButtonRelCompraListaActionPerformed
 

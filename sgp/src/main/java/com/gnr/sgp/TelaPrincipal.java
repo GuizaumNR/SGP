@@ -1,6 +1,25 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * The MIT License
+ *
+ * Copyright 2023 Guilherme Rodrigues.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.gnr.sgp;
 
@@ -32,14 +51,12 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /**
+ * Tela responsavel por gerenciar todas as telas.
  *
  * @author Guilherme
  */
 public class TelaPrincipal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form TelaPrincipal
-     */
     public static final String VERSION = "1.0.0";
 
     Date dataSistema = new Date();
@@ -68,7 +85,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     public TelaPrincipal() {
 
-//        setSize(screenWidth, screenHeight); // Define o tamanho da janela com base no tamanho da tela
         this.conexao = new ConexaoMysql();
 
         setUndecorated(true);
@@ -82,7 +98,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         labelSuporte.setText("Suporte: Guilherme - (53) 99912-8134");
         menu();
         atualizarDataHora();
-        // Cria um Timer com intervalo de 1 segundo (1000 milissegundos)
         Timer timer = new Timer(1000, e -> atualizarDataHora());
         timer.start();
 
@@ -106,7 +121,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jButtonSair.setFocusable(false);
         jButtonMinimizar.setFocusable(false);
 
-//        jlabelLogo.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\logo.png"));
         jDesktop.add(telaFornecedor);
         jDesktop.add(telaUsuario);
         jDesktop.add(telaAnimal);
@@ -161,7 +175,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     public void menu() {
 
-        //JSeparator separator = new JSeparator();
         jPanelTop.setLayout(new BorderLayout());
 
         jPanelTop.add(jPanelBotoes, BorderLayout.NORTH);
@@ -170,7 +183,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     private void atualizarDataHora() {
-        // Atualiza data e hora
+
         now = Calendar.getInstance();
         labelDataEHora.setText(formato.format(dataSistema) + " " + String.format("%1$tH:%1$tM:%1$tS", now));
     }
