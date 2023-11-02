@@ -286,7 +286,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
             }
         });
 
-        jComboAnimSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "boi", "touro", "femea" }));
+        jComboAnimSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Boi", "Touro", "Fêmea" }));
 
         jButtonAnimEditar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\update.png"));
         jButtonAnimEditar.setToolTipText("Editar Usuário");

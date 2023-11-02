@@ -235,32 +235,24 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         precoKg = Double.parseDouble(jTextFieldVendaPrecoKg.getText());
         valorTotal = quantidade * mediaKg * precoKg;
 
-        VendasAnimais venda = new VendasAnimais(01, Integer.parseInt(jTextFieldVendaAnimal.getText()), quantidade, (kgTotais * 10), mediaKg, precoKg, (percentual * 100), comissao, valorTotal, jTextFieldVendaComprador.getText(), jTextFieldVendaVendedor.getText(), jComboVendaPagamento.getSelectedItem().toString(), operador);
+        VendasAnimais venda = new VendasAnimais(01, Integer.parseInt(jTextFieldVendaAnimal.getText()), quantidade, kgTotais, mediaKg, precoKg, (percentual * 100), comissao, valorTotal, jTextFieldVendaComprador.getText(), jTextFieldVendaVendedor.getText(), jComboVendaPagamento.getSelectedItem().toString(), operador);
 
         VendasAnimaisDao vendasDao = new VendasAnimaisDao();
         vendasDao.Adicionar(venda);
 
-        criarDocumento();
+        criarCupom();
 
         limpaCampos();
 
     }
 
-    public static String formatarPeso(double valor) {
-        // Crie um objeto DecimalFormat com o formato desejado
-        DecimalFormat df = new DecimalFormat("#,##0.00 kg");
-
-        // Formate o valor como uma string
-        String valorFormatado = df.format(valor);
-
-        return valorFormatado;
-    }
-
-    public void criarDocumento() throws SQLException, ParseException {
+    public void criarCupom() throws SQLException, ParseException {
 
         String path = "";
 
-        String sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
+        String sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.quantidade, v.preco_kg, "
+                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.kg_totais, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Kg_Totais, "
+                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.media_kg, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Média_Kg, "
                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
                 + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
                 + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
@@ -288,8 +280,8 @@ public class TelaVenda extends javax.swing.JInternalFrame {
                 String sexoAnimal = resultPDF.getString("sexo_animal");
                 String idadeAnimal = resultPDF.getString("idade_animal");
                 String quantidade = resultPDF.getString("quantidade");
-                String kgTotais = resultPDF.getString("kg_totais");
-                String mediaKg = resultPDF.getString("media_kg");
+                String kgTotais = resultPDF.getString("Kg_Totais");
+                String mediaKg = resultPDF.getString("Média_Kg");
                 String precoKgFormatado = resultPDF.getString("preco_kg_formatado");
                 String valorTotalFormatado = resultPDF.getString("valor_total_formatado");
                 String porcentagemComissao = resultPDF.getString("porce_formatado");
@@ -300,7 +292,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
                 String operador = resultPDF.getString("operador");
 
                 // Criar o documento PDF
-                path = "C:\\Users\\" + username + "\\Documents\\Venda_N" + resultPDF.getString("id_venda") + ".pdf";
+                path = "C:\\Users\\" + username + "\\Documents\\Venda_N" + idVenda + ".pdf";
                 PdfWriter pdfWriter = new PdfWriter(path);
                 PdfDocument documentoPDF = new PdfDocument(pdfWriter);
                 Document document = new Document(documentoPDF, PageSize.A6);

@@ -101,6 +101,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenuOpcoes.setEnabled(false);
         jMenuConsultaManejo.setEnabled(false);
         jMenuCadastroManejo.setEnabled(false);
+        jMenuConsultaFornecedores.setEnabled(false);
 
         jButtonSair.setFocusable(false);
         jButtonMinimizar.setFocusable(false);
@@ -151,7 +152,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         if (permissao) {
 
         } else {
-            jMenuCadastroUsuario.setEnabled(false);
+            jMenuCadastro.setEnabled(false);
+            jMenuCaixa.setEnabled(false);
+            jMenuMovEstoque.setEnabled(false);
             jMenuRelatorio.setEnabled(false);
         }
     }
