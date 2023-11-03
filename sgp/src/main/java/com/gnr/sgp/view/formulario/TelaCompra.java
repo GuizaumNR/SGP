@@ -45,10 +45,13 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -213,8 +216,11 @@ public class TelaCompra extends javax.swing.JInternalFrame {
         try {
             int quantidade = Integer.parseInt(jTextFieldCompQuantidade.getText());
             double mediaKg = kgTotais / quantidade;
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+            DecimalFormat formato = new DecimalFormat("#.##", symbols);
+            String mediaFormatada = formato.format(mediaKg);
 
-            jTextFieldCompMediaKg.setText("" + mediaKg);
+            jTextFieldCompMediaKg.setText("" + mediaFormatada);
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
             jTextFieldCompMediaKg.setText("Valor Inválido.");
@@ -228,8 +234,11 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                 valorTotal = Double.parseDouble(totalTexto);
                 percentual = (Double.parseDouble(jTextFieldCompPorcentagem.getText()) / 100);
                 comissao = valorTotal * percentual;
+                DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+                DecimalFormat formato = new DecimalFormat("#.##", symbols);
+                String comissaoFormatada = formato.format(comissao);
 
-                jTextFieldCompComissao.setText("" + comissao);
+                jTextFieldCompComissao.setText("" + comissaoFormatada);
             } else {
                 jTextFieldCompComissao.setText("Valor Inválido");
             }
