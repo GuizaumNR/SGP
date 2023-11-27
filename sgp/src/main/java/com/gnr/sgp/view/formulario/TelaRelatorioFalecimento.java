@@ -455,7 +455,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
         jLabelRelFaleOrdem = new javax.swing.JLabel();
         jRadioButtonRelFaleHoje = new javax.swing.JRadioButton();
         jRadioButtonRelFaleDesc = new javax.swing.JRadioButton();
-        jButtonRelCompraLista = new javax.swing.JButton();
+        jButtonRelNascLista = new javax.swing.JButton();
         jButtonRelVendaExcluir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableRelComp = new javax.swing.JTable();
@@ -503,10 +503,10 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
 
         jRadioButtonRelFaleDesc.setText("Decrescente");
 
-        jButtonRelCompraLista.setText("Gerar Lista");
-        jButtonRelCompraLista.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRelNascLista.setText("Gerar Lista");
+        jButtonRelNascLista.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonRelCompraListaActionPerformed(evt);
+                jButtonRelNascListaActionPerformed(evt);
             }
         });
 
@@ -571,7 +571,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButtonRelVendaExcluir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonRelCompraLista)
+                        .addComponent(jButtonRelNascLista)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonRelFale))
                     .addComponent(jScrollPane1))
@@ -597,7 +597,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonRelFale, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonRelCompraLista, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonRelNascLista, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonRelVendaExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -633,7 +633,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboRelFaleOrdemActionPerformed
 
-    private void jButtonRelCompraListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelCompraListaActionPerformed
+    private void jButtonRelNascListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelNascListaActionPerformed
         try {
             criarLista(jFormattedRelFaleInicio.getText(), jFormattedRelFaleFim.getText(), jComboRelFaleOrdem.getSelectedItem().toString());
 
@@ -645,7 +645,7 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
             Logger.getLogger(TelaRelatorioVenda.class
                 .getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButtonRelCompraListaActionPerformed
+    }//GEN-LAST:event_jButtonRelNascListaActionPerformed
 
     private void jButtonRelVendaExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelVendaExcluirActionPerformed
         try {
@@ -661,8 +661,8 @@ public class TelaRelatorioFalecimento extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonRelCompraLista;
     private javax.swing.JButton jButtonRelFale;
+    private javax.swing.JButton jButtonRelNascLista;
     private javax.swing.JButton jButtonRelVendaExcluir;
     private javax.swing.JComboBox<String> jComboRelFaleOrdem;
     private javax.swing.JFormattedTextField jFormattedRelFaleFim;

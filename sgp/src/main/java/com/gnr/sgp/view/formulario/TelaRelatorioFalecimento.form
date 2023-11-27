@@ -65,7 +65,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="jButtonRelVendaExcluir" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jButtonRelCompraLista" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonRelNascLista" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jButtonRelFale" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -97,7 +97,7 @@
               <EmptySpace pref="50" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonRelFale" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                  <Component id="jButtonRelCompraLista" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                  <Component id="jButtonRelNascLista" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                   <Component id="jButtonRelVendaExcluir" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -175,12 +175,12 @@
         <Property name="text" type="java.lang.String" value="Decrescente"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonRelCompraLista">
+    <Component class="javax.swing.JButton" name="jButtonRelNascLista">
       <Properties>
         <Property name="text" type="java.lang.String" value="Gerar Lista"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRelCompraListaActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRelNascListaActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonRelVendaExcluir">

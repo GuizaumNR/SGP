@@ -30,7 +30,7 @@ import java.sql.SQLException;
  *
  * @author Guilherme
  */
-public class main {
+public class Sgp {
 
     public static void main(String[] args) throws SQLException {
         Login login = new Login();
