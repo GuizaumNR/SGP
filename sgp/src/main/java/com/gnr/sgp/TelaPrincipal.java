@@ -957,7 +957,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void jMenuItemEstoqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEstoqueActionPerformed
        if (!telaFornecedor.isVisible() && !telaAnimal.isVisible() && !telaUsuario.isVisible() && !telaVenda.isVisible() && !telaRelVenda.isVisible() && !telaRelCompra.isVisible() && !telaCompra.isVisible() && !telaNasc.isVisible() && !telaFale.isVisible() && !telaRelNasc.isVisible() && !telaConAni.isVisible() && !telaConUsu.isVisible() && !telaRelFale.isVisible()) {
 
-            telaRelFale.setVisible(true);
+            telaRelEst.setVisible(true);
 
         } else {
             telaFornecedor.setVisible(false);
