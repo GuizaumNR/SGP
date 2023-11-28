@@ -35,7 +35,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.text.MaskFormatter;
 import net.proteanit.sql.DbUtils;
 
 /**
