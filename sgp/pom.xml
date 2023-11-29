@@ -106,7 +106,7 @@
         </dependency>
    
         <dependency>
-            <groupId>org.slf4j</groupId>
+                       <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.6.4</version>
         </dependency>
@@ -139,7 +139,6 @@
                     <descriptors>
                         <descriptor>src/assemble/assembly.xml</descriptor>
                     </descriptors>
-                     <localRepository>${repositorySystemSession.getLocalRepository().getBasedir()}</localRepository>
                 </configuration>
                 <executions>
                     <execution>
