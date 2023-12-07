@@ -36,6 +36,7 @@ import java.awt.event.WindowFocusListener;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -117,6 +118,17 @@ public class Login extends javax.swing.JFrame {
                 loginController.login();
             }
         });
+
+        ClassLoader classLoader = Login.class.getClassLoader();
+        String imagePath = "logo.png";
+        java.net.URL imageURL = classLoader.getResource(imagePath);
+
+        if (imageURL != null) {
+            ImageIcon icon = new ImageIcon(imageURL);
+            jLabelLogo.setIcon(icon);
+        } else {
+            System.out.println("Imagem não encontrada: " + imagePath);
+        }
 
     }
 

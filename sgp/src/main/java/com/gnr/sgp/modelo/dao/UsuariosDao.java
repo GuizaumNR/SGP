@@ -121,7 +121,7 @@ public class UsuariosDao {
 
             int deletado = pst.executeUpdate();
             if (deletado > 0) {
-                JOptionPane.showMessageDialog(null, "Dados do usuário deletados com sucesso!");;
+                JOptionPane.showMessageDialog(null, "Dados do usuário deletados com sucesso!");
 
             } else {
                 JOptionPane.showMessageDialog(null, "Não foi possível deletar os dados do usuário.", "Erro", JOptionPane.ERROR_MESSAGE);

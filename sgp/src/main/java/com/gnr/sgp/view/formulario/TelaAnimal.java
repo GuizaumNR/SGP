@@ -33,6 +33,7 @@ import java.awt.event.ComponentEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -71,6 +72,48 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
             }
         });
         jTextAnimDescricao.setText("S/N");
+        
+        ClassLoader classLoader = TelaAnimal.class.getClassLoader();
+        String imageBusca = "busca.png";
+        java.net.URL imageURLBusca = classLoader.getResource(imageBusca);
+
+        if (imageURLBusca != null) {
+            ImageIcon iconBusca = new ImageIcon(imageURLBusca);
+            jLabelAnimBusca.setIcon(iconBusca);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageBusca);
+        }
+        
+        String imageDelete = "delete.png";
+        java.net.URL imageURLDelete = classLoader.getResource(imageDelete);
+
+        if (imageURLDelete != null) {
+            ImageIcon iconDelete = new ImageIcon(imageURLDelete);
+            jButtonAnimDeletar.setIcon(iconDelete);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageDelete);
+        }
+        
+        String imageUpdate = "update.png";
+        java.net.URL imageURLUpdate = classLoader.getResource(imageUpdate);
+
+        if (imageURLUpdate != null) {
+            ImageIcon iconUpdate = new ImageIcon(imageURLUpdate);
+            jButtonAnimEditar.setIcon(iconUpdate);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageUpdate);
+        }
+        
+        String imageCreate = "create.png";
+        java.net.URL imageURLCreate = classLoader.getResource(imageCreate);
+
+        if (imageURLCreate != null) {
+            ImageIcon iconCreate = new ImageIcon(imageURLCreate);
+            jButtonAnimAdicionar.setIcon(iconCreate);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageCreate);
+        }
+        
     }
 
     public void adicionar() {
@@ -256,7 +299,6 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jTableAnim);
 
-        jLabelAnimBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
         jLabelAnimBusca.setText(" ");
 
         jComboAnimPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Idade", "Sexo" }));
@@ -266,7 +308,6 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
             }
         });
 
-        jButtonAnimAdicionar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\create.png"));
         jButtonAnimAdicionar.setToolTipText("Adicionar Animal");
         jButtonAnimAdicionar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonAnimAdicionar.setPreferredSize(new java.awt.Dimension(80, 80));
@@ -276,7 +317,6 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
             }
         });
 
-        jButtonAnimDeletar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\delete.png"));
         jButtonAnimDeletar.setToolTipText("Deletar Animal");
         jButtonAnimDeletar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonAnimDeletar.setPreferredSize(new java.awt.Dimension(80, 80));
@@ -309,7 +349,6 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
 
         jComboAnimSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Boi", "Touro", "Fêmea" }));
 
-        jButtonAnimEditar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\update.png"));
         jButtonAnimEditar.setToolTipText("Editar Usuário");
         jButtonAnimEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonAnimEditar.setPreferredSize(new java.awt.Dimension(80, 80));

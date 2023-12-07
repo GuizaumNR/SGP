@@ -30,6 +30,7 @@ import java.awt.event.ComponentEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -59,6 +60,17 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
                 setLocation(-5, -5);
             }
         });
+        
+        ClassLoader classLoader = TelaConsultaAnimal.class.getClassLoader();
+        String imageBusca = "busca.png";
+        java.net.URL imageURLBusca = classLoader.getResource(imageBusca);
+
+        if (imageURLBusca != null) {
+            ImageIcon iconBusca = new ImageIcon(imageURLBusca);
+            jLabelAnimBusca.setIcon(iconBusca);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageBusca);
+        }
     }
 
     public void pesquisarAnimalId() {
@@ -156,7 +168,6 @@ public class TelaConsultaAnimal extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jTableAnim);
 
-        jLabelAnimBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
         jLabelAnimBusca.setText(" ");
 
         jComboAnimPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Idade", "Sexo" }));

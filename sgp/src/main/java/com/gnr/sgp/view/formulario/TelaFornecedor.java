@@ -32,6 +32,7 @@ import java.awt.event.ComponentEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 //importando recursos da biblioteca rs2xml 
@@ -65,6 +66,47 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
                 setLocation(-5, -5);
             }
         });
+        
+        ClassLoader classLoader = TelaFornecedor.class.getClassLoader();
+        String imageBusca = "busca.png";
+        java.net.URL imageURLBusca = classLoader.getResource(imageBusca);
+
+        if (imageURLBusca != null) {
+            ImageIcon iconBusca = new ImageIcon(imageURLBusca);
+            jLabelFornBusca.setIcon(iconBusca);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageBusca);
+        }
+        
+        String imageDelete = "delete.png";
+        java.net.URL imageURLDelete = classLoader.getResource(imageDelete);
+
+        if (imageURLDelete != null) {
+            ImageIcon iconDelete = new ImageIcon(imageURLDelete);
+            jButtonFornDeletar.setIcon(iconDelete);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageDelete);
+        }
+        
+        String imageUpdate = "update.png";
+        java.net.URL imageURLUpdate = classLoader.getResource(imageUpdate);
+
+        if (imageURLUpdate != null) {
+            ImageIcon iconUpdate = new ImageIcon(imageURLUpdate);
+            jButtonFornEditar.setIcon(iconUpdate);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageUpdate);
+        }
+        
+        String imageCreate = "create.png";
+        java.net.URL imageURLCreate = classLoader.getResource(imageCreate);
+
+        if (imageURLCreate != null) {
+            ImageIcon iconCreate = new ImageIcon(imageURLCreate);
+            jButtonFornAdicionar.setIcon(iconCreate);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageCreate);
+        }
 
     }
 
@@ -194,7 +236,6 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
         setName(""); // NOI18N
         setPreferredSize(new java.awt.Dimension(730, 545));
 
-        jButtonFornAdicionar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\create.png"));
         jButtonFornAdicionar.setToolTipText("Adicionar");
         jButtonFornAdicionar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonFornAdicionar.setPreferredSize(new java.awt.Dimension(80, 80));
@@ -204,7 +245,6 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
             }
         });
 
-        jButtonFornEditar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\update.png"));
         jButtonFornEditar.setToolTipText("Editar");
         jButtonFornEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonFornEditar.setPreferredSize(new java.awt.Dimension(80, 80));
@@ -214,7 +254,6 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
             }
         });
 
-        jButtonFornDeletar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\delete.png"));
         jButtonFornDeletar.setToolTipText("Deletar");
         jButtonFornDeletar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonFornDeletar.setPreferredSize(new java.awt.Dimension(80, 80));
@@ -284,7 +323,6 @@ public class TelaFornecedor extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jTableForn);
 
-        jLabelFornBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
         jLabelFornBusca.setText(" ");
 
         jComboFornPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Nome" }));

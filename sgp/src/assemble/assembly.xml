@@ -1,7 +1,7 @@
 <assembly>
     <id>jar-with-dependencies</id>
     <formats>
-        <format>jar</format>
+        <format>exe</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
     <dependencySets>

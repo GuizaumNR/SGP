@@ -33,6 +33,7 @@ import java.sql.*;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import javax.swing.ImageIcon;
 import net.proteanit.sql.DbUtils;
 
 public class TelaConsultaUsuario extends javax.swing.JInternalFrame {
@@ -54,6 +55,17 @@ public class TelaConsultaUsuario extends javax.swing.JInternalFrame {
                 setLocation(-5, -5);
             }
         });
+        
+        ClassLoader classLoader = TelaConsultaUsuario.class.getClassLoader();
+        String imageBusca = "busca.png";
+        java.net.URL imageURLBusca = classLoader.getResource(imageBusca);
+
+        if (imageURLBusca != null) {
+            ImageIcon iconBusca = new ImageIcon(imageURLBusca);
+            jLabelUsuBusca.setIcon(iconBusca);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageBusca);
+        }
     }
 
     public void pesquisarUsuarioId() {
@@ -171,7 +183,6 @@ public class TelaConsultaUsuario extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabelUsuBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
         jLabelUsuBusca.setText(" ");
 
         jLabelFornCampos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N

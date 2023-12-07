@@ -58,7 +58,7 @@ public class AutenticacaoDao {
 
     public Usuarios login(LoginDTO login) {
         Usuarios usuario = usuarioDao.buscarUsuariosLogin(login.getUsuario());
-
+        
         if (usuario == null) {
             return null;
         }

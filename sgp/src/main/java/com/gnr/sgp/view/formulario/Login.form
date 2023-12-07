@@ -53,20 +53,22 @@
               </Group>
               <Group type="102" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabelLogo" alignment="0" min="-2" pref="813" max="-2" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                          <Component id="jButtonLoginLogin" min="-2" pref="125" max="-2" attributes="0"/>
-                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                              <Component id="jSeparator2" min="-2" pref="300" max="-2" attributes="0"/>
-                              <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jLabelLoginSenha" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabelLoginLogin" min="-2" max="-2" attributes="0"/>
-                                  <Component id="passLoginSenha" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="txtLoginUsuario" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jButtonLoginCancelar" alignment="0" min="-2" pref="125" max="-2" attributes="0"/>
-                                  <Component id="jSeparator1" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
-                              </Group>
+                  <Component id="jLabelLogo" min="-2" pref="813" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="jButtonLoginLogin" min="-2" pref="125" max="-2" attributes="0"/>
+                      <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                          <Component id="jSeparator2" min="-2" pref="300" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jLabelLoginSenha" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelLoginLogin" min="-2" max="-2" attributes="0"/>
+                              <Component id="passLoginSenha" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtLoginUsuario" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jButtonLoginCancelar" alignment="0" min="-2" pref="125" max="-2" attributes="0"/>
+                              <Component id="jSeparator1" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>

@@ -55,8 +55,13 @@ public class LoginController implements ActionListener {
 
         switch (acao) {
             case "login":
+                try {
                 login();
-                break;
+
+            } catch (NegocioException e) {
+                JOptionPane.showMessageDialog(null, "Erro: " + e);
+            }
+            break;
             case "cancelar":
                 cancelar();
                 break;
@@ -76,31 +81,33 @@ public class LoginController implements ActionListener {
 
         Usuarios usuarioTemp = this.autenticacaoDao.login(loginDto);
 
-        if (this.login.getTxtLoginUsuario().getText() == "admin") {
-            System.out.println("admin");
-        }
         if (usuarioTemp != null) {
-            login.dispose();
-
-            TelaPrincipal tela = new TelaPrincipal();
-            operador = usuarioTemp.getNome();
-            tela.setOperador(operador);
-            tela.setVisible(true);
-
             try {
-                this.autenticacaoDao.permissao(usuarioTemp);
-                // O código aqui será executado se o usuário tiver permissão
-                tela.setPermissao(Boolean.TRUE);
+                login.dispose();
 
+                TelaPrincipal tela = new TelaPrincipal();
+                operador = usuarioTemp.getNome();
+                tela.setOperador(operador);
+                tela.setVisible(true);
+
+                try {
+                    this.autenticacaoDao.permissao(usuarioTemp);
+                    // O código aqui será executado se o usuário tiver permissão
+                    tela.setPermissao(Boolean.TRUE);
+
+                } catch (NegocioException e) {
+                    // O código aqui será executado se o usuário não tiver permissão
+                    tela.setPermissao(Boolean.FALSE);
+
+                }
             } catch (NegocioException e) {
-                // O código aqui será executado se o usuário não tiver permissão
-                tela.setPermissao(Boolean.FALSE);
-
+                JOptionPane.showMessageDialog(null, "Erro: " + e);
             }
         } else {
             this.login.getLabelLoginMensagem().setText("Usuário ou senha incorretos.");
             limpaCampos();
         }
+
     }
 
     private void cancelar() {

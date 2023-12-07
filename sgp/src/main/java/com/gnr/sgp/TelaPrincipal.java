@@ -113,12 +113,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jMenuRelatorioManejo.setEnabled(false);
-        jMenuAjuda.setEnabled(false);
-        jMenuOpcoes.setEnabled(false);
-        jMenuConsultaManejo.setEnabled(false);
-        jMenuCadastroManejo.setEnabled(false);
-        jMenuConsultaFornecedores.setEnabled(false);
+        jMenuRelatorioManejo.setVisible(false);
+        jMenuAjuda.setVisible(false);
+        jMenuOpcoes.setVisible(false);
+        jMenuConsultaManejo.setVisible(false);
+        jMenuCadastroManejo.setVisible(false);
+        jMenuConsultaFornecedores.setVisible(false);
 
         jButtonSair.setFocusable(false);
         jButtonMinimizar.setFocusable(false);

@@ -33,6 +33,7 @@ import java.awt.event.ComponentEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
@@ -70,6 +71,17 @@ public class TelaFalecimento extends javax.swing.JInternalFrame {
                 setLocation(-5, -5);
             }
         });
+        ClassLoader classLoader = TelaFalecimento.class.getClassLoader();
+        String imageBusca = "busca.png";
+        java.net.URL imageURLBusca = classLoader.getResource(imageBusca);
+
+        if (imageURLBusca != null) {
+            ImageIcon iconBusca = new ImageIcon(imageURLBusca);
+            jLabelFaleBusca.setIcon(iconBusca);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageBusca);
+        }
+        
 
     }
 
@@ -235,7 +247,6 @@ public class TelaFalecimento extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabelFaleBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
         jLabelFaleBusca.setText(" ");
 
         jLabelFaleCampos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N

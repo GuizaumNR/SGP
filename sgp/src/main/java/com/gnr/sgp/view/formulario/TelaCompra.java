@@ -54,6 +54,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -195,6 +196,18 @@ public class TelaCompra extends javax.swing.JInternalFrame {
                 setLocation(-5, -5);
             }
         });
+        
+        ClassLoader classLoader = TelaCompra.class.getClassLoader();
+        String imageBusca = "busca.png";
+        java.net.URL imageURLBusca = classLoader.getResource(imageBusca);
+
+        if (imageURLBusca != null) {
+            ImageIcon iconBusca = new ImageIcon(imageURLBusca);
+            jLabelCompBusca.setIcon(iconBusca);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageBusca);
+        }
+       
 
     }
 
@@ -561,7 +574,6 @@ public class TelaCompra extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabelCompBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
         jLabelCompBusca.setText(" ");
 
         jLabelCompCampos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N

@@ -35,6 +35,7 @@ import com.gnr.sgp.modelo.dominio.Usuarios;
 import com.gnr.sgp.view.modelo.ValidadorQuantCaract;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 
@@ -60,6 +61,47 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                 setLocation(-5, -5);
             }
         });
+        ClassLoader classLoader = TelaUsuario.class.getClassLoader();
+        String imageBusca = "busca.png";
+        java.net.URL imageURLBusca = classLoader.getResource(imageBusca);
+
+        if (imageURLBusca != null) {
+            ImageIcon iconBusca = new ImageIcon(imageURLBusca);
+            jLabelUsuBusca.setIcon(iconBusca);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageBusca);
+        }
+        
+        String imageDelete = "delete.png";
+        java.net.URL imageURLDelete = classLoader.getResource(imageDelete);
+
+        if (imageURLDelete != null) {
+            ImageIcon iconDelete = new ImageIcon(imageURLDelete);
+            jButtonUsuDeletar.setIcon(iconDelete);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageDelete);
+        }
+        
+        String imageUpdate = "update.png";
+        java.net.URL imageURLUpdate = classLoader.getResource(imageUpdate);
+
+        if (imageURLUpdate != null) {
+            ImageIcon iconUpdate = new ImageIcon(imageURLUpdate);
+            jButtonUsuEditar.setIcon(iconUpdate);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageUpdate);
+        }
+        
+        String imageCreate = "create.png";
+        java.net.URL imageURLCreate = classLoader.getResource(imageCreate);
+
+        if (imageURLCreate != null) {
+            ImageIcon iconCreate = new ImageIcon(imageURLCreate);
+            jButtonUsuAdicionar.setIcon(iconCreate);
+        } else {
+            System.out.println("Imagem não encontrada: " + imageCreate);
+        }
+        
     }
 
     private void consultar() {
@@ -261,7 +303,6 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             }
         });
 
-        jButtonUsuAdicionar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\create.png"));
         jButtonUsuAdicionar.setToolTipText("Adicionar Usuário");
         jButtonUsuAdicionar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonUsuAdicionar.setPreferredSize(new java.awt.Dimension(80, 80));
@@ -271,7 +312,6 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             }
         });
 
-        jButtonUsuEditar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\update.png"));
         jButtonUsuEditar.setToolTipText("Editar Usuário");
         jButtonUsuEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonUsuEditar.setPreferredSize(new java.awt.Dimension(80, 80));
@@ -281,7 +321,6 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             }
         });
 
-        jButtonUsuDeletar.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\delete.png"));
         jButtonUsuDeletar.setToolTipText("Deletar Usuário");
         jButtonUsuDeletar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonUsuDeletar.setPreferredSize(new java.awt.Dimension(80, 80));
@@ -330,7 +369,6 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabelUsuBusca.setIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\resources\\busca.png"));
         jLabelUsuBusca.setText(" ");
 
         jLabelFornCampos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
