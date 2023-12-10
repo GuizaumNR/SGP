@@ -220,9 +220,9 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     public void setarCampos() {
         int setar = jTableForn.getSelectedRow();
         String valorId = jTableForn.getModel().getValueAt(setar, 0).toString();
-        String valorLogin = jTableForn.getModel().getValueAt(setar, 2).toString();
-        String valorNome = jTableForn.getModel().getValueAt(setar, 1).toString();
-        String valorTipo = jTableForn.getModel().getValueAt(setar, 4).toString();
+        String valorLogin = jTableForn.getModel().getValueAt(setar, 1).toString();
+        String valorNome = jTableForn.getModel().getValueAt(setar, 2).toString();
+        String valorTipo = jTableForn.getModel().getValueAt(setar, 3).toString();
         if (valorId != null && valorLogin != null && valorNome != null) {
             jTextUsuId.setText(valorId);
             jTextUsuLogin.setText(valorLogin);

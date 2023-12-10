@@ -82,6 +82,7 @@ public class LoginController implements ActionListener {
         Usuarios usuarioTemp = this.autenticacaoDao.login(loginDto);
 
         if (usuarioTemp != null) {
+          
             try {
                 login.dispose();
 

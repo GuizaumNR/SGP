@@ -31,8 +31,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 /**
  * Classe responsavel pela ligacao com a tabela usuarios no banco de dados.
  *
@@ -45,9 +43,7 @@ public class UsuariosDao {
 
     public UsuariosDao() {
         this.conexao = new ConexaoMysql();
-    }
-
-    ;
+    };
 
     public String adicionar(Usuarios usuario) {
         String sql = "INSERT INTO usuarios(login, senha, tipo, nome) VALUES(?, ?, ?, ?)";
@@ -82,11 +78,9 @@ public class UsuariosDao {
     public String editar(Usuarios usuario) {
         String sql = "UPDATE usuarios SET senha = ?, tipo = ?, nome = ? WHERE login = ?";
 
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String senhaCrypt = passwordEncoder.encode(usuario.getSenha());
         try {
             PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
-            pst.setString(1, senhaCrypt);
+            pst.setString(1, usuario.getSenha());
             pst.setString(2, usuario.getTipo());
             pst.setString(3, usuario.getNome());
             pst.setString(4, usuario.getLogin());
@@ -110,7 +104,8 @@ public class UsuariosDao {
         String sql = "DELETE FROM usuarios WHERE login = ?";
 
         Usuarios usuarioTemp = buscarUsuariosLogin(usuario.getLogin());
-
+ JOptionPane.showMessageDialog(null,"Login " + usuario.getLogin());
+       
         if (usuarioTemp == null) {
             JOptionPane.showMessageDialog(null, "Erro: Este login não existe no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -135,11 +130,8 @@ public class UsuariosDao {
 
     private void preencherValoresPreparedStatment(PreparedStatement preparedStatement, Usuarios usuario) throws SQLException {
 
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String senhaCrypt = passwordEncoder.encode(usuario.getSenha());
-
         preparedStatement.setString(1, usuario.getLogin());
-        preparedStatement.setString(2, senhaCrypt);
+        preparedStatement.setString(2, usuario.getSenha());
         preparedStatement.setString(3, usuario.getTipo());
         preparedStatement.setString(4, usuario.getNome());
 

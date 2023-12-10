@@ -26,8 +26,6 @@ package com.gnr.sgp.modelo.dao;
 import com.gnr.sgp.modelo.dominio.Usuarios;
 import com.gnr.sgp.modelo.exception.NegocioException;
 import com.gnr.sgp.view.modelo.LoginDTO;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 /**
  * Classe responsavel por validar os dados do login.
  * @author Guilherme
@@ -63,15 +61,11 @@ public class AutenticacaoDao {
             return null;
         }
 
-        if (validarSenha(usuario.getSenha(), login.getSenha())) {
+        if (usuario.getSenha().equals(login.getSenha())) {
             return usuario;
         }
+        
         return null;
     }
-
-    private boolean validarSenha(String senhaUsuario, String senhaLogin) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        return passwordEncoder.matches(senhaLogin, senhaUsuario);
-    }
+    
 }

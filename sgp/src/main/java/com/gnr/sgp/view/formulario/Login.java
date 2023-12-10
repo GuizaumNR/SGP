@@ -42,7 +42,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-
 /**
  * A classe Login representa a interface de login da aplicação.
  *
@@ -131,6 +130,7 @@ public class Login extends javax.swing.JFrame {
         }
 
     }
+    
 
     private void eventos() {
         jButtonLoginLogin.addActionListener(loginController);
