@@ -76,14 +76,15 @@ public class UsuariosDao {
     }
 
     public String editar(Usuarios usuario) {
-        String sql = "UPDATE usuarios SET senha = ?, tipo = ?, nome = ? WHERE login = ?";
+        String sql = "UPDATE usuarios SET senha = ?, login = ?, tipo = ?, nome = ? WHERE id = ?";
 
         try {
             PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, usuario.getSenha());
-            pst.setString(2, usuario.getTipo());
-            pst.setString(3, usuario.getNome());
-            pst.setString(4, usuario.getLogin());
+            pst.setString(2, usuario.getLogin());
+            pst.setString(3, usuario.getTipo());
+            pst.setString(4, usuario.getNome());
+            pst.setLong(5, usuario.getId());
 
             int editado = pst.executeUpdate();
             if (editado > 0) {
@@ -101,32 +102,33 @@ public class UsuariosDao {
     }
 
     public String deletar(Usuarios usuario) {
-        String sql = "DELETE FROM usuarios WHERE login = ?";
+        String sql = "DELETE FROM usuarios WHERE id = ?";
+        Usuarios usuarioTemp = pesquisarUsuarioId(usuario.getId());
 
-        Usuarios usuarioTemp = buscarUsuariosLogin(usuario.getLogin());
- JOptionPane.showMessageDialog(null,"Login " + usuario.getLogin());
-       
         if (usuarioTemp == null) {
-            JOptionPane.showMessageDialog(null, "Erro: Este login não existe no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro: Este id não existe no banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
 
         try {
             PreparedStatement pst = conexao.obterConexao().prepareStatement(sql);
-            pst.setString(1, usuario.getLogin());
+            pst.setLong(1, usuario.getId());
 
             int deletado = pst.executeUpdate();
             if (deletado > 0) {
                 JOptionPane.showMessageDialog(null, "Dados do usuário deletados com sucesso!");
-
             } else {
                 JOptionPane.showMessageDialog(null, "Não foi possível deletar os dados do usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Erro:", JOptionPane.ERROR);
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
+
         return null;
     }
+
+    
 
     private void preencherValoresPreparedStatment(PreparedStatement preparedStatement, Usuarios usuario) throws SQLException {
 
@@ -136,7 +138,7 @@ public class UsuariosDao {
         preparedStatement.setString(4, usuario.getNome());
 
         if (usuario.getId() != 0) {
-            preparedStatement.setLong(6, usuario.getId());
+            preparedStatement.setLong(5, usuario.getId());
         }
     }
 
@@ -152,6 +154,19 @@ public class UsuariosDao {
 
     public Usuarios buscarUsuariosLogin(String login) {
         String sql = String.format("SELECT * FROM usuarios WHERE login = '%s'", login);
+        try {
+            ResultSet result = conexao.obterConexao().prepareStatement(sql).executeQuery();
+            if (result.next()) {
+                return getUsuarios(result);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public Usuarios pesquisarUsuarioId(Long id) {
+        String sql = String.format("SELECT * FROM usuarios WHERE id = '%s'", id);
         try {
             ResultSet result = conexao.obterConexao().prepareStatement(sql).executeQuery();
             if (result.next()) {

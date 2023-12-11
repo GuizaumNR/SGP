@@ -139,7 +139,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         if ((jTextUsuLogin.getText().isEmpty() || jPassUsuSenha.getText().isEmpty() || jComboUsuPerfil.getSelectedItem().toString().isEmpty() || jTextUsuNome.getText().isEmpty())) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
         } else {
-            Usuarios usuario = new Usuarios(0l, jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
+            Usuarios usuario = new Usuarios(Long.parseLong(jTextUsuId.getText()), jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
 
             UsuariosDao usuariosDao = new UsuariosDao();
             usuariosDao.editar(usuario);
@@ -152,7 +152,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
 
         int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar o usuário " + jTextUsuLogin.getText() + " do banco de dados?", "Atenção", JOptionPane.YES_NO_OPTION);
         if (confirma == JOptionPane.YES_OPTION) {
-            Usuarios usuario = new Usuarios(0l, jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
+            Usuarios usuario = new Usuarios(Long.parseLong(jTextUsuId.getText()), jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
 
             UsuariosDao usuariosDao = new UsuariosDao();
             usuariosDao.deletar(usuario);
@@ -232,6 +232,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     }
 
     public void limpaCampos() {
+        jTextUsuId.setText(null);
         jTextUsuNome.setText(null);
         jTextUsuLogin.setText(null);
         jPassUsuSenha.setText(null);
