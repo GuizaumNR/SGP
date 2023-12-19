@@ -118,6 +118,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenuOpcoes.setVisible(false);
         jMenuConsultaManejo.setVisible(false);
         jMenuCadastroManejo.setVisible(false);
+        jMenuCadastroFornecedor.setVisible(false);
         jMenuConsultaFornecedores.setVisible(false);
 
         jButtonSair.setFocusable(false);
