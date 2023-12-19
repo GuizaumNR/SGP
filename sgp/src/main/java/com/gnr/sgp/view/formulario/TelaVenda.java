@@ -359,7 +359,7 @@ public class TelaVenda extends javax.swing.JInternalFrame {
                 document.add(new Paragraph("--------------------------------------------------------"));
 
                 // Detalhes do animal
-                float[] animalColumnWidths = {3, 3, 1, 1, 1};
+                float[] animalColumnWidths = {3, 3, 1, 1, 1, 1, 1};
                 Table animalTable = new Table(animalColumnWidths);
                 animalTable.setWidthPercent(100);
 

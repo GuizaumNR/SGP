@@ -120,7 +120,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
         if ((jTextAnimQuantidade.getText().isEmpty())) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios.");
         } else {
-            Animais animal = new Animais(01, null, jTextAnimQuantidade.getText(), jComboAnimIdade.getSelectedItem().toString(), jComboAnimSexo.getSelectedItem().toString());
+            Animais animal = new Animais(0l, "NI", jTextAnimQuantidade.getText(), jComboAnimIdade.getSelectedItem().toString(), jComboAnimSexo.getSelectedItem().toString());
 
             AnimaisDao animaisDao = new AnimaisDao();
             animaisDao.adicionar(animal);
