@@ -83,15 +83,8 @@ public class Login extends javax.swing.JFrame {
         });
 
         Usuarios usuarioExemplo = new Usuarios(0l, "admin", "1234", "admin", "admin");
-        Usuarios usuarioAdmin = buscarUsuariosLogin(usuarioExemplo.getLogin());;
+        Usuarios usuarioAdmin = buscarUsuariosLogin(usuarioExemplo.getLogin());
         if (usuarioAdmin != null) {
-        } else {
-            UsuariosDao usuariosDao = new UsuariosDao();
-            usuariosDao.adicionar(usuarioExemplo);
-        }
-        Usuarios usuarioExemplo1 = new Usuarios(0l, "consulta", "1234", "consulta", "consulta");
-        Usuarios usuarioConsulta = buscarUsuariosLogin(usuarioExemplo.getLogin());;
-        if (usuarioConsulta != null) {
         } else {
             UsuariosDao usuariosDao = new UsuariosDao();
             usuariosDao.adicionar(usuarioExemplo);
