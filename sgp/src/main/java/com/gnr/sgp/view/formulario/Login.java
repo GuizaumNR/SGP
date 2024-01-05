@@ -23,6 +23,7 @@
  */
 package com.gnr.sgp.view.formulario;
 
+import com.gnr.sgp.TelaPrincipal;
 import com.gnr.sgp.controller.LoginController;
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
@@ -121,7 +122,15 @@ public class Login extends javax.swing.JFrame {
         } else {
             System.out.println("Imagem não encontrada: " + imagePath);
         }
+        String icon = "icon.png";
+        java.net.URL iconURL = classLoader.getResource(icon);
 
+        if (iconURL != null) {
+            ImageIcon iconBusca = new ImageIcon(iconURL);
+            this.setIconImage(iconBusca.getImage());
+        } else {
+            System.out.println("Imagem não encontrada: " + icon);
+        }
     }
     
 

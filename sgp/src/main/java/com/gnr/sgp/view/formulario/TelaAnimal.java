@@ -349,7 +349,7 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
 
         jComboAnimSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Boi", "Touro", "Fêmea" }));
 
-        jButtonAnimEditar.setToolTipText("Editar Usuário");
+        jButtonAnimEditar.setToolTipText("Editar Animal");
         jButtonAnimEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonAnimEditar.setPreferredSize(new java.awt.Dimension(80, 80));
         jButtonAnimEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -400,7 +400,6 @@ public class TelaAnimal extends javax.swing.JInternalFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jTextAnimQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButtonAnimAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(65, 65, 65)
                                 .addComponent(jButtonAnimEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)

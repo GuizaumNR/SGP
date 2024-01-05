@@ -28,29 +28,14 @@ import com.gnr.sgp.modelo.conexao.ConexaoMysql;
 import com.gnr.sgp.modelo.dao.VendasAnimaisDao;
 import com.gnr.sgp.modelo.dominio.VendasAnimais;
 import com.gnr.sgp.view.modelo.ValidadorNumerico;
-import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.geom.PageSize;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.border.Border;
-import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.property.TextAlignment;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -279,144 +264,8 @@ public class TelaVenda extends javax.swing.JInternalFrame {
         VendasAnimaisDao vendasDao = new VendasAnimaisDao();
         vendasDao.Adicionar(venda);
 
-        criarCupom();
-
         limpaCampos();
 
-    }
-
-    /**
-     * Cria um cupom em PDF com os detalhes da última venda.
-     *
-     * @throws SQLException Se ocorrer um erro de SQL durante a execução.
-     * @throws ParseException Se ocorrer um erro de parse durante a execução.
-     */
-    public void criarCupom() throws SQLException, ParseException {
-
-        String path = "";
-
-        String sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.quantidade, v.preco_kg, "
-                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.kg_totais, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Kg_Totais, "
-                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.media_kg, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Média_Kg, "
-                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
-                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
-                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
-                + "vendedor, comprador, pagamento, operador "
-                + "FROM vendas_animais v "
-                + "JOIN animais a ON v.id_animal = a.id "
-                + "ORDER BY id_venda DESC LIMIT 1";
-
-        try {
-            // Linhas da tabela com os dados do ResultSet
-            PdfFont dataFont = PdfFontFactory.createFont();
-            PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
-            ResultSet resultPDF = pstPDF.executeQuery();
-
-            if (resultPDF.next()) {
-
-                String username = System.getProperty("user.name");
-                Calendar now = Calendar.getInstance();
-                String hora = String.format("%1$tH:%1$tM:%1$tS", now);
-                String data = new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + " " + hora;
-
-                String idVenda = resultPDF.getString("id_venda");
-                String dataVenda = data;
-                String sexoAnimal = resultPDF.getString("sexo_animal");
-                String idadeAnimal = resultPDF.getString("idade_animal");
-                String quantidade = resultPDF.getString("quantidade");
-                String kgTotais = resultPDF.getString("Kg_Totais");
-                String mediaKg = resultPDF.getString("Média_Kg");
-                String precoKgFormatado = resultPDF.getString("preco_kg_formatado");
-                String valorTotalFormatado = resultPDF.getString("valor_total_formatado");
-                String porcentagemComissao = resultPDF.getString("porce_formatado");
-                String comissaoFormatada = resultPDF.getString("comissao_formatado");
-                String vendedor = resultPDF.getString("vendedor");
-                String comprador = resultPDF.getString("comprador");
-                String pagamento = resultPDF.getString("pagamento");
-                String operador = resultPDF.getString("operador");
-
-                // Criar o documento PDF
-                path = "C:\\Users\\" + username + "\\Documents\\Venda_N" + idVenda + ".pdf";
-                PdfWriter pdfWriter = new PdfWriter(path);
-                PdfDocument documentoPDF = new PdfDocument(pdfWriter);
-                Document document = new Document(documentoPDF, PageSize.A6);
-
-                // Adicionar conteúdo ao documento
-                document.add(new Paragraph("CUPOM NÃO FISCAL").setBold().setFontSize(12).setTextAlignment(TextAlignment.CENTER));
-                document.add(new Paragraph("--------------------------------------------------------"));
-
-                // Detalhes da venda
-                float[] vendaColumnWidths = {1, 1, 1};
-                Table vendaTable = new Table(vendaColumnWidths);
-                vendaTable.setWidthPercent(100);
-
-                vendaTable.addCell(new Cell().add("Pecuária MML").setFontSize(8).setBorder(Border.NO_BORDER));
-                vendaTable.addCell(new Cell().add("Venda n°: " + idVenda).setFontSize(8).setBorder(Border.NO_BORDER));
-                vendaTable.addCell(new Cell().add("Data: " + dataVenda).setFontSize(8).setBorder(Border.NO_BORDER));
-
-                document.add(vendaTable);
-                document.add(new Paragraph("--------------------------------------------------------"));
-
-                // Detalhes do animal
-                float[] animalColumnWidths = {3, 3, 1, 1, 1, 1, 1};
-                Table animalTable = new Table(animalColumnWidths);
-                animalTable.setWidthPercent(100);
-
-                animalTable.addCell(new Cell().add("Sexo: " + sexoAnimal).setFontSize(8).setBorder(Border.NO_BORDER));
-                animalTable.addCell(new Cell().add("Idade: " + idadeAnimal).setFontSize(8).setBorder(Border.NO_BORDER));
-                animalTable.addCell(new Cell().add("Quantidade: " + quantidade).setFontSize(8).setBorder(Border.NO_BORDER));
-                animalTable.addCell(new Cell().add(" ").setFontSize(8).setBorder(Border.NO_BORDER));
-                animalTable.addCell(new Cell().add(" ").setFontSize(8).setBorder(Border.NO_BORDER));
-                animalTable.addCell(new Cell().add("Kilos Totais: " + kgTotais).setFontSize(8).setBorder(Border.NO_BORDER));
-                animalTable.addCell(new Cell().add("Média dos Kilos: " + mediaKg).setFontSize(8).setBorder(Border.NO_BORDER));
-
-                document.add(animalTable);
-                document.add(new Paragraph("--------------------------------------------------------"));
-
-                // Valores financeiros
-                float[] valoresColumnWidths = {1, 1};
-                Table valoresTable = new Table(valoresColumnWidths);
-                valoresTable.setWidthPercent(100);
-
-                valoresTable.addCell(new Cell().add("Preço por Kg: " + precoKgFormatado).setFontSize(8).setBorder(Border.NO_BORDER));
-                valoresTable.addCell(new Cell().add("Valor Total: " + valorTotalFormatado).setFontSize(8).setBorder(Border.NO_BORDER));
-
-                document.add(new Paragraph("Valores:").setFontSize(8));
-                document.add(valoresTable);
-                document.add(new Paragraph("--------------------------------------------------------"));
-
-                // Comissão
-                float[] comissaoColumnWidths = {1, 1};
-                Table comissaoTable = new Table(comissaoColumnWidths);
-                comissaoTable.setWidthPercent(100);
-
-                comissaoTable.addCell(new Cell().add("Porcentagem: " + porcentagemComissao).setFontSize(8).setBorder(Border.NO_BORDER));
-                comissaoTable.addCell(new Cell().add("Valor: " + comissaoFormatada).setFontSize(8).setBorder(Border.NO_BORDER));
-
-                document.add(new Paragraph("Comissão:").setFontSize(8));
-                document.add(comissaoTable);
-                document.add(new Paragraph("--------------------------------------------------------"));
-
-                // Informações adicionais
-                float[] infoColumnWidths = {1, 1, 1, 1};
-                Table infoTable = new Table(infoColumnWidths);
-                infoTable.setWidthPercent(100);
-
-                infoTable.addCell(new Cell().add("Vendedor: " + vendedor).setFontSize(8).setBorder(Border.NO_BORDER));
-                infoTable.addCell(new Cell().add("Comprador: " + comprador).setFontSize(8).setBorder(Border.NO_BORDER));
-                infoTable.addCell(new Cell().add("Pagamento: " + pagamento).setFontSize(8).setBorder(Border.NO_BORDER));
-                infoTable.addCell(new Cell().add("Operador: " + operador).setFontSize(8).setBorder(Border.NO_BORDER));
-
-                document.add(new Paragraph("Informações adicionais:").setFontSize(8));
-                document.add(infoTable);
-                // Fechar o documento
-                document.close();
-            }
-            JOptionPane.showMessageDialog(null, "PDF criado em " + path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void setOperador(String operador) {

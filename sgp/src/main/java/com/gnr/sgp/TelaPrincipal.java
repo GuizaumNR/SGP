@@ -159,7 +159,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         telaConUsu.setSize(largura, altura);
 
         ClassLoader classLoader = TelaPrincipal.class.getClassLoader();
-        String icon = "busca.png";
+        String icon = "icon.png";
         java.net.URL iconURL = classLoader.getResource(icon);
 
         if (iconURL != null) {
