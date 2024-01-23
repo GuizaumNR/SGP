@@ -149,9 +149,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     }
 
     public void deletar() {
-
-        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar o usuário " + jTextUsuLogin.getText() + " do banco de dados?", "Atenção", JOptionPane.YES_NO_OPTION);
-        if (confirma == JOptionPane.YES_OPTION) {
+        if ((jTextUsuLogin.getText().isEmpty() || jComboUsuPerfil.getSelectedItem().toString().isEmpty() || jTextUsuNome.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
+        } else {
+            int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar o usuário " + jTextUsuLogin.getText() + " do banco de dados?", "Atenção", JOptionPane.YES_NO_OPTION);
+            if (confirma == JOptionPane.YES_OPTION) {
             Usuarios usuario = new Usuarios(Long.parseLong(jTextUsuId.getText()), jTextUsuLogin.getText(), jPassUsuSenha.getText(), jComboUsuPerfil.getSelectedItem().toString(), jTextUsuNome.getText());
 
             UsuariosDao usuariosDao = new UsuariosDao();
@@ -159,8 +161,8 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
 
             limpaCampos();
 
+            }
         }
-
     }
 
     public void pesquisarUsuarioId() {
@@ -262,7 +264,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         jComboUsuPesquisa = new javax.swing.JComboBox<>();
         jTextUsuBusca = new javax.swing.JTextField();
         jLabelUsuBusca = new javax.swing.JLabel();
-        jLabelFornCampos = new javax.swing.JLabel();
+        jLabelUsuCampos = new javax.swing.JLabel();
         jTextUsuId = new javax.swing.JTextField();
         jLabelUsuId = new javax.swing.JLabel();
         jLabelUsuNome = new javax.swing.JLabel();
@@ -377,8 +379,8 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
 
         jLabelUsuBusca.setText(" ");
 
-        jLabelFornCampos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabelFornCampos.setText("* Campos obrigatórios");
+        jLabelUsuCampos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabelUsuCampos.setText("* Campos obrigatórios");
 
         jTextUsuId.setEditable(false);
         jTextUsuId.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -411,7 +413,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabelUsuBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                        .addComponent(jLabelFornCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabelUsuCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -451,7 +453,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabelFornCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabelUsuCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(8, 8, 8))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
@@ -561,8 +563,8 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButtonUsuEditar;
     public javax.swing.JComboBox<String> jComboUsuPerfil;
     private javax.swing.JComboBox<String> jComboUsuPesquisa;
-    private javax.swing.JLabel jLabelFornCampos;
     private javax.swing.JLabel jLabelUsuBusca;
+    private javax.swing.JLabel jLabelUsuCampos;
     private javax.swing.JLabel jLabelUsuId;
     private javax.swing.JLabel jLabelUsuLogin;
     private javax.swing.JLabel jLabelUsuNome;
