@@ -78,6 +78,7 @@ public class DespesasDao {
             pst.setDouble(2, despesa.getValor());
             pst.setString(3, despesa.getPagador());
             pst.setString(4, despesa.getCategoria());
+            pst.setLong(5, despesa.getId());
 
             int editado = pst.executeUpdate();
             if (editado > 0) {

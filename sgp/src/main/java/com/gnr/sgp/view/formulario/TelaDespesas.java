@@ -24,7 +24,7 @@
 package com.gnr.sgp.view.formulario;
 
 /**
- * Tela responsavel pelos usuarios.
+ * Tela responsavel pelas despesas.
  * @author Guilherme
  */
 import com.gnr.sgp.modelo.conexao.Conexao;
@@ -35,6 +35,7 @@ import com.gnr.sgp.modelo.dominio.Despesas;
 import com.gnr.sgp.view.modelo.ValidadorNumerico;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
@@ -48,6 +49,7 @@ public class TelaDespesas extends javax.swing.JInternalFrame {
     String operador;
 
     ValidadorNumerico validaNumeros = new ValidadorNumerico();
+    SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
     
     public TelaDespesas() {
 
@@ -110,7 +112,7 @@ public class TelaDespesas extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
         } else {
 
-            Despesas despesa = new Despesas(0l, jTextDespesaDescricao.getText(), Integer.parseInt(jTextFieldDespesaValor.getText()), jComboDespesaPagador.getSelectedItem().toString(), jTextDespesaCategoria.getText(), "", operador);
+            Despesas despesa = new Despesas(0l, jTextDespesaDescricao.getText(), Double.parseDouble(jTextFieldDespesaValor.getText()), jComboDespesaPagador.getSelectedItem().toString(), jTextDespesaCategoria.getText(), "", operador);
 
             DespesasDao despesaDao = new DespesasDao();
             despesaDao.adicionar(despesa);
@@ -125,7 +127,7 @@ public class TelaDespesas extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
         } else {
 
-            Despesas despesa = new Despesas(0l, jTextDespesaDescricao.getText(), Integer.parseInt(jTextFieldDespesaValor.getText()), jComboDespesaPagador.getSelectedItem().toString(), jTextDespesaCategoria.getText(), "", operador);
+            Despesas despesa = new Despesas(Long.parseLong(jTextDespesaId.getText()), jTextDespesaDescricao.getText(), Double.parseDouble(jTextFieldDespesaValor.getText()), jComboDespesaPagador.getSelectedItem().toString(), jTextDespesaCategoria.getText(), "", operador);
 
             DespesasDao despesaDao = new DespesasDao();
             despesaDao.editar(despesa);
@@ -140,7 +142,7 @@ public class TelaDespesas extends javax.swing.JInternalFrame {
         } else {
             int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar a despesa " + jTextDespesaDescricao.getText() + " do banco de dados?", "Atenção", JOptionPane.YES_NO_OPTION);
             if (confirma == JOptionPane.YES_OPTION) {
-            Despesas despesa = new Despesas(Long.parseLong(jTextDespesaId.getText()), jTextDespesaDescricao.getText(), Integer.parseInt(jTextFieldDespesaValor.getText()), jComboDespesaPagador.getSelectedItem().toString(), jTextDespesaCategoria.getText(), "", operador);
+            Despesas despesa = new Despesas(Long.parseLong(jTextDespesaId.getText()), jTextDespesaDescricao.getText(), Double.parseDouble(jTextFieldDespesaValor.getText()), jComboDespesaPagador.getSelectedItem().toString(), jTextDespesaCategoria.getText(), "", operador);
             
             DespesasDao despesaDao = new DespesasDao();
             despesaDao.deletar(despesa);
@@ -151,7 +153,7 @@ public class TelaDespesas extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarDespesaId() {
-        String sql = String.format("SELECT id as ID, descricao as Descrição, valor as Valor, pagador as Pagador, categoria as Categoria, data_despesa as Data, operador as Operador FROM despesas WHERE id like ?");
+        String sql = "SELECT id as ID, descricao as Descrição, valor as Valor, pagador as Pagador, categoria as Categoria, DATE_FORMAT(data_despesa, '%d/%m/%Y') as Data, operador as Operador FROM despesas WHERE id like ?";
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextUsuBusca.getText() + "%");
@@ -164,7 +166,7 @@ public class TelaDespesas extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarDespesaDescricao() {
-        String sql = String.format("SELECT id as ID, descricao as Descrição, valor as Valor, pagador as Pagador, categoria as Categoria, data_despesa as Data, operador as Operador FROM despesas WHERE descricao like ?");
+        String sql = "SELECT id as ID, descricao as Descrição, valor as Valor, pagador as Pagador, categoria as Categoria, DATE_FORMAT(data_despesa, '%d/%m/%Y') as Data, operador as Operador FROM despesas WHERE descricao like ?";
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextUsuBusca.getText() + "%");
@@ -177,7 +179,7 @@ public class TelaDespesas extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarDespesaCategoria() {
-        String sql = String.format("SELECT id as ID, descricao as Descrição, valor as Valor, pagador as Pagador, categoria as Categoria, data_despesa as Data, operador as Operador FROM despesas WHERE categoria like ?");
+        String sql = "SELECT id as ID, descricao as Descrição, valor as Valor, pagador as Pagador, categoria as Categoria, DATE_FORMAT(data_despesa, '%d/%m/%Y') as Data, operador as Operador FROM despesas WHERE categoria like ?";
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextUsuBusca.getText() + "%");
@@ -191,7 +193,7 @@ public class TelaDespesas extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarDespesaPagador() {
-        String sql = String.format("SELECT id as ID, descricao as Descrição, valor as Valor, pagador as Pagador, categoria as Categoria, data_despesa as Data, operador as Operador FROM pagador like ?");
+        String sql = "SELECT id as ID, descricao as Descrição, valor as Valor, pagador as Pagador, categoria as Categoria, DATE_FORMAT(data_despesa, '%d/%m/%Y') as Data, operador as Operador FROM despesas WHERE pagador like ?";
         try {
             pst = conexao.obterConexao().prepareStatement(sql);
             pst.setString(1, jTextUsuBusca.getText() + "%");

@@ -31,6 +31,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+
 /**
  * Classe responsavel pela ligacao com a tabela usuarios no banco de dados.
  *
@@ -43,7 +44,9 @@ public class UsuariosDao {
 
     public UsuariosDao() {
         this.conexao = new ConexaoMysql();
-    };
+    }
+
+    ;
 
     public String adicionar(Usuarios usuario) {
         String sql = "INSERT INTO usuarios(login, senha, tipo, nome) VALUES(?, ?, ?, ?)";
@@ -86,7 +89,9 @@ public class UsuariosDao {
             pst.setString(4, usuario.getNome());
             pst.setLong(5, usuario.getId());
 
+            System.out.println("Executando a atualização: " + sql);
             int editado = pst.executeUpdate();
+            System.out.println("Linhas afetadas: " + editado);
             if (editado > 0) {
                 JOptionPane.showMessageDialog(null, "Dados do usuário alterados com sucesso!");
 
@@ -128,8 +133,6 @@ public class UsuariosDao {
         return null;
     }
 
-    
-
     private void preencherValoresPreparedStatment(PreparedStatement preparedStatement, Usuarios usuario) throws SQLException {
 
         preparedStatement.setString(1, usuario.getLogin());
@@ -164,7 +167,7 @@ public class UsuariosDao {
         }
         return null;
     }
-    
+
     public Usuarios pesquisarUsuarioId(Long id) {
         String sql = String.format("SELECT * FROM usuarios WHERE id = '%s'", id);
         try {
