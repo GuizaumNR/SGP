@@ -484,7 +484,6 @@ public class TelaDespesas extends javax.swing.JInternalFrame {
 
     private void jButtonDespesaAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDespesaAdicionarActionPerformed
         adicionar();
-
     }//GEN-LAST:event_jButtonDespesaAdicionarActionPerformed
 
     private void jButtonDespesaEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDespesaEditarActionPerformed

@@ -51,7 +51,7 @@ import javax.swing.JTextField;
 public class Login extends javax.swing.JFrame {
 
     private final LoginController loginController;
-    private final String copy = "Copyright ©2023 Guilherme Rodrigues - Todos os direitos reservados.";
+    private final String copy = "Copyright ©2024 Guilherme Rodrigues - Todos os direitos reservados.";
 
     Conexao conexao;
 

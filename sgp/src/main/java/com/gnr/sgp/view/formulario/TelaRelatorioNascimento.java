@@ -105,8 +105,6 @@ public class TelaRelatorioNascimento extends javax.swing.JInternalFrame {
         PreparedStatement pstmt = conexao.obterConexao().prepareStatement(sqlCompra);
         int resultado2 = pstmt.executeUpdate();
 
-        System.out.println(valorId);
-
         if (resultado > 0 && resultado2 > 0) {
             JOptionPane.showMessageDialog(null, "Registro deletado, e quantidade de animais ajustada.");
             try {

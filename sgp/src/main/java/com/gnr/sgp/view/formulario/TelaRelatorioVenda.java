@@ -108,8 +108,8 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
      * @throws SQLException
      */
     public void deletar() throws SQLException {
-        int setar = jTableRelComp.getSelectedRow();
-        String valorId = jTableRelComp.getModel().getValueAt(setar, 0).toString();
+        int setar = jTableRelVenda.getSelectedRow();
+        String valorId = jTableRelVenda.getModel().getValueAt(setar, 0).toString();
 
         String sqlAnimal = "UPDATE animais a "
                 + "JOIN vendas_animais v ON a.id = v.id_animal "
@@ -123,8 +123,6 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
 
         PreparedStatement pstmt = conexao.obterConexao().prepareStatement(sqlCompra);
         int resultado2 = pstmt.executeUpdate();
-
-        System.out.println(valorId);
 
         if (resultado > 0 && resultado2 > 0) {
             JOptionPane.showMessageDialog(null, "Registro deletado, e quantidade de animais ajustada.");
@@ -349,7 +347,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                 pst = conexao.obterConexao().prepareStatement(sql);
                 rs = pst.executeQuery();
 
-                jTableRelComp.setModel(DbUtils.resultSetToTableModel(rs));
+                jTableRelVenda.setModel(DbUtils.resultSetToTableModel(rs));
 
             } else {
                 JOptionPane.showMessageDialog(null, "Data inválida.");
@@ -628,7 +626,7 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
         jRadioButtonRelVendaDesc = new javax.swing.JRadioButton();
         jButtonRelCompraLista = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableRelComp = new javax.swing.JTable();
+        jTableRelVenda = new javax.swing.JTable();
         jButtonRelVendaExcluir = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(227, 234, 227));
@@ -687,12 +685,12 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
             }
         });
 
-        jTableRelComp = new javax.swing.JTable(){
+        jTableRelVenda = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex){
                 return false;
             }
         };
-        jTableRelComp.setModel(new javax.swing.table.DefaultTableModel(
+        jTableRelVenda.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
@@ -703,14 +701,14 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
                 "ID", "Data", "Sexo", "Idade", "Qtde", "Kg_Totais", "Média_Kg", "Preço_Kg", "Total", "Porce", "Comissão", "Vendedor", "Comprador", "Pagamento", "Operador"
             }
         ));
-        jTableRelComp.setFocusable(false);
-        jTableRelComp.getTableHeader().setReorderingAllowed(false);
-        jTableRelComp.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTableRelVenda.setFocusable(false);
+        jTableRelVenda.getTableHeader().setReorderingAllowed(false);
+        jTableRelVenda.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTableRelCompMouseClicked(evt);
+                jTableRelVendaMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTableRelComp);
+        jScrollPane1.setViewportView(jTableRelVenda);
 
         jButtonRelVendaExcluir.setText("Excluir Registro");
         jButtonRelVendaExcluir.addActionListener(new java.awt.event.ActionListener() {
@@ -833,9 +831,9 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jButtonRelCompraListaActionPerformed
 
-    private void jTableRelCompMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableRelCompMouseClicked
+    private void jTableRelVendaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableRelVendaMouseClicked
 
-    }//GEN-LAST:event_jTableRelCompMouseClicked
+    }//GEN-LAST:event_jTableRelVendaMouseClicked
 
     private void jButtonRelVendaExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelVendaExcluirActionPerformed
         try {
@@ -862,6 +860,6 @@ public class TelaRelatorioVenda extends javax.swing.JInternalFrame {
     private javax.swing.JRadioButton jRadioButtonRelVendaDesc;
     private javax.swing.JRadioButton jRadioButtonRelVendaHoje;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableRelComp;
+    private javax.swing.JTable jTableRelVenda;
     // End of variables declaration//GEN-END:variables
 }

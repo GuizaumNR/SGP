@@ -25,6 +25,7 @@ package com.gnr.sgp.view.formulario;
 
 import com.gnr.sgp.modelo.conexao.Conexao;
 import com.gnr.sgp.modelo.conexao.ConexaoMysql;
+import com.gnr.sgp.modelo.dominio.Despesas;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.kernel.color.DeviceGray;
 import com.itextpdf.kernel.font.PdfFont;
@@ -60,14 +61,14 @@ import javax.swing.text.MaskFormatter;
 import net.proteanit.sql.DbUtils;
 
 /**
- * Classse responsavel pelos relatorios de vendas.
+ * Classse responsavel pelos relatorios de depesas.
  *
  * @author Guilherme
  */
 public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
 
     /**
-     * Creates new form TelaVenda
+     * Creates new form TelaRelatorioDespesa
      */
     private final Conexao conexao;
     PreparedStatement pst = null;
@@ -103,33 +104,24 @@ public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
     }
 
     /**
-     * Deleta um registro de venda e ajusta a quantidade de animais.
+     * Deleta um registro de despesa.
      *
      * @throws SQLException
      */
     public void deletar() throws SQLException {
-        int setar = jTableRelComp.getSelectedRow();
-        String valorId = jTableRelComp.getModel().getValueAt(setar, 0).toString();
+        int setar = jTableRelDespesa.getSelectedRow();
+        String valorId = jTableRelDespesa.getModel().getValueAt(setar, 0).toString();
 
-        String sqlAnimal = "UPDATE animais a "
-                + "JOIN vendas_animais v ON a.id = v.id_animal "
-                + "SET a.quantidade = a.quantidade + v.quantidade "
-                + "WHERE v.id_venda = '" + valorId + "' ";
+        String sql = "DELETE FROM despesa WHERE id = ?";
+        pst.setString(1, valorId);
 
-        String sqlCompra = "DELETE FROM vendas_animais WHERE id_venda = '" + valorId + "' ";
-
-        pst = conexao.obterConexao().prepareStatement(sqlAnimal);
+        pst = conexao.obterConexao().prepareStatement(sql);
         int resultado = pst.executeUpdate();
 
-        PreparedStatement pstmt = conexao.obterConexao().prepareStatement(sqlCompra);
-        int resultado2 = pstmt.executeUpdate();
-
-        System.out.println(valorId);
-
-        if (resultado > 0 && resultado2 > 0) {
+        if (resultado > 0) {
             JOptionPane.showMessageDialog(null, "Registro deletado, e quantidade de animais ajustada.");
             try {
-                criarLista(jFormattedRelVendInicio.getText(), jFormattedRelVendaFim.getText(), jComboRelVendaOrdem.getSelectedItem().toString(), jComboRelVendaPagamento.getSelectedItem().toString());
+                criarLista(jFormattedRelDespesaInicio.getText(), jFormattedRelDespesaFim.getText(), jComboRelDespesaOrdem.getSelectedItem().toString(), jComboRelDespesaPagador.getSelectedItem().toString());
 
             } catch (SQLException ex) {
                 Logger.getLogger(TelaRelatorioDespesa.class
@@ -223,24 +215,24 @@ public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
     }
 
     /**
-     * Cria uma lista de vendas com base nos parâmetros fornecidos e a exibe em
+     * Cria uma lista de despesas com base nos parâmetros fornecidos e a exibe em
      * um JTable.
      *
      * @param inicio Data de início no formato "dd/MM/yyyy".
      * @param fim Data de término no formato "dd/MM/yyyy".
      * @param ordem Coluna pela qual os resultados devem ser ordenados.
-     * @param pagamento Método de pagamento a ser filtrado.
+     * @param pagador a ser filtrado.
      * @throws SQLException Se ocorrer um erro ao acessar o banco de dados.
      * @throws ParseException Se ocorrer um erro ao fazer parsing das datas.
      */
-    public void criarLista(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
+    public void criarLista(String inicio, String fim, String ordem, String pagador) throws SQLException, ParseException {
 
         Date dataInicio = new Date();
         Date dataFim = new Date();
 // Convertendo as strings para o formato de data padrão
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        if (!jRadioButtonRelVendaHoje.isSelected()) {
+        if (!jRadioButtonRelDespesaHoje.isSelected()) {
 
             dataInicio = dateFormat.parse(inicio);
             dataFim = dateFormat.parse(fim);
@@ -284,72 +276,44 @@ public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
                 String fimFormatado = dbDateFormat.format(dataFim);
                 String sql = "";
 
-                if (jRadioButtonRelVendaDesc.isSelected()) {
-                    if (pagamento != "*") {
-                        sql = "SELECT id_venda as ID, DATE_FORMAT(data_venda, '%d/%m/%Y') as Data,  a.sexo as Sexo, a.idade as Idade, v.quantidade as Qtde, "
-                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.kg_totais, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Kg_Totais, "
-                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.media_kg, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Média_Kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
-                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Comissão, "
-                                + "vendedor as Vendedor, comprador as Comprador, pagamento as Pagamento, operador as Operador "
-                                + "FROM vendas_animais v "
-                                + "JOIN animais a ON v.id_animal = a.id "
-                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                                + "AND pagamento = '" + pagamento + "' "
-                                + "ORDER BY v." + ordem + " DESC";
+                if (jRadioButtonRelDespesaDesc.isSelected()) {
+                    if (pagador != "*") {
+                        sql = "SELECT id as ID, DATE_FORMAT(data_despesa, '%d/%m/%Y') as Data, descricao as Descrição, CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Valor, "
+                                + "categoria as Categoria, pagador as Pagador, operador as Operador "
+                                + "FROM despesas d "
+                                + "WHERE data_despesa BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "AND pagador = '" + pagador + "' "
+                                + "ORDER BY d." + ordem + " DESC";
 
                     } else {
-                        sql = "SELECT id_venda as ID, DATE_FORMAT(data_venda, '%d/%m/%Y') as Data,  a.sexo as Sexo, a.idade as Idade, v.quantidade as Qtde, "
-                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.kg_totais, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Kg_Totais, "
-                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.media_kg, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Média_Kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
-                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Comissão, "
-                                + "vendedor as Vendedor, comprador as Comprador, pagamento as Pagamento, operador as Operador "
-                                + "FROM vendas_animais v "
-                                + "JOIN animais a ON v.id_animal = a.id "
-                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                                + "ORDER BY v." + ordem + " DESC";
+                        sql = "SELECT id as ID, DATE_FORMAT(data_despesa, '%d/%m/%Y') as Data, descricao as Descrição, CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Valor, "
+                                + "categoria as Categoria, pagador as Pagador, operador as Operador "
+                                + "FROM despesas d "
+                                + "WHERE data_despesa BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "ORDER BY d." + ordem + " DESC";
                     }
 
                 } else {
-                    if (pagamento != "*") {
-                        sql = "SELECT id_venda as ID, DATE_FORMAT(data_venda, '%d/%m/%Y') as Data,  a.sexo as Sexo, a.idade as Idade, v.quantidade as Qtde, "
-                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.kg_totais, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Kg_Totais, "
-                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.media_kg, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Média_Kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
-                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Comissão, "
-                                + "vendedor as Vendedor, comprador as Comprador, pagamento as Pagamento, operador as Operador "
-                                + "FROM vendas_animais v "
-                                + "JOIN animais a ON v.id_animal = a.id "
-                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                                + "AND pagamento = '" + pagamento + "' "
-                                + "ORDER BY v." + ordem;
+                    if (pagador != "*") {
+                        sql = "SELECT id as ID, DATE_FORMAT(data_despesa, '%d/%m/%Y') as Data, descricao as Descrição, CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Valor, "
+                                + "categoria as Categoria, pagador as Pagador, operador as Operador "
+                                + "FROM despesas d "
+                                + "WHERE data_despesa BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "AND pagador = '" + pagador + "' "
+                                + "ORDER BY d." + ordem;
                     } else {
-                        sql = "SELECT id_venda as ID, DATE_FORMAT(data_venda, '%d/%m/%Y') as Data,  a.sexo as Sexo, a.idade as Idade, v.quantidade as Qtde, "
-                                + "CONCAT(REPLACE(REPLACE(REPLACE(FORMAT(v.kg_totais, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Kg_Totais, "
-                                + "CONCAT('Kg ', REPLACE(REPLACE(REPLACE(FORMAT(v.media_kg, 2), '.', 'temp'), ',', '.'), 'temp', ','), ' Kg') as Média_Kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Preço_Kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Total, "
-                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Porce, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Comissão, "
-                                + "vendedor as Vendedor, comprador as Comprador, pagamento as Pagamento, operador as Operador "
-                                + "FROM vendas_animais v "
-                                + "JOIN animais a ON v.id_animal = a.id "
-                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                                + "ORDER BY v." + ordem;
+                        sql = "SELECT id as ID, DATE_FORMAT(data_despesa, '%d/%m/%Y') as Data, descricao as Descrição, CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Valor, "
+                                + "categoria as Categoria, pagador as Pagador, operador as Operador "
+                                + "FROM despesas d "
+                                + "WHERE data_despesa BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "ORDER BY d." + ordem;
                     }
                 }
 
                 pst = conexao.obterConexao().prepareStatement(sql);
                 rs = pst.executeQuery();
 
-                jTableRelComp.setModel(DbUtils.resultSetToTableModel(rs));
+                jTableRelDespesa.setModel(DbUtils.resultSetToTableModel(rs));
 
             } else {
                 JOptionPane.showMessageDialog(null, "Data inválida.");
@@ -367,18 +331,18 @@ public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
      * @param inicio Data de início no formato "dd/MM/yyyy".
      * @param fim Data de término no formato "dd/MM/yyyy".
      * @param ordem Coluna pela qual os resultados devem ser ordenados.
-     * @param pagamento Método de pagamento a ser filtrado.
+     * @param pagador a ser filtrado.
      * @throws SQLException Se ocorrer um erro ao acessar o banco de dados.
      * @throws ParseException Se ocorrer um erro ao fazer parsing das datas.
      */
-    public void criarDocumento(String inicio, String fim, String ordem, String pagamento) throws SQLException, ParseException {
+    public void criarDocumento(String inicio, String fim, String ordem, String pagador) throws SQLException, ParseException {
 
         Date dataInicio = new Date();
         Date dataFim = new Date();
 // Convertendo as strings para o formato de data padrão
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        if (!jRadioButtonRelVendaHoje.isSelected()) {
+        if (!jRadioButtonRelDespesaHoje.isSelected()) {
 
             dataInicio = dateFormat.parse(inicio);
             dataFim = dateFormat.parse(fim);
@@ -422,69 +386,49 @@ public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
                 String fimFormatado = dbDateFormat.format(dataFim);
                 String sqlPDF = "";
 
-                if (jRadioButtonRelVendaDesc.isSelected()) {
-                    if (pagamento != "*") {
-                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
-                                + "vendedor, comprador, pagamento, operador "
-                                + "FROM vendas_animais v "
-                                + "JOIN animais a ON v.id_animal = a.id "
-                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                                + "AND pagamento = '" + pagamento + "' "
-                                + "ORDER BY v." + ordem + " DESC";
+                if (jRadioButtonRelDespesaDesc.isSelected()) {
+                    if (pagador != "*") {
+                        sqlPDF = "SELECT id as ID, DATE_FORMAT(data_despesa, '%d/%m/%Y') as Data, descricao as Descrição, CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Valor, "
+                                + "categoria as Categoria, pagador as Pagador, operador as Operador "
+                                + "FROM despesas d "
+                                + "WHERE data_despesa BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "AND pagador = '" + pagador + "' "
+                                + "ORDER BY d." + ordem + " DESC";
 
                     } else {
-                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
-                                + "vendedor, comprador, pagamento, operador "
-                                + "FROM vendas_animais v "
-                                + "JOIN animais a ON v.id_animal = a.id "
-                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                                + "ORDER BY v." + ordem + " DESC";
+                        sqlPDF = "SELECT id as ID, DATE_FORMAT(data_despesa, '%d/%m/%Y') as Data, descricao as Descrição, CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Valor, "
+                                + "categoria as Categoria, pagador as Pagador, operador as Operador "
+                                + "FROM despesas d "
+                                + "WHERE data_despesa BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "ORDER BY d." + ordem + " DESC";
                     }
 
                 } else {
-                    if (pagamento != "*") {
-                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
-                                + "vendedor, comprador, pagamento, operador "
-                                + "FROM vendas_animais v "
-                                + "JOIN animais a ON v.id_animal = a.id "
-                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                                + "AND pagamento = '" + pagamento + "' "
-                                + "ORDER BY v." + ordem;
+                    if (pagador != "*") {
+                        sqlPDF = "SELECT id as ID, DATE_FORMAT(data_despesa, '%d/%m/%Y') as Data, descricao as Descrição, CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Valor, "
+                                + "categoria as Categoria, pagador as Pagador, operador as Operador "
+                                + "FROM despesas d "
+                                + "WHERE data_despesa BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "AND pagador = '" + pagador + "' "
+                                + "ORDER BY d." + ordem;
                     } else {
-                        sqlPDF = "SELECT id_venda, DATE_FORMAT(data_venda, '%d/%m/%Y') as data_formatada,  a.sexo as sexo_animal, a.idade as idade_animal, v.quantidade, v.kg_totais, v.quantidade, v.media_kg, v.preco_kg, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(preco_kg, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as preco_kg_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor_total, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as valor_total_formatado, "
-                                + "CONCAT('% ', REPLACE(REPLACE(REPLACE(FORMAT(v.porce_comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as porce_formatado, "
-                                + "CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(v.comissao, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as comissao_formatado, "
-                                + "vendedor, comprador, pagamento, operador "
-                                + "FROM vendas_animais v "
-                                + "JOIN animais a ON v.id_animal = a.id "
-                                + "WHERE data_venda BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
-                                + "ORDER BY v." + ordem;
+                        sqlPDF = "SELECT id as ID, DATE_FORMAT(data_despesa, '%d/%m/%Y') as Data, descricao as Descrição, CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(valor, 2), '.', 'temp'), ',', '.'), 'temp', ',')) as Valor, "
+                                + "categoria as Categoria, pagador as Pagador, operador as Operador "
+                                + "FROM despesas d "
+                                + "WHERE data_despesa BETWEEN '" + inicioFormatado + "' AND '" + fimFormatado + "' "
+                                + "ORDER BY d." + ordem;
                     }
                 }
                 try {
                     String username = System.getProperty("user.name");
                     String data = new SimpleDateFormat("dd_MM_yyyy").format(new Date());
-                    String path = "C:\\Users\\" + username + "\\Documents\\Relatorio_Vendas_" + data + ".pdf";
+                    String path = "C:\\Users\\" + username + "\\Documents\\Relatorio_Despesas_" + data + ".pdf";
 
                     PdfWriter pdfWriter = new PdfWriter(path);
                     PdfDocument documentoPDF = new PdfDocument(pdfWriter);
                     Document document = new Document(documentoPDF, PageSize.A4);
 
-                    float[] columnWidths = {1, 3, 1, 1, 1, 3, 3, 3, 4, 2, 3, 4, 4, 4, 4};
+                    float[] columnWidths = {1, 2, 4, 4, 3, 3, 3};
                     Table table = new Table(columnWidths);
                     table.setWidthPercent(100);
                     table.setHorizontalAlignment(HorizontalAlignment.CENTER);
@@ -510,7 +454,7 @@ public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
                     SolidLine separatorLine = new SolidLine(1);
                     document.add(new Paragraph("")).add(new LineSeparator(separatorLine));
 
-                    document.add(new Paragraph("Relatório de Vendas")
+                    document.add(new Paragraph("Relatório de Despesas")
                             .setFont(fontBold)
                             .setFontSize(18)
                             .setTextAlignment(com.itextpdf.layout.property.TextAlignment.CENTER));
@@ -521,7 +465,7 @@ public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
                     document.add(new Paragraph(""));
 
                     PdfFont headerFont = PdfFontFactory.createFont();
-                    String[] headers = {"ID", "Data", "Sexo", "Idade", "Qtde", "Kg Totais", "Média Kg", "Preço Kg", "Total", "%", "Comissão", "Vend", "Comp", "Pag", "Operador"};
+                    String[] headers = {"ID", "Data", "Descrição", "Valor", "Categoria", "Pagador", "Operador"};
                     for (String header : headers) {
                         Cell cell = new Cell().add(header).setFont(headerFont).setFontSize(10).setBackgroundColor(DeviceGray.BLACK).setTextAlignment(TextAlignment.CENTER).setFontColor(DeviceGray.WHITE);
                         table.addCell(cell);
@@ -532,61 +476,31 @@ public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
                     PreparedStatement pstPDF = conexao.obterConexao().prepareStatement(sqlPDF);
                     ResultSet resultPDF = pstPDF.executeQuery();
 
-                    int totalQuantidade = 0;
-                    double totalKilo = 0;
                     double totalValor = 0;
-                    double totalComissao = 0;
 
                     while (resultPDF.next()) {
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("id_venda")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("data_formatada")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("sexo_animal")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("idade_animal")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("quantidade")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(formatarPeso(Double.parseDouble(resultPDF.getString("kg_totais")))));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(formatarPeso(Double.parseDouble(resultPDF.getString("media_kg")))));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(14).add(resultPDF.getString("preco_kg_formatado")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(40).add(resultPDF.getString("valor_total_formatado")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("porce_formatado")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("comissao_formatado")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("vendedor")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("comprador")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("pagamento")));
-                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("operador")));
-
-                        int quantidade = resultPDF.getInt("quantidade"); // Substitua o nome da coluna conforme necessário
-                        totalQuantidade += quantidade;
-
-                        String totais = resultPDF.getString("kg_totais");
-                        Double totaisFormatado = Double.parseDouble(totais);
-                        totalKilo += totaisFormatado;
-
-                        String total = resultPDF.getString("valor_total_formatado");
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("ID")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(resultPDF.getString("Data")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("Descrição")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("Valor")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(resultPDF.getString("Categoria")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("Pagador")));
+                        table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(resultPDF.getString("Operador")));
+                       
+                        String total = resultPDF.getString("Valor");
                         double totalFormatado = reverterValorFormatado(total);
                         totalValor += totalFormatado;
-
-                        String comissao = resultPDF.getString("comissao_formatado");
-                        double comissaoFormatado = reverterValorFormatado(comissao);
-                        totalComissao += comissaoFormatado;
 
                     }
 
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add("Totais"));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(18).add(String.valueOf(totalQuantidade)));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(formatarPeso(totalKilo)));
+                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(formatarValor(totalValor)));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(25).add(""));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(formatarValor(totalValor)));
                     table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(formatarValor(totalComissao)));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(20).add(""));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
-                    table.addCell(new Cell().setFont(dataFont).setFontSize(8).setWidth(30).add(""));
-
+                   
                     table.setAutoLayout();
                     document.add(table);
                     document.close();
@@ -614,108 +528,113 @@ public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFormattedRelVendInicio = new javax.swing.JFormattedTextField(mfData);
-        jLabelRelVendaPeriodoA = new javax.swing.JLabel();
-        jFormattedRelVendaFim = new javax.swing.JFormattedTextField(mfData);
-        jButtonRelVenda = new javax.swing.JButton();
-        jLabelRelVendaPagamento = new javax.swing.JLabel();
-        jLabelRelVendaPeriodo = new javax.swing.JLabel();
-        jComboRelVendaOrdem = new javax.swing.JComboBox<>();
-        jLabelRelVendaOrdem = new javax.swing.JLabel();
-        jComboRelVendaPagamento = new javax.swing.JComboBox<>();
-        jLabelRelVendaPagamentoParenteses = new javax.swing.JLabel();
-        jRadioButtonRelVendaHoje = new javax.swing.JRadioButton();
-        jRadioButtonRelVendaDesc = new javax.swing.JRadioButton();
-        jButtonRelCompraLista = new javax.swing.JButton();
+        jFormattedRelDespesaInicio = new javax.swing.JFormattedTextField(mfData);
+        jLabelRelDespesaPeriodoA = new javax.swing.JLabel();
+        jFormattedRelDespesaFim = new javax.swing.JFormattedTextField(mfData);
+        jButtonRelDespesa = new javax.swing.JButton();
+        jLabelRelDespesaPagador = new javax.swing.JLabel();
+        jLabelRelDespesaPeriodo = new javax.swing.JLabel();
+        jComboRelDespesaOrdem = new javax.swing.JComboBox<>();
+        jLabelRelDespesaOrdem = new javax.swing.JLabel();
+        jComboRelDespesaPagador = new javax.swing.JComboBox<>();
+        jLabelRelDespesaPagadorParenteses = new javax.swing.JLabel();
+        jRadioButtonRelDespesaHoje = new javax.swing.JRadioButton();
+        jRadioButtonRelDespesaDesc = new javax.swing.JRadioButton();
+        jButtonRelDespesaLista = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableRelComp = new javax.swing.JTable();
-        jButtonRelVendaExcluir = new javax.swing.JButton();
+        jTableRelDespesa = new javax.swing.JTable();
+        jButtonRelDespesaExcluir = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(227, 234, 227));
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        setTitle("Relatório de Vendas");
+        setTitle("Relatório de Despesas");
         setMinimumSize(new java.awt.Dimension(680, 480));
         setPreferredSize(new java.awt.Dimension(730, 545));
 
         //jFormattedRelVendInicio.setText(formato.format(dataSistema));
-        jFormattedRelVendInicio.addActionListener(new java.awt.event.ActionListener() {
+        jFormattedRelDespesaInicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedRelVendInicioActionPerformed(evt);
+                jFormattedRelDespesaInicioActionPerformed(evt);
             }
         });
 
-        jLabelRelVendaPeriodoA.setText("a");
+        jLabelRelDespesaPeriodoA.setText("a");
 
-        jFormattedRelVendaFim.addActionListener(new java.awt.event.ActionListener() {
+        jFormattedRelDespesaFim.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedRelVendaFimActionPerformed(evt);
+                jFormattedRelDespesaFimActionPerformed(evt);
             }
         });
 
-        jButtonRelVenda.setText("Gerar PDF");
-        jButtonRelVenda.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRelDespesa.setText("Gerar PDF");
+        jButtonRelDespesa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonRelVendaActionPerformed(evt);
+                jButtonRelDespesaActionPerformed(evt);
             }
         });
 
-        jLabelRelVendaPagamento.setText("Pagamento:");
+        jLabelRelDespesaPagador.setText("Pagador:");
 
-        jLabelRelVendaPeriodo.setText("Período:");
+        jLabelRelDespesaPeriodo.setText("Período:");
 
-        jComboRelVendaOrdem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "data_venda", "quantidade", "valor_total", "vendedor", "comprador" }));
-
-        jLabelRelVendaOrdem.setText("Ordem:");
-
-        jComboRelVendaPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "*", "Dinheiro", "Cartão Débito", "Cartão Crédito", "Pix", "Permuta" }));
-        jComboRelVendaPagamento.addActionListener(new java.awt.event.ActionListener() {
+        jComboRelDespesaOrdem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "data_despesa", "descricao", "valor", "categoria", "pagador" }));
+        jComboRelDespesaOrdem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboRelVendaPagamentoActionPerformed(evt);
+                jComboRelDespesaOrdemActionPerformed(evt);
             }
         });
 
-        jLabelRelVendaPagamentoParenteses.setText("(\" * \" Todas formas )");
+        jLabelRelDespesaOrdem.setText("Ordem:");
 
-        jRadioButtonRelVendaHoje.setText("Hoje");
-
-        jRadioButtonRelVendaDesc.setText("Decrescente");
-
-        jButtonRelCompraLista.setText("Gerar Lista");
-        jButtonRelCompraLista.addActionListener(new java.awt.event.ActionListener() {
+        jComboRelDespesaPagador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "*", "Marcos", "Negocio", "Adiantamento" }));
+        jComboRelDespesaPagador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonRelCompraListaActionPerformed(evt);
+                jComboRelDespesaPagadorActionPerformed(evt);
             }
         });
 
-        jTableRelComp = new javax.swing.JTable(){
+        jLabelRelDespesaPagadorParenteses.setText("(\" * \" Todos)");
+
+        jRadioButtonRelDespesaHoje.setText("Hoje");
+
+        jRadioButtonRelDespesaDesc.setText("Decrescente");
+
+        jButtonRelDespesaLista.setText("Gerar Lista");
+        jButtonRelDespesaLista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRelDespesaListaActionPerformed(evt);
+            }
+        });
+
+        jTableRelDespesa = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex){
                 return false;
             }
         };
-        jTableRelComp.setModel(new javax.swing.table.DefaultTableModel(
+        jTableRelDespesa.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Data", "Sexo", "Idade", "Qtde", "Kg_Totais", "Média_Kg", "Preço_Kg", "Total", "Porce", "Comissão", "Vendedor", "Comprador", "Pagamento", "Operador"
+                "ID", "Data", "Descrição", "Valor", "Categoria", "Pagador", "Operador"
             }
         ));
-        jTableRelComp.setFocusable(false);
-        jTableRelComp.getTableHeader().setReorderingAllowed(false);
-        jTableRelComp.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTableRelDespesa.setFocusable(false);
+        jTableRelDespesa.getTableHeader().setReorderingAllowed(false);
+        jTableRelDespesa.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTableRelCompMouseClicked(evt);
+                jTableRelDespesaMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTableRelComp);
+        jScrollPane1.setViewportView(jTableRelDespesa);
 
-        jButtonRelVendaExcluir.setText("Excluir Registro");
-        jButtonRelVendaExcluir.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRelDespesaExcluir.setText("Excluir Registro");
+        jButtonRelDespesaExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonRelVendaExcluirActionPerformed(evt);
+                jButtonRelDespesaExcluirActionPerformed(evt);
             }
         });
 
@@ -727,37 +646,37 @@ public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonRelVendaExcluir)
+                        .addComponent(jButtonRelDespesaExcluir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonRelCompraLista)
+                        .addComponent(jButtonRelDespesaLista)
                         .addGap(18, 18, 18)
-                        .addComponent(jButtonRelVenda))
+                        .addComponent(jButtonRelDespesa))
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabelRelDespesaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jComboRelDespesaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jRadioButtonRelVendaDesc))
+                                .addComponent(jRadioButtonRelDespesaDesc))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelRelVendaPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabelRelDespesaPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedRelVendInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jFormattedRelDespesaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabelRelVendaPeriodoA)
+                                .addComponent(jLabelRelDespesaPeriodoA)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jFormattedRelVendaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jFormattedRelDespesaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jRadioButtonRelVendaHoje)
+                                .addComponent(jRadioButtonRelDespesaHoje)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabelRelVendaPagamento)
+                                .addComponent(jLabelRelDespesaPagador)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jComboRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jComboRelDespesaPagador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabelRelVendaPagamentoParenteses)))
-                        .addGap(0, 356, Short.MAX_VALUE)))
+                                .addComponent(jLabelRelDespesaPagadorParenteses)))
+                        .addGap(0, 152, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -765,44 +684,44 @@ public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jFormattedRelVendInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelRelVendaPeriodoA)
-                    .addComponent(jFormattedRelVendaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelRelVendaPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButtonRelVendaHoje)
-                    .addComponent(jLabelRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboRelVendaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelRelVendaPagamentoParenteses, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jFormattedRelDespesaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelRelDespesaPeriodoA)
+                    .addComponent(jFormattedRelDespesaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelRelDespesaPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jRadioButtonRelDespesaHoje)
+                    .addComponent(jLabelRelDespesaPagador, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboRelDespesaPagador, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelRelDespesaPagadorParenteses, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboRelVendaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelRelVendaOrdem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jRadioButtonRelVendaDesc))
+                    .addComponent(jComboRelDespesaOrdem, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelRelDespesaOrdem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jRadioButtonRelDespesaDesc))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonRelVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonRelCompraLista, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonRelVendaExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonRelDespesa, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonRelDespesaLista, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonRelDespesaExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jFormattedRelVendInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedRelVendInicioActionPerformed
+    private void jFormattedRelDespesaInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedRelDespesaInicioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedRelVendInicioActionPerformed
+    }//GEN-LAST:event_jFormattedRelDespesaInicioActionPerformed
 
-    private void jFormattedRelVendaFimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedRelVendaFimActionPerformed
+    private void jFormattedRelDespesaFimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedRelDespesaFimActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedRelVendaFimActionPerformed
+    }//GEN-LAST:event_jFormattedRelDespesaFimActionPerformed
 
-    private void jButtonRelVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelVendaActionPerformed
+    private void jButtonRelDespesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelDespesaActionPerformed
 
         try {
-            criarDocumento(jFormattedRelVendInicio.getText(), jFormattedRelVendaFim.getText(), jComboRelVendaOrdem.getSelectedItem().toString(), jComboRelVendaPagamento.getSelectedItem().toString());
+            criarDocumento(jFormattedRelDespesaInicio.getText(), jFormattedRelDespesaFim.getText(), jComboRelDespesaOrdem.getSelectedItem().toString(), jComboRelDespesaPagador.getSelectedItem().toString());
 
         } catch (SQLException ex) {
             Logger.getLogger(TelaRelatorioDespesa.class
@@ -813,15 +732,15 @@ public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
-    }//GEN-LAST:event_jButtonRelVendaActionPerformed
+    }//GEN-LAST:event_jButtonRelDespesaActionPerformed
 
-    private void jComboRelVendaPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboRelVendaPagamentoActionPerformed
+    private void jComboRelDespesaPagadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboRelDespesaPagadorActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboRelVendaPagamentoActionPerformed
+    }//GEN-LAST:event_jComboRelDespesaPagadorActionPerformed
 
-    private void jButtonRelCompraListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelCompraListaActionPerformed
+    private void jButtonRelDespesaListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelDespesaListaActionPerformed
         try {
-            criarLista(jFormattedRelVendInicio.getText(), jFormattedRelVendaFim.getText(), jComboRelVendaOrdem.getSelectedItem().toString(), jComboRelVendaPagamento.getSelectedItem().toString());
+            criarLista(jFormattedRelDespesaInicio.getText(), jFormattedRelDespesaFim.getText(), jComboRelDespesaOrdem.getSelectedItem().toString(), jComboRelDespesaPagador.getSelectedItem().toString());
 
         } catch (SQLException ex) {
             Logger.getLogger(TelaRelatorioDespesa.class
@@ -831,37 +750,41 @@ public class TelaRelatorioDespesa extends javax.swing.JInternalFrame {
             Logger.getLogger(TelaRelatorioDespesa.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButtonRelCompraListaActionPerformed
+    }//GEN-LAST:event_jButtonRelDespesaListaActionPerformed
 
-    private void jTableRelCompMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableRelCompMouseClicked
+    private void jTableRelDespesaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableRelDespesaMouseClicked
 
-    }//GEN-LAST:event_jTableRelCompMouseClicked
+    }//GEN-LAST:event_jTableRelDespesaMouseClicked
 
-    private void jButtonRelVendaExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelVendaExcluirActionPerformed
+    private void jButtonRelDespesaExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelDespesaExcluirActionPerformed
         try {
             deletar();
         } catch (SQLException ex) {
             Logger.getLogger(TelaRelatorioCompra.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButtonRelVendaExcluirActionPerformed
+    }//GEN-LAST:event_jButtonRelDespesaExcluirActionPerformed
+
+    private void jComboRelDespesaOrdemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboRelDespesaOrdemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboRelDespesaOrdemActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonRelCompraLista;
-    private javax.swing.JButton jButtonRelVenda;
-    private javax.swing.JButton jButtonRelVendaExcluir;
-    private javax.swing.JComboBox<String> jComboRelVendaOrdem;
-    private javax.swing.JComboBox<String> jComboRelVendaPagamento;
-    public javax.swing.JFormattedTextField jFormattedRelVendInicio;
-    private javax.swing.JFormattedTextField jFormattedRelVendaFim;
-    private javax.swing.JLabel jLabelRelVendaOrdem;
-    private javax.swing.JLabel jLabelRelVendaPagamento;
-    private javax.swing.JLabel jLabelRelVendaPagamentoParenteses;
-    private javax.swing.JLabel jLabelRelVendaPeriodo;
-    private javax.swing.JLabel jLabelRelVendaPeriodoA;
-    private javax.swing.JRadioButton jRadioButtonRelVendaDesc;
-    private javax.swing.JRadioButton jRadioButtonRelVendaHoje;
+    private javax.swing.JButton jButtonRelDespesa;
+    private javax.swing.JButton jButtonRelDespesaExcluir;
+    private javax.swing.JButton jButtonRelDespesaLista;
+    private javax.swing.JComboBox<String> jComboRelDespesaOrdem;
+    private javax.swing.JComboBox<String> jComboRelDespesaPagador;
+    private javax.swing.JFormattedTextField jFormattedRelDespesaFim;
+    public javax.swing.JFormattedTextField jFormattedRelDespesaInicio;
+    private javax.swing.JLabel jLabelRelDespesaOrdem;
+    private javax.swing.JLabel jLabelRelDespesaPagador;
+    private javax.swing.JLabel jLabelRelDespesaPagadorParenteses;
+    private javax.swing.JLabel jLabelRelDespesaPeriodo;
+    private javax.swing.JLabel jLabelRelDespesaPeriodoA;
+    private javax.swing.JRadioButton jRadioButtonRelDespesaDesc;
+    private javax.swing.JRadioButton jRadioButtonRelDespesaHoje;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableRelComp;
+    private javax.swing.JTable jTableRelDespesa;
     // End of variables declaration//GEN-END:variables
 }
